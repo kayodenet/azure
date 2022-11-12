@@ -1,6 +1,6 @@
 # Vnet Connectivity using VPN Gateway with Narrow Traffic Selectors for Segmentation
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/kayodenet/azure/master/scenarios/01-vnet-vpn/azuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fkayodenet%2Fazure%2Fmaster%2Fscenarios%2F01-vnet-vpn%2Fazuredeploy.json)
 
 This template deploys a hub and spoke topology to test the connectivity of VNETs using VPN gateway custom traffic selectors.
 
