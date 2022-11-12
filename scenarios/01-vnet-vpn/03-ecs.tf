@@ -24,7 +24,7 @@ resource "azurerm_subnet" "ecs_subnets" {
 #----------------------------
 
 module "ecs_main_vm" {
-  source          = "../../../modules/ubuntu"
+  source          = "../../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.ecs_prefix}main-vm"
   location        = local.ecs_location
@@ -37,7 +37,7 @@ module "ecs_main_vm" {
 }
 
 module "ecs_bu1_vm" {
-  source          = "../../../modules/ubuntu"
+  source          = "../../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.ecs_prefix}bu1-vm"
   location        = local.ecs_location
@@ -50,7 +50,7 @@ module "ecs_bu1_vm" {
 }
 
 module "ecs_bu2_vm" {
-  source          = "../../../modules/ubuntu"
+  source          = "../../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.ecs_prefix}bu2-vm"
   location        = local.ecs_location

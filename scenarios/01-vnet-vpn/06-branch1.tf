@@ -29,7 +29,7 @@ resource "azurerm_subnet_network_security_group_association" "branch1_subnets" {
 #----------------------------
 
 module "branch1_vm" {
-  source          = "../../../modules/ubuntu"
+  source          = "../../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.branch1_prefix}vm"
   location        = local.branch1_location

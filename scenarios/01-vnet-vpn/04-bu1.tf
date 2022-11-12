@@ -29,7 +29,7 @@ resource "azurerm_subnet" "bu1_subnets" {
 #----------------------------
 
 module "bu1_vm" {
-  source          = "../../../modules/ubuntu"
+  source          = "../../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.bu1_prefix}vm"
   location        = local.bu1_location
