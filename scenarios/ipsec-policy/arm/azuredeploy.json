@@ -1,0 +1,2916 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualHubs_SapVpn_bu1_ars_name": {
+            "defaultValue": "SapVpn-bu1-ars",
+            "type": "String"
+        },
+        "virtualMachines_SapVpn_bu1_vm_name": {
+            "defaultValue": "SapVpn-bu1-vm",
+            "type": "String"
+        },
+        "virtualMachines_SapVpn_bu2_vm_name": {
+            "defaultValue": "SapVpn-bu2-vm",
+            "type": "String"
+        },
+        "virtualNetworks_SapVpn_bu1_vnet_name": {
+            "defaultValue": "SapVpn-bu1-vnet",
+            "type": "String"
+        },
+        "virtualNetworks_SapVpn_bu2_vnet_name": {
+            "defaultValue": "SapVpn-bu2-vnet",
+            "type": "String"
+        },
+        "virtualNetworks_SapVpn_ecs_vnet_name": {
+            "defaultValue": "SapVpn-ecs-vnet",
+            "type": "String"
+        },
+        "virtualMachines_SapVpn_branch1_vm_name": {
+            "defaultValue": "SapVpn-branch1-vm",
+            "type": "String"
+        },
+        "virtualMachines_SapVpn_ecs_bu1_vm_name": {
+            "defaultValue": "SapVpn-ecs-bu1-vm",
+            "type": "String"
+        },
+        "virtualMachines_SapVpn_ecs_bu2_vm_name": {
+            "defaultValue": "SapVpn-ecs-bu2-vm",
+            "type": "String"
+        },
+        "virtualMachines_SapVpn_ecs_main_vm_name": {
+            "defaultValue": "SapVpn-ecs-main-vm",
+            "type": "String"
+        },
+        "networkInterfaces_SapVpn_bu1_vm_nic_name": {
+            "defaultValue": "SapVpn-bu1-vm-nic",
+            "type": "String"
+        },
+        "networkInterfaces_SapVpn_bu2_vm_nic_name": {
+            "defaultValue": "SapVpn-bu2-vm-nic",
+            "type": "String"
+        },
+        "virtualNetworks_SapVpn_branch1_vnet_name": {
+            "defaultValue": "SapVpn-branch1-vnet",
+            "type": "String"
+        },
+        "connections_SapVpn_bu1_bu1_local_gw1_name": {
+            "defaultValue": "SapVpn-bu1-bu1-local-gw1",
+            "type": "String"
+        },
+        "connections_SapVpn_bu1_ecs_local_gw0_name": {
+            "defaultValue": "SapVpn-bu1-ecs-local-gw0",
+            "type": "String"
+        },
+        "connections_SapVpn_bu2_bu2_local_gw1_name": {
+            "defaultValue": "SapVpn-bu2-bu2-local-gw1",
+            "type": "String"
+        },
+        "connections_SapVpn_bu2_ecs_local_gw0_name": {
+            "defaultValue": "SapVpn-bu2-ecs-local-gw0",
+            "type": "String"
+        },
+        "connections_SapVpn_ecs_bu1_local_gw0_name": {
+            "defaultValue": "SapVpn-ecs-bu1-local-gw0",
+            "type": "String"
+        },
+        "connections_SapVpn_ecs_bu1_local_gw1_name": {
+            "defaultValue": "SapVpn-ecs-bu1-local-gw1",
+            "type": "String"
+        },
+        "connections_SapVpn_ecs_bu2_local_gw0_name": {
+            "defaultValue": "SapVpn-ecs-bu2-local-gw0",
+            "type": "String"
+        },
+        "connections_SapVpn_ecs_bu2_local_gw1_name": {
+            "defaultValue": "SapVpn-ecs-bu2-local-gw1",
+            "type": "String"
+        },
+        "publicIPAddresses_SapVpn_bu1_ars_pip_name": {
+            "defaultValue": "SapVpn-bu1-ars-pip",
+            "type": "String"
+        },
+        "connections_SapVpn_bu1__azure_vcx_bu1_name": {
+            "defaultValue": "SapVpn-bu1--azure-vcx-bu1",
+            "type": "String"
+        },
+        "storageAccounts_sapvpnregion161ddf09c_name": {
+            "defaultValue": "sapvpnregion161ddf09c",
+            "type": "String"
+        },
+        "publicIPAddresses_SapVpn_bu1_ergw_pip0_name": {
+            "defaultValue": "SapVpn-bu1-ergw-pip0",
+            "type": "String"
+        },
+        "virtualNetworkGateways_SapVpn_bu1_ergw_name": {
+            "defaultValue": "SapVpn-bu1-ergw",
+            "type": "String"
+        },
+        "networkInterfaces_SapVpn_branch1_vm_nic_name": {
+            "defaultValue": "SapVpn-branch1-vm-nic",
+            "type": "String"
+        },
+        "networkInterfaces_SapVpn_ecs_bu1_vm_nic_name": {
+            "defaultValue": "SapVpn-ecs-bu1-vm-nic",
+            "type": "String"
+        },
+        "networkInterfaces_SapVpn_ecs_bu2_vm_nic_name": {
+            "defaultValue": "SapVpn-ecs-bu2-vm-nic",
+            "type": "String"
+        },
+        "publicIPAddresses_SapVpn_bu1_vpngw_pip0_name": {
+            "defaultValue": "SapVpn-bu1-vpngw-pip0",
+            "type": "String"
+        },
+        "publicIPAddresses_SapVpn_bu1_vpngw_pip1_name": {
+            "defaultValue": "SapVpn-bu1-vpngw-pip1",
+            "type": "String"
+        },
+        "publicIPAddresses_SapVpn_bu2_vpngw_pip0_name": {
+            "defaultValue": "SapVpn-bu2-vpngw-pip0",
+            "type": "String"
+        },
+        "publicIPAddresses_SapVpn_bu2_vpngw_pip1_name": {
+            "defaultValue": "SapVpn-bu2-vpngw-pip1",
+            "type": "String"
+        },
+        "publicIPAddresses_SapVpn_ecs_vpngw_pip0_name": {
+            "defaultValue": "SapVpn-ecs-vpngw-pip0",
+            "type": "String"
+        },
+        "publicIPAddresses_SapVpn_ecs_vpngw_pip1_name": {
+            "defaultValue": "SapVpn-ecs-vpngw-pip1",
+            "type": "String"
+        },
+        "virtualNetworkGateways_SapVpn_bu1_vpngw_name": {
+            "defaultValue": "SapVpn-bu1-vpngw",
+            "type": "String"
+        },
+        "virtualNetworkGateways_SapVpn_bu2_vpngw_name": {
+            "defaultValue": "SapVpn-bu2-vpngw",
+            "type": "String"
+        },
+        "virtualNetworkGateways_SapVpn_ecs_vpngw_name": {
+            "defaultValue": "SapVpn-ecs-vpngw",
+            "type": "String"
+        },
+        "networkInterfaces_SapVpn_ecs_main_vm_nic_name": {
+            "defaultValue": "SapVpn-ecs-main-vm-nic",
+            "type": "String"
+        },
+        "publicIPAddresses_SapVpn_branch1_nva_pip_name": {
+            "defaultValue": "SapVpn-branch1-nva-pip",
+            "type": "String"
+        },
+        "publicIPAddresses_SapVpn_branch1_ergw_pip0_name": {
+            "defaultValue": "SapVpn-branch1-ergw-pip0",
+            "type": "String"
+        },
+        "virtualNetworkGateways_SapVpn_branch1_ergw_name": {
+            "defaultValue": "SapVpn-branch1-ergw",
+            "type": "String"
+        },
+        "connections_SapVpn_branch1__azure_vcx_branch1_name": {
+            "defaultValue": "SapVpn-branch1--azure-vcx-branch1",
+            "type": "String"
+        },
+        "expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name": {
+            "defaultValue": "SapVpn-bu1-ecs-local-gw0",
+            "type": "String"
+        },
+        "localNetworkGateways_SapVpn_bu1_ecs_local_gw0_name": {
+            "defaultValue": "SapVpn-bu1-ecs-local-gw0",
+            "type": "String"
+        },
+        "localNetworkGateways_SapVpn_bu1_ecs_local_gw1_name": {
+            "defaultValue": "SapVpn-bu1-ecs-local-gw1",
+            "type": "String"
+        },
+        "localNetworkGateways_SapVpn_bu2_ecs_local_gw0_name": {
+            "defaultValue": "SapVpn-bu2-ecs-local-gw0",
+            "type": "String"
+        },
+        "localNetworkGateways_SapVpn_bu2_ecs_local_gw1_name": {
+            "defaultValue": "SapVpn-bu2-ecs-local-gw1",
+            "type": "String"
+        },
+        "localNetworkGateways_SapVpn_ecs_bu1_local_gw0_name": {
+            "defaultValue": "SapVpn-ecs-bu1-local-gw0",
+            "type": "String"
+        },
+        "localNetworkGateways_SapVpn_ecs_bu1_local_gw1_name": {
+            "defaultValue": "SapVpn-ecs-bu1-local-gw1",
+            "type": "String"
+        },
+        "localNetworkGateways_SapVpn_ecs_bu2_local_gw0_name": {
+            "defaultValue": "SapVpn-ecs-bu2-local-gw0",
+            "type": "String"
+        },
+        "localNetworkGateways_SapVpn_ecs_bu2_local_gw1_name": {
+            "defaultValue": "SapVpn-ecs-bu2-local-gw1",
+            "type": "String"
+        },
+        "networkSecurityGroups_SapVpn_nsg_westeurope_main_name": {
+            "defaultValue": "SapVpn-nsg-westeurope-main",
+            "type": "String"
+        },
+        "expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name": {
+            "defaultValue": "SapVpn-branch1-ecs-local-gw0",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/localNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('localNetworkGateways_SapVpn_bu1_ecs_local_gw0_name')]",
+            "location": "westeurope",
+            "properties": {
+                "localNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "10.11.1.0/24"
+                    ]
+                },
+                "gatewayIpAddress": "20.105.253.168"
+            }
+        },
+        {
+            "type": "Microsoft.Network/localNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('localNetworkGateways_SapVpn_bu1_ecs_local_gw1_name')]",
+            "location": "westeurope",
+            "properties": {
+                "localNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "10.11.1.0/24"
+                    ]
+                },
+                "gatewayIpAddress": "20.105.253.251"
+            }
+        },
+        {
+            "type": "Microsoft.Network/localNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('localNetworkGateways_SapVpn_bu2_ecs_local_gw0_name')]",
+            "location": "westeurope",
+            "properties": {
+                "localNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "10.11.2.0/24"
+                    ]
+                },
+                "gatewayIpAddress": "20.105.253.168"
+            }
+        },
+        {
+            "type": "Microsoft.Network/localNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('localNetworkGateways_SapVpn_bu2_ecs_local_gw1_name')]",
+            "location": "westeurope",
+            "properties": {
+                "localNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "10.11.2.0/24"
+                    ]
+                },
+                "gatewayIpAddress": "20.105.253.251"
+            }
+        },
+        {
+            "type": "Microsoft.Network/localNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('localNetworkGateways_SapVpn_ecs_bu1_local_gw0_name')]",
+            "location": "westeurope",
+            "properties": {
+                "localNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "10.1.0.0/24",
+                        "10.10.0.0/16"
+                    ]
+                },
+                "gatewayIpAddress": "20.105.253.166"
+            }
+        },
+        {
+            "type": "Microsoft.Network/localNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('localNetworkGateways_SapVpn_ecs_bu1_local_gw1_name')]",
+            "location": "westeurope",
+            "properties": {
+                "localNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "10.1.0.0/24",
+                        "10.10.0.0/16"
+                    ]
+                },
+                "gatewayIpAddress": "20.105.253.243"
+            }
+        },
+        {
+            "type": "Microsoft.Network/localNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('localNetworkGateways_SapVpn_ecs_bu2_local_gw0_name')]",
+            "location": "westeurope",
+            "properties": {
+                "localNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "10.2.0.0/24"
+                    ]
+                },
+                "gatewayIpAddress": "20.105.254.28"
+            }
+        },
+        {
+            "type": "Microsoft.Network/localNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('localNetworkGateways_SapVpn_ecs_bu2_local_gw1_name')]",
+            "location": "westeurope",
+            "properties": {
+                "localNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "10.2.0.0/24"
+                    ]
+                },
+                "gatewayIpAddress": "20.105.253.98"
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('publicIPAddresses_SapVpn_branch1_ergw_pip0_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "20.105.254.57",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('publicIPAddresses_SapVpn_branch1_nva_pip_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "20.105.254.120",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('publicIPAddresses_SapVpn_bu1_ars_pip_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "20.105.254.23",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('publicIPAddresses_SapVpn_bu1_ergw_pip0_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "20.105.254.39",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('publicIPAddresses_SapVpn_bu1_vpngw_pip0_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "20.105.253.166",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('publicIPAddresses_SapVpn_bu1_vpngw_pip1_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "20.105.253.243",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('publicIPAddresses_SapVpn_bu2_vpngw_pip0_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "20.105.254.28",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('publicIPAddresses_SapVpn_bu2_vpngw_pip1_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "20.105.253.98",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('publicIPAddresses_SapVpn_ecs_vpngw_pip0_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "20.105.253.168",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('publicIPAddresses_SapVpn_ecs_vpngw_pip1_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "20.105.253.251",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualHubs",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('virtualHubs_SapVpn_bu1_ars_name')]",
+            "location": "westeurope",
+            "kind": "RouteServer",
+            "properties": {
+                "virtualHubRouteTableV2s": [],
+                "virtualRouterAsn": 65515,
+                "virtualRouterIps": [
+                    "10.1.2.4",
+                    "10.1.2.5"
+                ],
+                "routeTable": {
+                    "routes": []
+                },
+                "virtualRouterAutoScaleConfiguration": {
+                    "minCapacity": 2
+                },
+                "sku": "Standard",
+                "routingState": "Provisioned",
+                "allowBranchToBranchTraffic": true
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2022-05-01",
+            "name": "[parameters('storageAccounts_sapvpnregion161ddf09c_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+                "defaultToOAuthAuthentication": false,
+                "publicNetworkAccess": "Enabled",
+                "allowCrossTenantReplication": true,
+                "isNfsV3Enabled": false,
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": true,
+                "allowSharedKeyAccess": true,
+                "isHnsEnabled": false,
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "type": "Microsoft.Network/expressRouteCircuits/authorizations",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'), '/', parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/expressRouteCircuits', parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'))]"
+            ],
+            "properties": {
+                "authorizationKey": "a4480f5c-125c-4cf0-98cf-9d2f8c37a0ad",
+                "authorizationUseStatus": "Available"
+            }
+        },
+        {
+            "type": "Microsoft.Network/expressRouteCircuits/authorizations",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'), '/', parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/expressRouteCircuits', parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'))]"
+            ],
+            "properties": {
+                "authorizationKey": "53410077-84e5-47df-8654-03c84d2e45d1",
+                "authorizationUseStatus": "Available"
+            }
+        },
+        {
+            "type": "Microsoft.Network/expressRouteCircuits/peerings",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'), '/AzurePrivatePeering')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/expressRouteCircuits', parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'))]"
+            ],
+            "properties": {
+                "peeringType": "AzurePrivatePeering",
+                "azureASN": 12076,
+                "peerASN": 65111,
+                "primaryPeerAddressPrefix": "169.254.66.208/30",
+                "secondaryPeerAddressPrefix": "169.254.66.212/30",
+                "primaryAzurePort": "MEG-AMB-09XGMR-CIS-1-PRI-A",
+                "secondaryAzurePort": "MEG-AMB-09XGMR-CIS-2-SEC-A",
+                "state": "Enabled",
+                "vlanId": 100,
+                "connections": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/expressRouteCircuits/peerings",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'), '/AzurePrivatePeering')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/expressRouteCircuits', parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'))]"
+            ],
+            "properties": {
+                "peeringType": "AzurePrivatePeering",
+                "azureASN": 12076,
+                "peerASN": 65111,
+                "primaryPeerAddressPrefix": "169.254.66.232/30",
+                "secondaryPeerAddressPrefix": "169.254.66.236/30",
+                "primaryAzurePort": "MEG-AMB-09XGMR-CIS-1-PRI-A",
+                "secondaryAzurePort": "MEG-AMB-09XGMR-CIS-2-SEC-A",
+                "state": "Enabled",
+                "vlanId": 100,
+                "connections": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('networkInterfaces_SapVpn_branch1_vm_nic_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'SapVpn-branch1-main')]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "[parameters('networkInterfaces_SapVpn_branch1_vm_nic_name')]",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_branch1_vm_nic_name')), concat('/ipConfigurations/', parameters('networkInterfaces_SapVpn_branch1_vm_nic_name')))]",
+                        "etag": "W/\"c306c6b0-86bf-4184-9df7-fcdcfbff3070\"",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.10.0.5",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'SapVpn-branch1-main')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "nicType": "Standard"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('networkInterfaces_SapVpn_bu1_vm_nic_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'SapVpn-bu1-main')]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "[parameters('networkInterfaces_SapVpn_bu1_vm_nic_name')]",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_bu1_vm_nic_name')), concat('/ipConfigurations/', parameters('networkInterfaces_SapVpn_bu1_vm_nic_name')))]",
+                        "etag": "W/\"3213d3b1-c4e0-4780-8c19-048e0b3776f4\"",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.1.0.5",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'SapVpn-bu1-main')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "nicType": "Standard"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('networkInterfaces_SapVpn_bu2_vm_nic_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'SapVpn-bu2-main')]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "[parameters('networkInterfaces_SapVpn_bu2_vm_nic_name')]",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_bu2_vm_nic_name')), concat('/ipConfigurations/', parameters('networkInterfaces_SapVpn_bu2_vm_nic_name')))]",
+                        "etag": "W/\"7d143093-3c97-47f9-8b36-94623a77ee92\"",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.2.0.5",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'SapVpn-bu2-main')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "nicType": "Standard"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('networkInterfaces_SapVpn_ecs_bu1_vm_nic_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu1')]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "[parameters('networkInterfaces_SapVpn_ecs_bu1_vm_nic_name')]",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_ecs_bu1_vm_nic_name')), concat('/ipConfigurations/', parameters('networkInterfaces_SapVpn_ecs_bu1_vm_nic_name')))]",
+                        "etag": "W/\"64a0abdb-eebd-42e0-b006-e923768490b9\"",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.11.1.5",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu1')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "nicType": "Standard"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('networkInterfaces_SapVpn_ecs_bu2_vm_nic_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu2')]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "[parameters('networkInterfaces_SapVpn_ecs_bu2_vm_nic_name')]",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_ecs_bu2_vm_nic_name')), concat('/ipConfigurations/', parameters('networkInterfaces_SapVpn_ecs_bu2_vm_nic_name')))]",
+                        "etag": "W/\"ef0ec326-410f-4f13-a2df-27441042ab25\"",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.11.2.5",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu2')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "nicType": "Standard"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('networkInterfaces_SapVpn_ecs_main_vm_nic_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-main')]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "[parameters('networkInterfaces_SapVpn_ecs_main_vm_nic_name')]",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_ecs_main_vm_nic_name')), concat('/ipConfigurations/', parameters('networkInterfaces_SapVpn_ecs_main_vm_nic_name')))]",
+                        "etag": "W/\"b4243f93-a88f-4b4d-a93c-e17a17b86aba\"",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.11.0.5",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-main')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "nicType": "Standard"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'), '/inbound-allow-all')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+            ],
+            "properties": {
+                "description": "Inbound Allow RFC1918",
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [
+                    "172.16.0.0/12",
+                    "10.0.0.0/8",
+                    "192.168.0.0/16"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'), '/outbound-allow-rfc1918')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+            ],
+            "properties": {
+                "description": "Outbound Allow RFC1918",
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [
+                    "172.16.0.0/12",
+                    "10.0.0.0/8",
+                    "192.168.0.0/16"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualNetworks_SapVpn_branch1_vnet_name'), '/GatewaySubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_branch1_vnet_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.10.1.0/24",
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualNetworks_SapVpn_bu1_vnet_name'), '/GatewaySubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_bu1_vnet_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.1.1.0/24",
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualNetworks_SapVpn_bu2_vnet_name'), '/GatewaySubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_bu2_vnet_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.2.1.0/24",
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualNetworks_SapVpn_ecs_vnet_name'), '/GatewaySubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_ecs_vnet_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.11.3.0/24",
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualNetworks_SapVpn_bu1_vnet_name'), '/RouteServerSubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_bu1_vnet_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.1.2.0/24",
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualNetworks_SapVpn_bu2_vnet_name'), '/RouteServerSubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_bu2_vnet_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.2.2.0/24",
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('storageAccounts_sapvpnregion161ddf09c_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "allowPermanentDelete": false,
+                    "enabled": false
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('storageAccounts_sapvpnregion161ddf09c_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "protocolSettings": {
+                    "smb": {}
+                },
+                "cors": {
+                    "corsRules": []
+                },
+                "shareDeleteRetentionPolicy": {
+                    "enabled": true,
+                    "days": 7
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/queueServices",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('storageAccounts_sapvpnregion161ddf09c_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/tableServices",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('storageAccounts_sapvpnregion161ddf09c_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('virtualMachines_SapVpn_branch1_vm_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_branch1_vm_nic_name'))]",
+                "[resourceId('Microsoft.Storage/StorageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1s"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "0001-com-ubuntu-server-focal",
+                        "sku": "20_04-lts",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_SapVpn_branch1_vm_name'), '-vm-os-disk')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "writeAcceleratorEnabled": false,
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS",
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_SapVpn_branch1_vm_name'), '-vm-os-disk'))]"
+                        },
+                        "deleteOption": "Detach",
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[concat(parameters('virtualMachines_SapVpn_branch1_vm_name'), '-vm')]",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "ssh": {
+                            "publicKeys": []
+                        },
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_branch1_vm_nic_name'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https://', parameters('storageAccounts_sapvpnregion161ddf09c_name'), '.blob.core.windows.net/')]"
+                    }
+                },
+                "priority": "Regular",
+                "extensionsTimeBudget": "PT1H30M"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('virtualMachines_SapVpn_bu1_vm_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_bu1_vm_nic_name'))]",
+                "[resourceId('Microsoft.Storage/StorageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1s"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "0001-com-ubuntu-server-focal",
+                        "sku": "20_04-lts",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_SapVpn_bu1_vm_name'), '-vm-os-disk')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "writeAcceleratorEnabled": false,
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS",
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_SapVpn_bu1_vm_name'), '-vm-os-disk'))]"
+                        },
+                        "deleteOption": "Detach",
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[concat(parameters('virtualMachines_SapVpn_bu1_vm_name'), '-vm')]",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "ssh": {
+                            "publicKeys": []
+                        },
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_bu1_vm_nic_name'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https://', parameters('storageAccounts_sapvpnregion161ddf09c_name'), '.blob.core.windows.net/')]"
+                    }
+                },
+                "priority": "Regular",
+                "extensionsTimeBudget": "PT1H30M"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('virtualMachines_SapVpn_bu2_vm_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_bu2_vm_nic_name'))]",
+                "[resourceId('Microsoft.Storage/StorageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1s"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "0001-com-ubuntu-server-focal",
+                        "sku": "20_04-lts",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_SapVpn_bu2_vm_name'), '-vm-os-disk')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "writeAcceleratorEnabled": false,
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS",
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_SapVpn_bu2_vm_name'), '-vm-os-disk'))]"
+                        },
+                        "deleteOption": "Detach",
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[concat(parameters('virtualMachines_SapVpn_bu2_vm_name'), '-vm')]",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "ssh": {
+                            "publicKeys": []
+                        },
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_bu2_vm_nic_name'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https://', parameters('storageAccounts_sapvpnregion161ddf09c_name'), '.blob.core.windows.net/')]"
+                    }
+                },
+                "priority": "Regular",
+                "extensionsTimeBudget": "PT1H30M"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('virtualMachines_SapVpn_ecs_bu1_vm_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_ecs_bu1_vm_nic_name'))]",
+                "[resourceId('Microsoft.Storage/StorageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1s"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "0001-com-ubuntu-server-focal",
+                        "sku": "20_04-lts",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_SapVpn_ecs_bu1_vm_name'), '-vm-os-disk')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "writeAcceleratorEnabled": false,
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS",
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_SapVpn_ecs_bu1_vm_name'), '-vm-os-disk'))]"
+                        },
+                        "deleteOption": "Detach",
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[concat(parameters('virtualMachines_SapVpn_ecs_bu1_vm_name'), '-vm')]",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "ssh": {
+                            "publicKeys": []
+                        },
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_ecs_bu1_vm_nic_name'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https://', parameters('storageAccounts_sapvpnregion161ddf09c_name'), '.blob.core.windows.net/')]"
+                    }
+                },
+                "priority": "Regular",
+                "extensionsTimeBudget": "PT1H30M"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('virtualMachines_SapVpn_ecs_bu2_vm_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_ecs_bu2_vm_nic_name'))]",
+                "[resourceId('Microsoft.Storage/StorageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1s"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "0001-com-ubuntu-server-focal",
+                        "sku": "20_04-lts",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_SapVpn_ecs_bu2_vm_name'), '-vm-os-disk')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "writeAcceleratorEnabled": false,
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS",
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_SapVpn_ecs_bu2_vm_name'), '-vm-os-disk'))]"
+                        },
+                        "deleteOption": "Detach",
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[concat(parameters('virtualMachines_SapVpn_ecs_bu2_vm_name'), '-vm')]",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "ssh": {
+                            "publicKeys": []
+                        },
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_ecs_bu2_vm_nic_name'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https://', parameters('storageAccounts_sapvpnregion161ddf09c_name'), '.blob.core.windows.net/')]"
+                    }
+                },
+                "priority": "Regular",
+                "extensionsTimeBudget": "PT1H30M"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('virtualMachines_SapVpn_ecs_main_vm_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_ecs_main_vm_nic_name'))]",
+                "[resourceId('Microsoft.Storage/StorageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1s"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "0001-com-ubuntu-server-focal",
+                        "sku": "20_04-lts",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_SapVpn_ecs_main_vm_name'), '-vm-os-disk')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "writeAcceleratorEnabled": false,
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS",
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_SapVpn_ecs_main_vm_name'), '-vm-os-disk'))]"
+                        },
+                        "deleteOption": "Detach",
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[concat(parameters('virtualMachines_SapVpn_ecs_main_vm_name'), '-vm')]",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "ssh": {
+                            "publicKeys": []
+                        },
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_ecs_main_vm_nic_name'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https://', parameters('storageAccounts_sapvpnregion161ddf09c_name'), '.blob.core.windows.net/')]"
+                    }
+                },
+                "priority": "Regular",
+                "extensionsTimeBudget": "PT1H30M"
+            }
+        },
+        {
+            "type": "Microsoft.Network/connections",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('connections_SapVpn_branch1__azure_vcx_branch1_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_branch1_ergw_name'))]",
+                "[resourceId('Microsoft.Network/expressRouteCircuits', parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'))]"
+            ],
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_branch1_ergw_name'))]",
+                    "properties": {}
+                },
+                "connectionType": "ExpressRoute",
+                "routingWeight": 0,
+                "enableBgp": false,
+                "useLocalAzureIpAddress": false,
+                "usePolicyBasedTrafficSelectors": false,
+                "ipsecPolicies": [],
+                "trafficSelectorPolicies": [],
+                "authorizationKey": "308201F306092A864886F70D010703A08201E4308201E00201003182018C3082018802010030703059310B3009060355040613025553311E301C060355040A13154D6963726F736F667420436F72706F726174696F6E312A3028060355040313214D6963726F736F667420417A75726520544C532049737375696E672043412030310213330061CC38D32D2681CF7D1C6600000061CC38300D06092A864886F70D010101050004820100AC965C67FCD428F6B93B876D9F639C70A19E4069FE9CEF1A87ACF74FE78BF9B079707556C8F38874AF96DFDBE534B87ED9701F96493FFFC0A2A3E63B5C9B3918A109672C2AD1D9A4F3DFC63988D7C1E0F38D7BE75C0F462A85031E24C4F038E6FB6FFF8538B062EAEEB96F6AD15C733EA00E84030A89F305C190067135EF025C4F164D9B89F0F610EEFC45289D94A7A55C74F0CA0F695EF289F67D10AAB1514AF68B54A9C6EA29823854FD5EA5F972289F30443C2CC8F9F57EA2D19A4C9103355C121337C3345541A2C010FAEF5496596C13A76D3431F3DCE8990AA831C115868412DE5A11071C19418510395D7753E98A6103AC80E77DA79C284FD2079CF370304B06092A864886F70D010701301406082A864886F70D03070408E72653E06119E7728028EE3D9B8ED9E0C68627A9C95E2A28096C191981CD006AB9A6803D92D0FCB9CC5E1F1C71CDF82FF866",
+                "peer": {
+                    "id": "[resourceId('Microsoft.Network/expressRouteCircuits', parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'))]"
+                },
+                "expressRouteGatewayBypass": false,
+                "dpdTimeoutSeconds": 0,
+                "connectionMode": "Default",
+                "gatewayCustomBgpIpAddresses": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/connections",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('connections_SapVpn_bu1__azure_vcx_bu1_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu1_ergw_name'))]",
+                "[resourceId('Microsoft.Network/expressRouteCircuits', parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'))]"
+            ],
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu1_ergw_name'))]",
+                    "properties": {}
+                },
+                "connectionType": "ExpressRoute",
+                "routingWeight": 0,
+                "enableBgp": false,
+                "useLocalAzureIpAddress": false,
+                "usePolicyBasedTrafficSelectors": false,
+                "ipsecPolicies": [],
+                "trafficSelectorPolicies": [],
+                "authorizationKey": "308201F306092A864886F70D010703A08201E4308201E00201003182018C3082018802010030703059310B3009060355040613025553311E301C060355040A13154D6963726F736F667420436F72706F726174696F6E312A3028060355040313214D6963726F736F667420417A75726520544C532049737375696E672043412030310213330061CC38D32D2681CF7D1C6600000061CC38300D06092A864886F70D0101010500048201000B5BCF1A22ACC567C17E4D3EA90D6B9B4E9C1CE887E514B8D917B836D0E8BA9E174F30366F9B7DC4DC063632C4A542D1EBED03328DEF3F88E5D5829CB68D33F613594ED4E0060BAD698B65B3D1B34DFB842069E35DF688278143F858B56C9F119434B8870BCB10277D212B88539877569E88BD79DACBBC588C4AEA3401899185AE2FDD85141DC721A754E96C4CCDD1E8822DB06D624135D103D0DEAD3F3075C8D652555578F21F15EA3A70DA10522D3DDEB8F9314A7A865F6E0D4E82FD0CC29B45FEF27428BA732AE4BA72366727F458691674B756703381E8B1C366BD6C0DE63C13A6E8462750D3B268CCD0F053BAD68DDDAA936D0D1BEE9B4D8928122810F3304B06092A864886F70D010701301406082A864886F70D03070408E2128A61421C11918028AABD62828C8FE7B121445F643BBF7707AC01C49CF6626B09CCAF0EC970B772BF93607E2FB25B9A62",
+                "peer": {
+                    "id": "[resourceId('Microsoft.Network/expressRouteCircuits', parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'))]"
+                },
+                "expressRouteGatewayBypass": false,
+                "dpdTimeoutSeconds": 0,
+                "connectionMode": "Default",
+                "gatewayCustomBgpIpAddresses": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/connections",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('connections_SapVpn_bu1_bu1_local_gw1_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu1_vpngw_name'))]",
+                "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_bu1_ecs_local_gw1_name'))]"
+            ],
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu1_vpngw_name'))]",
+                    "properties": {}
+                },
+                "localNetworkGateway2": {
+                    "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_bu1_ecs_local_gw1_name'))]",
+                    "properties": {}
+                },
+                "connectionType": "IPsec",
+                "connectionProtocol": "IKEv2",
+                "routingWeight": 0,
+                "enableBgp": false,
+                "useLocalAzureIpAddress": false,
+                "usePolicyBasedTrafficSelectors": true,
+                "ipsecPolicies": [],
+                "trafficSelectorPolicies": [
+                    {
+                        "localAddressRanges": [
+                            "10.1.0.0/24",
+                            "10.10.0.0/16"
+                        ],
+                        "remoteAddressRanges": [
+                            "10.11.1.0/24"
+                        ]
+                    }
+                ],
+                "expressRouteGatewayBypass": false,
+                "dpdTimeoutSeconds": 0,
+                "connectionMode": "Default",
+                "gatewayCustomBgpIpAddresses": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/connections",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('connections_SapVpn_bu1_ecs_local_gw0_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu1_vpngw_name'))]",
+                "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_bu1_ecs_local_gw0_name'))]"
+            ],
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu1_vpngw_name'))]",
+                    "properties": {}
+                },
+                "localNetworkGateway2": {
+                    "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_bu1_ecs_local_gw0_name'))]",
+                    "properties": {}
+                },
+                "connectionType": "IPsec",
+                "connectionProtocol": "IKEv2",
+                "routingWeight": 0,
+                "enableBgp": false,
+                "useLocalAzureIpAddress": false,
+                "usePolicyBasedTrafficSelectors": true,
+                "ipsecPolicies": [],
+                "trafficSelectorPolicies": [
+                    {
+                        "localAddressRanges": [
+                            "10.1.0.0/24",
+                            "10.10.0.0/16"
+                        ],
+                        "remoteAddressRanges": [
+                            "10.11.1.0/24"
+                        ]
+                    }
+                ],
+                "expressRouteGatewayBypass": false,
+                "dpdTimeoutSeconds": 0,
+                "connectionMode": "Default",
+                "gatewayCustomBgpIpAddresses": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/connections",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('connections_SapVpn_bu2_bu2_local_gw1_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu2_vpngw_name'))]",
+                "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_bu2_ecs_local_gw1_name'))]"
+            ],
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu2_vpngw_name'))]",
+                    "properties": {}
+                },
+                "localNetworkGateway2": {
+                    "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_bu2_ecs_local_gw1_name'))]",
+                    "properties": {}
+                },
+                "connectionType": "IPsec",
+                "connectionProtocol": "IKEv2",
+                "routingWeight": 0,
+                "enableBgp": false,
+                "useLocalAzureIpAddress": false,
+                "usePolicyBasedTrafficSelectors": true,
+                "ipsecPolicies": [],
+                "trafficSelectorPolicies": [
+                    {
+                        "localAddressRanges": [
+                            "10.2.0.0/24"
+                        ],
+                        "remoteAddressRanges": [
+                            "10.11.2.0/24"
+                        ]
+                    }
+                ],
+                "expressRouteGatewayBypass": false,
+                "dpdTimeoutSeconds": 0,
+                "connectionMode": "Default",
+                "gatewayCustomBgpIpAddresses": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/connections",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('connections_SapVpn_bu2_ecs_local_gw0_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu2_vpngw_name'))]",
+                "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_bu2_ecs_local_gw0_name'))]"
+            ],
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu2_vpngw_name'))]",
+                    "properties": {}
+                },
+                "localNetworkGateway2": {
+                    "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_bu2_ecs_local_gw0_name'))]",
+                    "properties": {}
+                },
+                "connectionType": "IPsec",
+                "connectionProtocol": "IKEv2",
+                "routingWeight": 0,
+                "enableBgp": false,
+                "useLocalAzureIpAddress": false,
+                "usePolicyBasedTrafficSelectors": true,
+                "ipsecPolicies": [],
+                "trafficSelectorPolicies": [
+                    {
+                        "localAddressRanges": [
+                            "10.2.0.0/24"
+                        ],
+                        "remoteAddressRanges": [
+                            "10.11.2.0/24"
+                        ]
+                    }
+                ],
+                "expressRouteGatewayBypass": false,
+                "dpdTimeoutSeconds": 0,
+                "connectionMode": "Default",
+                "gatewayCustomBgpIpAddresses": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/connections",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('connections_SapVpn_ecs_bu1_local_gw0_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name'))]",
+                "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_ecs_bu1_local_gw0_name'))]"
+            ],
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name'))]",
+                    "properties": {}
+                },
+                "localNetworkGateway2": {
+                    "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_ecs_bu1_local_gw0_name'))]",
+                    "properties": {}
+                },
+                "connectionType": "IPsec",
+                "connectionProtocol": "IKEv2",
+                "routingWeight": 0,
+                "enableBgp": false,
+                "useLocalAzureIpAddress": false,
+                "usePolicyBasedTrafficSelectors": true,
+                "ipsecPolicies": [],
+                "trafficSelectorPolicies": [
+                    {
+                        "localAddressRanges": [
+                            "10.11.1.0/24"
+                        ],
+                        "remoteAddressRanges": [
+                            "10.1.0.0/24",
+                            "10.10.0.0/16"
+                        ]
+                    }
+                ],
+                "expressRouteGatewayBypass": false,
+                "dpdTimeoutSeconds": 0,
+                "connectionMode": "Default",
+                "gatewayCustomBgpIpAddresses": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/connections",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('connections_SapVpn_ecs_bu1_local_gw1_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name'))]",
+                "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_ecs_bu1_local_gw1_name'))]"
+            ],
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name'))]",
+                    "properties": {}
+                },
+                "localNetworkGateway2": {
+                    "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_ecs_bu1_local_gw1_name'))]",
+                    "properties": {}
+                },
+                "connectionType": "IPsec",
+                "connectionProtocol": "IKEv2",
+                "routingWeight": 0,
+                "enableBgp": false,
+                "useLocalAzureIpAddress": false,
+                "usePolicyBasedTrafficSelectors": true,
+                "ipsecPolicies": [],
+                "trafficSelectorPolicies": [
+                    {
+                        "localAddressRanges": [
+                            "10.11.1.0/24"
+                        ],
+                        "remoteAddressRanges": [
+                            "10.1.0.0/24",
+                            "10.10.0.0/16"
+                        ]
+                    }
+                ],
+                "expressRouteGatewayBypass": false,
+                "dpdTimeoutSeconds": 0,
+                "connectionMode": "Default",
+                "gatewayCustomBgpIpAddresses": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/connections",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('connections_SapVpn_ecs_bu2_local_gw0_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name'))]",
+                "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_ecs_bu2_local_gw0_name'))]"
+            ],
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name'))]",
+                    "properties": {}
+                },
+                "localNetworkGateway2": {
+                    "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_ecs_bu2_local_gw0_name'))]",
+                    "properties": {}
+                },
+                "connectionType": "IPsec",
+                "connectionProtocol": "IKEv2",
+                "routingWeight": 0,
+                "enableBgp": false,
+                "useLocalAzureIpAddress": false,
+                "usePolicyBasedTrafficSelectors": true,
+                "ipsecPolicies": [],
+                "trafficSelectorPolicies": [
+                    {
+                        "localAddressRanges": [
+                            "10.11.2.0/24"
+                        ],
+                        "remoteAddressRanges": [
+                            "10.2.0.0/24"
+                        ]
+                    }
+                ],
+                "expressRouteGatewayBypass": false,
+                "dpdTimeoutSeconds": 0,
+                "connectionMode": "Default",
+                "gatewayCustomBgpIpAddresses": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/connections",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('connections_SapVpn_ecs_bu2_local_gw1_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name'))]",
+                "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_ecs_bu2_local_gw1_name'))]"
+            ],
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name'))]",
+                    "properties": {}
+                },
+                "localNetworkGateway2": {
+                    "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_SapVpn_ecs_bu2_local_gw1_name'))]",
+                    "properties": {}
+                },
+                "connectionType": "IPsec",
+                "connectionProtocol": "IKEv2",
+                "routingWeight": 0,
+                "enableBgp": false,
+                "useLocalAzureIpAddress": false,
+                "usePolicyBasedTrafficSelectors": true,
+                "ipsecPolicies": [],
+                "trafficSelectorPolicies": [
+                    {
+                        "localAddressRanges": [
+                            "10.11.2.0/24"
+                        ],
+                        "remoteAddressRanges": [
+                            "10.2.0.0/24"
+                        ]
+                    }
+                ],
+                "expressRouteGatewayBypass": false,
+                "dpdTimeoutSeconds": 0,
+                "connectionMode": "Default",
+                "gatewayCustomBgpIpAddresses": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/expressRouteCircuits",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/expressRouteCircuits/peerings', parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'), 'AzurePrivatePeering')]",
+                "[resourceId('Microsoft.Network/expressRouteCircuits/authorizations', parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'), parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_MeteredData",
+                "tier": "Standard",
+                "family": "MeteredData"
+            },
+            "properties": {
+                "peerings": [
+                    {
+                        "name": "AzurePrivatePeering",
+                        "id": "[resourceId('Microsoft.Network/expressRouteCircuits/peerings', parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'), 'AzurePrivatePeering')]",
+                        "properties": {
+                            "peeringType": "AzurePrivatePeering",
+                            "azureASN": 12076,
+                            "peerASN": 65111,
+                            "primaryPeerAddressPrefix": "169.254.66.208/30",
+                            "secondaryPeerAddressPrefix": "169.254.66.212/30",
+                            "primaryAzurePort": "MEG-AMB-09XGMR-CIS-1-PRI-A",
+                            "secondaryAzurePort": "MEG-AMB-09XGMR-CIS-2-SEC-A",
+                            "state": "Enabled",
+                            "vlanId": 100,
+                            "connections": []
+                        }
+                    }
+                ],
+                "authorizations": [
+                    {
+                        "name": "[parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name')]",
+                        "id": "[resourceId('Microsoft.Network/expressRouteCircuits/authorizations', parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'), parameters('expressRouteCircuits_SapVpn_branch1_ecs_local_gw0_name'))]",
+                        "properties": {
+                            "authorizationKey": "*****************",
+                            "authorizationUseStatus": "Available"
+                        }
+                    }
+                ],
+                "serviceProviderProperties": {
+                    "serviceProviderName": "Megaport",
+                    "peeringLocation": "Amsterdam",
+                    "bandwidthInMbps": 50
+                },
+                "circuitProvisioningState": "Enabled",
+                "allowClassicOperations": false,
+                "serviceKey": "16872d37-8f0e-40bb-b7a3-2b6574d70a47",
+                "serviceProviderProvisioningState": "Provisioned",
+                "globalReachEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/expressRouteCircuits",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/expressRouteCircuits/peerings', parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'), 'AzurePrivatePeering')]",
+                "[resourceId('Microsoft.Network/expressRouteCircuits/authorizations', parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'), parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_MeteredData",
+                "tier": "Standard",
+                "family": "MeteredData"
+            },
+            "properties": {
+                "peerings": [
+                    {
+                        "name": "AzurePrivatePeering",
+                        "id": "[resourceId('Microsoft.Network/expressRouteCircuits/peerings', parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'), 'AzurePrivatePeering')]",
+                        "properties": {
+                            "peeringType": "AzurePrivatePeering",
+                            "azureASN": 12076,
+                            "peerASN": 65111,
+                            "primaryPeerAddressPrefix": "169.254.66.232/30",
+                            "secondaryPeerAddressPrefix": "169.254.66.236/30",
+                            "primaryAzurePort": "MEG-AMB-09XGMR-CIS-1-PRI-A",
+                            "secondaryAzurePort": "MEG-AMB-09XGMR-CIS-2-SEC-A",
+                            "state": "Enabled",
+                            "vlanId": 100,
+                            "connections": []
+                        }
+                    }
+                ],
+                "authorizations": [
+                    {
+                        "name": "[parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name')]",
+                        "id": "[resourceId('Microsoft.Network/expressRouteCircuits/authorizations', parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'), parameters('expressRouteCircuits_SapVpn_bu1_ecs_local_gw0_name'))]",
+                        "properties": {
+                            "authorizationKey": "*****************",
+                            "authorizationUseStatus": "Available"
+                        }
+                    }
+                ],
+                "serviceProviderProperties": {
+                    "serviceProviderName": "Megaport",
+                    "peeringLocation": "Amsterdam",
+                    "bandwidthInMbps": 50
+                },
+                "circuitProvisioningState": "Enabled",
+                "allowClassicOperations": false,
+                "serviceKey": "5fbad1fb-14ec-4818-a11a-adf2e5d37710",
+                "serviceProviderProvisioningState": "Provisioned",
+                "globalReachEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'), 'inbound-allow-all')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'), 'outbound-allow-rfc1918')]"
+            ],
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "inbound-allow-all",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'), 'inbound-allow-all')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Inbound Allow RFC1918",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [
+                                "172.16.0.0/12",
+                                "10.0.0.0/8",
+                                "192.168.0.0/16"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "outbound-allow-rfc1918",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'), 'outbound-allow-rfc1918')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "description": "Outbound Allow RFC1918",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [
+                                "172.16.0.0/12",
+                                "10.0.0.0/8",
+                                "192.168.0.0/16"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('virtualNetworkGateways_SapVpn_branch1_ergw_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_branch1_ergw_pip0_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'GatewaySubnet')]"
+            ],
+            "properties": {
+                "enablePrivateIpAddress": false,
+                "ipConfigurations": [
+                    {
+                        "name": "SapVpn-branch1-link-0",
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_branch1_ergw_name')), '/ipConfigurations/SapVpn-branch1-link-0')]",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_branch1_ergw_pip0_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'GatewaySubnet')]"
+                            }
+                        }
+                    }
+                ],
+                "natRules": [],
+                "enableBgpRouteTranslationForNat": false,
+                "disableIPSecReplayProtection": false,
+                "sku": {
+                    "name": "Standard",
+                    "tier": "Standard"
+                },
+                "gatewayType": "ExpressRoute",
+                "vpnType": "RouteBased",
+                "enableBgp": true,
+                "activeActive": false,
+                "vpnClientConfiguration": {
+                    "vpnClientProtocols": [
+                        "OpenVPN",
+                        "IkeV2"
+                    ],
+                    "vpnAuthenticationTypes": [],
+                    "vpnClientRootCertificates": [],
+                    "vpnClientRevokedCertificates": [],
+                    "radiusServers": [],
+                    "vpnClientIpsecPolicies": []
+                },
+                "vpnGatewayGeneration": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('virtualNetworkGateways_SapVpn_bu1_ergw_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_ergw_pip0_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]"
+            ],
+            "properties": {
+                "enablePrivateIpAddress": false,
+                "ipConfigurations": [
+                    {
+                        "name": "SapVpn-bu1-link-0",
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu1_ergw_name')), '/ipConfigurations/SapVpn-bu1-link-0')]",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_ergw_pip0_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]"
+                            }
+                        }
+                    }
+                ],
+                "natRules": [],
+                "enableBgpRouteTranslationForNat": false,
+                "disableIPSecReplayProtection": false,
+                "sku": {
+                    "name": "Standard",
+                    "tier": "Standard"
+                },
+                "gatewayType": "ExpressRoute",
+                "vpnType": "RouteBased",
+                "enableBgp": true,
+                "activeActive": false,
+                "vpnClientConfiguration": {
+                    "vpnClientProtocols": [
+                        "OpenVPN",
+                        "IkeV2"
+                    ],
+                    "vpnAuthenticationTypes": [],
+                    "vpnClientRootCertificates": [],
+                    "vpnClientRevokedCertificates": [],
+                    "radiusServers": [],
+                    "vpnClientIpsecPolicies": []
+                },
+                "vpnGatewayGeneration": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualNetworks_SapVpn_branch1_vnet_name'), '/SapVpn-branch1-main')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_branch1_vnet_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.10.0.0/24",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+                },
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualNetworks_SapVpn_bu1_vnet_name'), '/SapVpn-bu1-main')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_bu1_vnet_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.1.0.0/24",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+                },
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualNetworks_SapVpn_bu2_vnet_name'), '/SapVpn-bu2-main')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_bu2_vnet_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.2.0.0/24",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+                },
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualNetworks_SapVpn_ecs_vnet_name'), '/SapVpn-ecs-bu1')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_ecs_vnet_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.11.1.0/24",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+                },
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualNetworks_SapVpn_ecs_vnet_name'), '/SapVpn-ecs-bu2')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_ecs_vnet_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.11.2.0/24",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+                },
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualNetworks_SapVpn_ecs_vnet_name'), '/SapVpn-ecs-main')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_ecs_vnet_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.11.0.0/24",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+                },
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('storageAccounts_sapvpnregion161ddf09c_name'), '/default/bootdiagnostics-sapvpnbra-39448b26-90c2-4f66-87a6-62ef8ae0fde5')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_sapvpnregion161ddf09c_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('storageAccounts_sapvpnregion161ddf09c_name'), '/default/bootdiagnostics-sapvpnbu1-531b55fe-e208-4864-83b1-26fbfbe461f1')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_sapvpnregion161ddf09c_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('storageAccounts_sapvpnregion161ddf09c_name'), '/default/bootdiagnostics-sapvpnbu2-06829987-2b51-406f-ab72-f69667daee5b')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_sapvpnregion161ddf09c_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('storageAccounts_sapvpnregion161ddf09c_name'), '/default/bootdiagnostics-sapvpnecs-56e55009-a68e-4e9a-8981-13faa271d3bb')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_sapvpnregion161ddf09c_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('storageAccounts_sapvpnregion161ddf09c_name'), '/default/bootdiagnostics-sapvpnecs-5f0a690d-9930-4709-913e-0fe8d0904a70')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_sapvpnregion161ddf09c_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('storageAccounts_sapvpnregion161ddf09c_name'), '/default/bootdiagnostics-sapvpnecs-6eae1814-acaa-4e1a-bf3b-88db22fff591')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_sapvpnregion161ddf09c_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sapvpnregion161ddf09c_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualHubs/ipConfigurations",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('virtualHubs_SapVpn_bu1_ars_name'), '/ipConfig1')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualHubs', parameters('virtualHubs_SapVpn_bu1_ars_name'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_ars_pip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'RouteServerSubnet')]"
+            ],
+            "properties": {
+                "privateIPAllocationMethod": "Dynamic",
+                "publicIPAddress": {
+                    "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_ars_pip_name'))]"
+                },
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'RouteServerSubnet')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('virtualNetworkGateways_SapVpn_bu1_vpngw_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_vpngw_pip0_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_vpngw_pip1_name'))]"
+            ],
+            "properties": {
+                "enablePrivateIpAddress": false,
+                "ipConfigurations": [
+                    {
+                        "name": "SapVpn-bu1-link-0",
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu1_vpngw_name')), '/ipConfigurations/SapVpn-bu1-link-0')]",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_vpngw_pip0_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "SapVpn-bu1-link-1",
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu1_vpngw_name')), '/ipConfigurations/SapVpn-bu1-link-1')]",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_vpngw_pip1_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]"
+                            }
+                        }
+                    }
+                ],
+                "natRules": [],
+                "enableBgpRouteTranslationForNat": false,
+                "disableIPSecReplayProtection": false,
+                "sku": {
+                    "name": "VpnGw1",
+                    "tier": "VpnGw1"
+                },
+                "gatewayType": "Vpn",
+                "vpnType": "RouteBased",
+                "enableBgp": false,
+                "activeActive": true,
+                "vpnClientConfiguration": {
+                    "vpnClientProtocols": [
+                        "OpenVPN",
+                        "IkeV2"
+                    ],
+                    "vpnAuthenticationTypes": [],
+                    "vpnClientRootCertificates": [],
+                    "vpnClientRevokedCertificates": [],
+                    "radiusServers": [],
+                    "vpnClientIpsecPolicies": []
+                },
+                "bgpSettings": {
+                    "asn": 65515,
+                    "bgpPeeringAddress": "10.1.1.15,10.1.1.14",
+                    "peerWeight": 0,
+                    "bgpPeeringAddresses": [
+                        {
+                            "ipconfigurationId": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu1_vpngw_name')), '/ipConfigurations/SapVpn-bu1-link-0')]",
+                            "customBgpIpAddresses": []
+                        },
+                        {
+                            "ipconfigurationId": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu1_vpngw_name')), '/ipConfigurations/SapVpn-bu1-link-1')]",
+                            "customBgpIpAddresses": []
+                        }
+                    ]
+                },
+                "vpnGatewayGeneration": "Generation1"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('virtualNetworkGateways_SapVpn_bu2_vpngw_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu2_vpngw_pip0_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu2_vpngw_pip1_name'))]"
+            ],
+            "properties": {
+                "enablePrivateIpAddress": false,
+                "ipConfigurations": [
+                    {
+                        "name": "SapVpn-bu2-link-0",
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu2_vpngw_name')), '/ipConfigurations/SapVpn-bu2-link-0')]",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu2_vpngw_pip0_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'GatewaySubnet')]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "SapVpn-bu2-link-1",
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu2_vpngw_name')), '/ipConfigurations/SapVpn-bu2-link-1')]",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu2_vpngw_pip1_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'GatewaySubnet')]"
+                            }
+                        }
+                    }
+                ],
+                "natRules": [],
+                "enableBgpRouteTranslationForNat": false,
+                "disableIPSecReplayProtection": false,
+                "sku": {
+                    "name": "VpnGw1",
+                    "tier": "VpnGw1"
+                },
+                "gatewayType": "Vpn",
+                "vpnType": "RouteBased",
+                "enableBgp": false,
+                "activeActive": true,
+                "vpnClientConfiguration": {
+                    "vpnClientProtocols": [
+                        "OpenVPN",
+                        "IkeV2"
+                    ],
+                    "vpnAuthenticationTypes": [],
+                    "vpnClientRootCertificates": [],
+                    "vpnClientRevokedCertificates": [],
+                    "radiusServers": [],
+                    "vpnClientIpsecPolicies": []
+                },
+                "bgpSettings": {
+                    "asn": 65515,
+                    "bgpPeeringAddress": "10.2.1.4,10.2.1.5",
+                    "peerWeight": 0,
+                    "bgpPeeringAddresses": [
+                        {
+                            "ipconfigurationId": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu2_vpngw_name')), '/ipConfigurations/SapVpn-bu2-link-0')]",
+                            "customBgpIpAddresses": []
+                        },
+                        {
+                            "ipconfigurationId": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_bu2_vpngw_name')), '/ipConfigurations/SapVpn-bu2-link-1')]",
+                            "customBgpIpAddresses": []
+                        }
+                    ]
+                },
+                "vpnGatewayGeneration": "Generation1"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_ecs_vpngw_pip0_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_ecs_vpngw_pip1_name'))]"
+            ],
+            "properties": {
+                "enablePrivateIpAddress": false,
+                "ipConfigurations": [
+                    {
+                        "name": "SapVpn-ecs-link-0",
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name')), '/ipConfigurations/SapVpn-ecs-link-0')]",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_ecs_vpngw_pip0_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'GatewaySubnet')]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "SapVpn-ecs-link-1",
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name')), '/ipConfigurations/SapVpn-ecs-link-1')]",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_ecs_vpngw_pip1_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'GatewaySubnet')]"
+                            }
+                        }
+                    }
+                ],
+                "natRules": [],
+                "enableBgpRouteTranslationForNat": false,
+                "disableIPSecReplayProtection": false,
+                "sku": {
+                    "name": "VpnGw1",
+                    "tier": "VpnGw1"
+                },
+                "gatewayType": "Vpn",
+                "vpnType": "RouteBased",
+                "enableBgp": false,
+                "activeActive": true,
+                "vpnClientConfiguration": {
+                    "vpnClientProtocols": [
+                        "OpenVPN",
+                        "IkeV2"
+                    ],
+                    "vpnAuthenticationTypes": [],
+                    "vpnClientRootCertificates": [],
+                    "vpnClientRevokedCertificates": [],
+                    "radiusServers": [],
+                    "vpnClientIpsecPolicies": []
+                },
+                "bgpSettings": {
+                    "asn": 65515,
+                    "bgpPeeringAddress": "10.11.3.5,10.11.3.4",
+                    "peerWeight": 0,
+                    "bgpPeeringAddresses": [
+                        {
+                            "ipconfigurationId": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name')), '/ipConfigurations/SapVpn-ecs-link-0')]",
+                            "customBgpIpAddresses": []
+                        },
+                        {
+                            "ipconfigurationId": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_SapVpn_ecs_vpngw_name')), '/ipConfigurations/SapVpn-ecs-link-1')]",
+                            "customBgpIpAddresses": []
+                        }
+                    ]
+                },
+                "vpnGatewayGeneration": "Generation1"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('virtualNetworks_SapVpn_branch1_vnet_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'SapVpn-branch1-main')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.10.0.0/16"
+                    ]
+                },
+                "dhcpOptions": {
+                    "dnsServers": []
+                },
+                "subnets": [
+                    {
+                        "name": "GatewaySubnet",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'GatewaySubnet')]",
+                        "properties": {
+                            "addressPrefix": "10.10.1.0/24",
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    },
+                    {
+                        "name": "SapVpn-branch1-main",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'SapVpn-branch1-main')]",
+                        "properties": {
+                            "addressPrefix": "10.10.0.0/24",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('virtualNetworks_SapVpn_bu1_vnet_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'RouteServerSubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'SapVpn-bu1-main')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.1.0.0/16"
+                    ]
+                },
+                "dhcpOptions": {
+                    "dnsServers": []
+                },
+                "subnets": [
+                    {
+                        "name": "RouteServerSubnet",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'RouteServerSubnet')]",
+                        "properties": {
+                            "addressPrefix": "10.1.2.0/24",
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    },
+                    {
+                        "name": "GatewaySubnet",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]",
+                        "properties": {
+                            "addressPrefix": "10.1.1.0/24",
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    },
+                    {
+                        "name": "SapVpn-bu1-main",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'SapVpn-bu1-main')]",
+                        "properties": {
+                            "addressPrefix": "10.1.0.0/24",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('virtualNetworks_SapVpn_bu2_vnet_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'RouteServerSubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'SapVpn-bu2-main')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.2.0.0/16"
+                    ]
+                },
+                "dhcpOptions": {
+                    "dnsServers": []
+                },
+                "subnets": [
+                    {
+                        "name": "GatewaySubnet",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'GatewaySubnet')]",
+                        "properties": {
+                            "addressPrefix": "10.2.1.0/24",
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    },
+                    {
+                        "name": "RouteServerSubnet",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'RouteServerSubnet')]",
+                        "properties": {
+                            "addressPrefix": "10.2.2.0/24",
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    },
+                    {
+                        "name": "SapVpn-bu2-main",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'SapVpn-bu2-main')]",
+                        "properties": {
+                            "addressPrefix": "10.2.0.0/24",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2022-01-01",
+            "name": "[parameters('virtualNetworks_SapVpn_ecs_vnet_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-main')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu1')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu2')]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.11.0.0/16"
+                    ]
+                },
+                "dhcpOptions": {
+                    "dnsServers": []
+                },
+                "subnets": [
+                    {
+                        "name": "GatewaySubnet",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'GatewaySubnet')]",
+                        "properties": {
+                            "addressPrefix": "10.11.3.0/24",
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    },
+                    {
+                        "name": "SapVpn-ecs-main",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-main')]",
+                        "properties": {
+                            "addressPrefix": "10.11.0.0/24",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    },
+                    {
+                        "name": "SapVpn-ecs-bu1",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu1')]",
+                        "properties": {
+                            "addressPrefix": "10.11.1.0/24",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    },
+                    {
+                        "name": "SapVpn-ecs-bu2",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu2')]",
+                        "properties": {
+                            "addressPrefix": "10.11.2.0/24",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
+                            },
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        }
+    ]
+}
