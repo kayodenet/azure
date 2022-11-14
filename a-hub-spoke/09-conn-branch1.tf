@@ -14,7 +14,7 @@ resource "local_file" "branch1_nva" {
 }
 
 locals {
-  branch1_nva_init = templatefile("../../scripts/nva-branch.sh", {
+  branch1_nva_init = templatefile("../scripts/nva-branch.sh", {
     LOCAL_ASN = local.branch1_nva_asn
     LOOPBACK0 = local.branch1_nva_loopback0
     EXT_ADDR  = local.branch1_nva_ext_addr
@@ -75,7 +75,7 @@ locals {
 }
 
 module "branch1_nva" {
-  source               = "../../modules/csr-branch"
+  source               = "../modules/csr-branch"
   resource_group       = azurerm_resource_group.rg.name
   name                 = "${local.branch1_prefix}nva"
   location             = local.branch1_location

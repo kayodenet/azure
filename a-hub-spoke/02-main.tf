@@ -7,7 +7,7 @@ locals {
   hub1_nva_asn = "65000"
   hub2_nva_asn = "65000"
   mypip        = chomp(data.http.mypip.response_body)
-  vm_startup = templatefile("../../scripts/vm.sh", {
+  vm_startup = templatefile("../scripts/vm.sh", {
     TARGETS_IP = [
       local.branch1_vm_addr,
       local.branch2_vm_addr,

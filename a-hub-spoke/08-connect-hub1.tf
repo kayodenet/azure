@@ -124,7 +124,7 @@ resource "local_file" "hub1_router" {
 }
 
 locals {
-  hub1_router_init = templatefile("../../scripts/nva-hub.sh", {
+  hub1_router_init = templatefile("../scripts/nva-hub.sh", {
     LOCAL_ASN = local.hub1_nva_asn
     LOOPBACK0 = local.hub1_nva_loopback0
     INT_ADDR  = local.hub1_nva_addr
@@ -170,7 +170,7 @@ locals {
 }
 
 module "hub1_nva" {
-  source               = "../../modules/csr-hub"
+  source               = "../modules/csr-hub"
   resource_group       = azurerm_resource_group.rg.name
   name                 = "${local.hub1_prefix}nva"
   location             = local.hub1_location

@@ -33,7 +33,7 @@ resource "azurerm_subnet" "hub2_subnets" {
 #----------------------------
 
 module "hub2_vm" {
-  source          = "../../modules/ubuntu"
+  source          = "../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.hub2_prefix}vm"
   location        = local.hub2_location
