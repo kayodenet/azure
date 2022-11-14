@@ -67,5 +67,13 @@ resource "azurerm_linux_virtual_machine" "this" {
     storage_account_uri = var.storage_account.primary_blob_endpoint
   }
   disable_password_authentication = false
+
+  lifecycle {
+    ignore_changes = [
+      identity,
+      secure_boot_enabled,
+      tags,
+    ]
+  }
 }
 

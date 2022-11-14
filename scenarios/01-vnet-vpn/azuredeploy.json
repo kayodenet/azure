@@ -6,39 +6,39 @@
             "defaultValue": "SapVpn-bu1-ars",
             "type": "String"
         },
-        "virtualMachines_SapVpn_bu1_vm_name": {
+        "bu1_vm_name": {
             "defaultValue": "SapVpn-bu1-vm",
             "type": "String"
         },
-        "virtualMachines_SapVpn_bu2_vm_name": {
+        "bu2_vm_name": {
             "defaultValue": "SapVpn-bu2-vm",
             "type": "String"
         },
-        "virtualNetworks_SapVpn_bu1_vnet_name": {
+        "bu1_vnet_name": {
             "defaultValue": "SapVpn-bu1-vnet",
             "type": "String"
         },
-        "virtualNetworks_SapVpn_bu2_vnet_name": {
+        "bu2_vnet_name": {
             "defaultValue": "SapVpn-bu2-vnet",
             "type": "String"
         },
-        "virtualNetworks_SapVpn_ecs_vnet_name": {
+        "ecs_vnet_name": {
             "defaultValue": "SapVpn-ecs-vnet",
             "type": "String"
         },
-        "virtualMachines_SapVpn_branch1_vm_name": {
+        "branch1_vm_name": {
             "defaultValue": "SapVpn-branch1-vm",
             "type": "String"
         },
-        "virtualMachines_SapVpn_ecs_bu1_vm_name": {
+        "ecs_bu1_vm_name": {
             "defaultValue": "SapVpn-ecs-bu1-vm",
             "type": "String"
         },
-        "virtualMachines_SapVpn_ecs_bu2_vm_name": {
+        "ecs_bu2_vm_name": {
             "defaultValue": "SapVpn-ecs-bu2-vm",
             "type": "String"
         },
-        "virtualMachines_SapVpn_ecs_main_vm_name": {
+        "ecs_main_vm_name": {
             "defaultValue": "SapVpn-ecs-main-vm",
             "type": "String"
         },
@@ -50,7 +50,7 @@
             "defaultValue": "SapVpn-bu2-vm-nic",
             "type": "String"
         },
-        "virtualNetworks_SapVpn_branch1_vnet_name": {
+        "branch1_vnet_name": {
             "defaultValue": "SapVpn-branch1-vnet",
             "type": "String"
         },
@@ -644,7 +644,7 @@
             "name": "[parameters('networkInterfaces_SapVpn_branch1_vm_nic_name')]",
             "location": "westeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'SapVpn-branch1-main')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('branch1_vnet_name'), 'SapVpn-branch1-main')]"
             ],
             "kind": "Regular",
             "properties": {
@@ -659,7 +659,7 @@
                             "privateIPAddress": "10.10.0.5",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'SapVpn-branch1-main')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('branch1_vnet_name'), 'SapVpn-branch1-main')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -680,7 +680,7 @@
             "name": "[parameters('networkInterfaces_SapVpn_bu1_vm_nic_name')]",
             "location": "westeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'SapVpn-bu1-main')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'SapVpn-bu1-main')]"
             ],
             "kind": "Regular",
             "properties": {
@@ -695,7 +695,7 @@
                             "privateIPAddress": "10.1.0.5",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'SapVpn-bu1-main')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'SapVpn-bu1-main')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -716,7 +716,7 @@
             "name": "[parameters('networkInterfaces_SapVpn_bu2_vm_nic_name')]",
             "location": "westeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'SapVpn-bu2-main')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu2_vnet_name'), 'SapVpn-bu2-main')]"
             ],
             "kind": "Regular",
             "properties": {
@@ -731,7 +731,7 @@
                             "privateIPAddress": "10.2.0.5",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'SapVpn-bu2-main')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu2_vnet_name'), 'SapVpn-bu2-main')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -752,7 +752,7 @@
             "name": "[parameters('networkInterfaces_SapVpn_ecs_bu1_vm_nic_name')]",
             "location": "westeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu1')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'SapVpn-ecs-bu1')]"
             ],
             "kind": "Regular",
             "properties": {
@@ -767,7 +767,7 @@
                             "privateIPAddress": "10.11.1.5",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu1')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'SapVpn-ecs-bu1')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -788,7 +788,7 @@
             "name": "[parameters('networkInterfaces_SapVpn_ecs_bu2_vm_nic_name')]",
             "location": "westeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu2')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'SapVpn-ecs-bu2')]"
             ],
             "kind": "Regular",
             "properties": {
@@ -803,7 +803,7 @@
                             "privateIPAddress": "10.11.2.5",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu2')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'SapVpn-ecs-bu2')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -824,7 +824,7 @@
             "name": "[parameters('networkInterfaces_SapVpn_ecs_main_vm_nic_name')]",
             "location": "westeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-main')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'SapVpn-ecs-main')]"
             ],
             "kind": "Regular",
             "properties": {
@@ -839,7 +839,7 @@
                             "privateIPAddress": "10.11.0.5",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-main')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'SapVpn-ecs-main')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -909,9 +909,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('virtualNetworks_SapVpn_branch1_vnet_name'), '/GatewaySubnet')]",
+            "name": "[concat(parameters('branch1_vnet_name'), '/GatewaySubnet')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_branch1_vnet_name'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('branch1_vnet_name'))]"
             ],
             "properties": {
                 "addressPrefix": "10.10.1.0/24",
@@ -924,9 +924,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('virtualNetworks_SapVpn_bu1_vnet_name'), '/GatewaySubnet')]",
+            "name": "[concat(parameters('bu1_vnet_name'), '/GatewaySubnet')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_bu1_vnet_name'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('bu1_vnet_name'))]"
             ],
             "properties": {
                 "addressPrefix": "10.1.1.0/24",
@@ -939,9 +939,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('virtualNetworks_SapVpn_bu2_vnet_name'), '/GatewaySubnet')]",
+            "name": "[concat(parameters('bu2_vnet_name'), '/GatewaySubnet')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_bu2_vnet_name'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('bu2_vnet_name'))]"
             ],
             "properties": {
                 "addressPrefix": "10.2.1.0/24",
@@ -954,9 +954,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('virtualNetworks_SapVpn_ecs_vnet_name'), '/GatewaySubnet')]",
+            "name": "[concat(parameters('ecs_vnet_name'), '/GatewaySubnet')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_ecs_vnet_name'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('ecs_vnet_name'))]"
             ],
             "properties": {
                 "addressPrefix": "10.11.3.0/24",
@@ -969,9 +969,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('virtualNetworks_SapVpn_bu1_vnet_name'), '/RouteServerSubnet')]",
+            "name": "[concat(parameters('bu1_vnet_name'), '/RouteServerSubnet')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_bu1_vnet_name'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('bu1_vnet_name'))]"
             ],
             "properties": {
                 "addressPrefix": "10.1.2.0/24",
@@ -984,9 +984,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('virtualNetworks_SapVpn_bu2_vnet_name'), '/RouteServerSubnet')]",
+            "name": "[concat(parameters('bu2_vnet_name'), '/RouteServerSubnet')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_bu2_vnet_name'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('bu2_vnet_name'))]"
             ],
             "properties": {
                 "addressPrefix": "10.2.2.0/24",
@@ -1070,7 +1070,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2022-03-01",
-            "name": "[parameters('virtualMachines_SapVpn_branch1_vm_name')]",
+            "name": "[parameters('branch1_vm_name')]",
             "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_branch1_vm_nic_name'))]",
@@ -1089,13 +1089,13 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_SapVpn_branch1_vm_name'), '-vm-os-disk')]",
+                        "name": "[concat(parameters('branch1_vm_name'), '-vm-os-disk')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "writeAcceleratorEnabled": false,
                         "managedDisk": {
                             "storageAccountType": "Standard_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_SapVpn_branch1_vm_name'), '-vm-os-disk'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('branch1_vm_name'), '-vm-os-disk'))]"
                         },
                         "deleteOption": "Detach",
                         "diskSizeGB": 30
@@ -1103,7 +1103,7 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[concat(parameters('virtualMachines_SapVpn_branch1_vm_name'), '-vm')]",
+                    "computerName": "[concat(parameters('branch1_vm_name'), '-vm')]",
                     "adminUsername": "azureuser",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": false,
@@ -1143,7 +1143,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2022-03-01",
-            "name": "[parameters('virtualMachines_SapVpn_bu1_vm_name')]",
+            "name": "[parameters('bu1_vm_name')]",
             "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_bu1_vm_nic_name'))]",
@@ -1162,13 +1162,13 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_SapVpn_bu1_vm_name'), '-vm-os-disk')]",
+                        "name": "[concat(parameters('bu1_vm_name'), '-vm-os-disk')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "writeAcceleratorEnabled": false,
                         "managedDisk": {
                             "storageAccountType": "Standard_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_SapVpn_bu1_vm_name'), '-vm-os-disk'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('bu1_vm_name'), '-vm-os-disk'))]"
                         },
                         "deleteOption": "Detach",
                         "diskSizeGB": 30
@@ -1176,7 +1176,7 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[concat(parameters('virtualMachines_SapVpn_bu1_vm_name'), '-vm')]",
+                    "computerName": "[concat(parameters('bu1_vm_name'), '-vm')]",
                     "adminUsername": "azureuser",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": false,
@@ -1216,7 +1216,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2022-03-01",
-            "name": "[parameters('virtualMachines_SapVpn_bu2_vm_name')]",
+            "name": "[parameters('bu2_vm_name')]",
             "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_bu2_vm_nic_name'))]",
@@ -1235,13 +1235,13 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_SapVpn_bu2_vm_name'), '-vm-os-disk')]",
+                        "name": "[concat(parameters('bu2_vm_name'), '-vm-os-disk')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "writeAcceleratorEnabled": false,
                         "managedDisk": {
                             "storageAccountType": "Standard_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_SapVpn_bu2_vm_name'), '-vm-os-disk'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('bu2_vm_name'), '-vm-os-disk'))]"
                         },
                         "deleteOption": "Detach",
                         "diskSizeGB": 30
@@ -1249,7 +1249,7 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[concat(parameters('virtualMachines_SapVpn_bu2_vm_name'), '-vm')]",
+                    "computerName": "[concat(parameters('bu2_vm_name'), '-vm')]",
                     "adminUsername": "azureuser",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": false,
@@ -1289,7 +1289,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2022-03-01",
-            "name": "[parameters('virtualMachines_SapVpn_ecs_bu1_vm_name')]",
+            "name": "[parameters('ecs_bu1_vm_name')]",
             "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_ecs_bu1_vm_nic_name'))]",
@@ -1308,13 +1308,13 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_SapVpn_ecs_bu1_vm_name'), '-vm-os-disk')]",
+                        "name": "[concat(parameters('ecs_bu1_vm_name'), '-vm-os-disk')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "writeAcceleratorEnabled": false,
                         "managedDisk": {
                             "storageAccountType": "Standard_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_SapVpn_ecs_bu1_vm_name'), '-vm-os-disk'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('ecs_bu1_vm_name'), '-vm-os-disk'))]"
                         },
                         "deleteOption": "Detach",
                         "diskSizeGB": 30
@@ -1322,7 +1322,7 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[concat(parameters('virtualMachines_SapVpn_ecs_bu1_vm_name'), '-vm')]",
+                    "computerName": "[concat(parameters('ecs_bu1_vm_name'), '-vm')]",
                     "adminUsername": "azureuser",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": false,
@@ -1362,7 +1362,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2022-03-01",
-            "name": "[parameters('virtualMachines_SapVpn_ecs_bu2_vm_name')]",
+            "name": "[parameters('ecs_bu2_vm_name')]",
             "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_ecs_bu2_vm_nic_name'))]",
@@ -1381,13 +1381,13 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_SapVpn_ecs_bu2_vm_name'), '-vm-os-disk')]",
+                        "name": "[concat(parameters('ecs_bu2_vm_name'), '-vm-os-disk')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "writeAcceleratorEnabled": false,
                         "managedDisk": {
                             "storageAccountType": "Standard_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_SapVpn_ecs_bu2_vm_name'), '-vm-os-disk'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('ecs_bu2_vm_name'), '-vm-os-disk'))]"
                         },
                         "deleteOption": "Detach",
                         "diskSizeGB": 30
@@ -1395,7 +1395,7 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[concat(parameters('virtualMachines_SapVpn_ecs_bu2_vm_name'), '-vm')]",
+                    "computerName": "[concat(parameters('ecs_bu2_vm_name'), '-vm')]",
                     "adminUsername": "azureuser",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": false,
@@ -1435,7 +1435,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2022-03-01",
-            "name": "[parameters('virtualMachines_SapVpn_ecs_main_vm_name')]",
+            "name": "[parameters('ecs_main_vm_name')]",
             "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_SapVpn_ecs_main_vm_nic_name'))]",
@@ -1454,13 +1454,13 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_SapVpn_ecs_main_vm_name'), '-vm-os-disk')]",
+                        "name": "[concat(parameters('ecs_main_vm_name'), '-vm-os-disk')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "writeAcceleratorEnabled": false,
                         "managedDisk": {
                             "storageAccountType": "Standard_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_SapVpn_ecs_main_vm_name'), '-vm-os-disk'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('ecs_main_vm_name'), '-vm-os-disk'))]"
                         },
                         "deleteOption": "Detach",
                         "diskSizeGB": 30
@@ -1468,7 +1468,7 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[concat(parameters('virtualMachines_SapVpn_ecs_main_vm_name'), '-vm')]",
+                    "computerName": "[concat(parameters('ecs_main_vm_name'), '-vm')]",
                     "adminUsername": "azureuser",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": false,
@@ -2076,7 +2076,7 @@
             "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_branch1_ergw_pip0_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'GatewaySubnet')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('branch1_vnet_name'), 'GatewaySubnet')]"
             ],
             "properties": {
                 "enablePrivateIpAddress": false,
@@ -2090,7 +2090,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_branch1_ergw_pip0_name'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'GatewaySubnet')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('branch1_vnet_name'), 'GatewaySubnet')]"
                             }
                         }
                     }
@@ -2127,7 +2127,7 @@
             "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_ergw_pip0_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'GatewaySubnet')]"
             ],
             "properties": {
                 "enablePrivateIpAddress": false,
@@ -2141,7 +2141,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_ergw_pip0_name'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'GatewaySubnet')]"
                             }
                         }
                     }
@@ -2174,9 +2174,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('virtualNetworks_SapVpn_branch1_vnet_name'), '/SapVpn-branch1-main')]",
+            "name": "[concat(parameters('branch1_vnet_name'), '/SapVpn-branch1-main')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_branch1_vnet_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('branch1_vnet_name'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
             ],
             "properties": {
@@ -2193,9 +2193,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('virtualNetworks_SapVpn_bu1_vnet_name'), '/SapVpn-bu1-main')]",
+            "name": "[concat(parameters('bu1_vnet_name'), '/SapVpn-bu1-main')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_bu1_vnet_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('bu1_vnet_name'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
             ],
             "properties": {
@@ -2212,9 +2212,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('virtualNetworks_SapVpn_bu2_vnet_name'), '/SapVpn-bu2-main')]",
+            "name": "[concat(parameters('bu2_vnet_name'), '/SapVpn-bu2-main')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_bu2_vnet_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('bu2_vnet_name'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
             ],
             "properties": {
@@ -2231,9 +2231,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('virtualNetworks_SapVpn_ecs_vnet_name'), '/SapVpn-ecs-bu1')]",
+            "name": "[concat(parameters('ecs_vnet_name'), '/SapVpn-ecs-bu1')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_ecs_vnet_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('ecs_vnet_name'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
             ],
             "properties": {
@@ -2250,9 +2250,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('virtualNetworks_SapVpn_ecs_vnet_name'), '/SapVpn-ecs-bu2')]",
+            "name": "[concat(parameters('ecs_vnet_name'), '/SapVpn-ecs-bu2')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_ecs_vnet_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('ecs_vnet_name'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
             ],
             "properties": {
@@ -2269,9 +2269,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('virtualNetworks_SapVpn_ecs_vnet_name'), '/SapVpn-ecs-main')]",
+            "name": "[concat(parameters('ecs_vnet_name'), '/SapVpn-ecs-main')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SapVpn_ecs_vnet_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('ecs_vnet_name'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
             ],
             "properties": {
@@ -2394,7 +2394,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualHubs', parameters('virtualHubs_SapVpn_bu1_ars_name'))]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_ars_pip_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'RouteServerSubnet')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'RouteServerSubnet')]"
             ],
             "properties": {
                 "privateIPAllocationMethod": "Dynamic",
@@ -2402,7 +2402,7 @@
                     "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_ars_pip_name'))]"
                 },
                 "subnet": {
-                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'RouteServerSubnet')]"
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'RouteServerSubnet')]"
                 }
             }
         },
@@ -2413,7 +2413,7 @@
             "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_vpngw_pip0_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'GatewaySubnet')]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_vpngw_pip1_name'))]"
             ],
             "properties": {
@@ -2428,7 +2428,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_vpngw_pip0_name'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'GatewaySubnet')]"
                             }
                         }
                     },
@@ -2441,7 +2441,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu1_vpngw_pip1_name'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'GatewaySubnet')]"
                             }
                         }
                     }
@@ -2493,7 +2493,7 @@
             "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu2_vpngw_pip0_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu2_vnet_name'), 'GatewaySubnet')]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu2_vpngw_pip1_name'))]"
             ],
             "properties": {
@@ -2508,7 +2508,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu2_vpngw_pip0_name'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'GatewaySubnet')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu2_vnet_name'), 'GatewaySubnet')]"
                             }
                         }
                     },
@@ -2521,7 +2521,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_bu2_vpngw_pip1_name'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'GatewaySubnet')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu2_vnet_name'), 'GatewaySubnet')]"
                             }
                         }
                     }
@@ -2573,7 +2573,7 @@
             "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_ecs_vpngw_pip0_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'GatewaySubnet')]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_ecs_vpngw_pip1_name'))]"
             ],
             "properties": {
@@ -2588,7 +2588,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_ecs_vpngw_pip0_name'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'GatewaySubnet')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'GatewaySubnet')]"
                             }
                         }
                     },
@@ -2601,7 +2601,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SapVpn_ecs_vpngw_pip1_name'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'GatewaySubnet')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'GatewaySubnet')]"
                             }
                         }
                     }
@@ -2649,11 +2649,11 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2022-01-01",
-            "name": "[parameters('virtualNetworks_SapVpn_branch1_vnet_name')]",
+            "name": "[parameters('branch1_vnet_name')]",
             "location": "westeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'GatewaySubnet')]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'SapVpn-branch1-main')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('branch1_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('branch1_vnet_name'), 'SapVpn-branch1-main')]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
             ],
             "properties": {
@@ -2668,7 +2668,7 @@
                 "subnets": [
                     {
                         "name": "GatewaySubnet",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'GatewaySubnet')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('branch1_vnet_name'), 'GatewaySubnet')]",
                         "properties": {
                             "addressPrefix": "10.10.1.0/24",
                             "serviceEndpoints": [],
@@ -2680,7 +2680,7 @@
                     },
                     {
                         "name": "SapVpn-branch1-main",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_branch1_vnet_name'), 'SapVpn-branch1-main')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('branch1_vnet_name'), 'SapVpn-branch1-main')]",
                         "properties": {
                             "addressPrefix": "10.10.0.0/24",
                             "networkSecurityGroup": {
@@ -2701,12 +2701,12 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2022-01-01",
-            "name": "[parameters('virtualNetworks_SapVpn_bu1_vnet_name')]",
+            "name": "[parameters('bu1_vnet_name')]",
             "location": "westeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'RouteServerSubnet')]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'SapVpn-bu1-main')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'RouteServerSubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'SapVpn-bu1-main')]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
             ],
             "properties": {
@@ -2721,7 +2721,7 @@
                 "subnets": [
                     {
                         "name": "RouteServerSubnet",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'RouteServerSubnet')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'RouteServerSubnet')]",
                         "properties": {
                             "addressPrefix": "10.1.2.0/24",
                             "serviceEndpoints": [],
@@ -2733,7 +2733,7 @@
                     },
                     {
                         "name": "GatewaySubnet",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'GatewaySubnet')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'GatewaySubnet')]",
                         "properties": {
                             "addressPrefix": "10.1.1.0/24",
                             "serviceEndpoints": [],
@@ -2745,7 +2745,7 @@
                     },
                     {
                         "name": "SapVpn-bu1-main",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu1_vnet_name'), 'SapVpn-bu1-main')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu1_vnet_name'), 'SapVpn-bu1-main')]",
                         "properties": {
                             "addressPrefix": "10.1.0.0/24",
                             "networkSecurityGroup": {
@@ -2766,12 +2766,12 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2022-01-01",
-            "name": "[parameters('virtualNetworks_SapVpn_bu2_vnet_name')]",
+            "name": "[parameters('bu2_vnet_name')]",
             "location": "westeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'GatewaySubnet')]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'RouteServerSubnet')]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'SapVpn-bu2-main')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu2_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu2_vnet_name'), 'RouteServerSubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu2_vnet_name'), 'SapVpn-bu2-main')]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]"
             ],
             "properties": {
@@ -2786,7 +2786,7 @@
                 "subnets": [
                     {
                         "name": "GatewaySubnet",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'GatewaySubnet')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu2_vnet_name'), 'GatewaySubnet')]",
                         "properties": {
                             "addressPrefix": "10.2.1.0/24",
                             "serviceEndpoints": [],
@@ -2798,7 +2798,7 @@
                     },
                     {
                         "name": "RouteServerSubnet",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'RouteServerSubnet')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu2_vnet_name'), 'RouteServerSubnet')]",
                         "properties": {
                             "addressPrefix": "10.2.2.0/24",
                             "serviceEndpoints": [],
@@ -2810,7 +2810,7 @@
                     },
                     {
                         "name": "SapVpn-bu2-main",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_bu2_vnet_name'), 'SapVpn-bu2-main')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('bu2_vnet_name'), 'SapVpn-bu2-main')]",
                         "properties": {
                             "addressPrefix": "10.2.0.0/24",
                             "networkSecurityGroup": {
@@ -2831,14 +2831,14 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2022-01-01",
-            "name": "[parameters('virtualNetworks_SapVpn_ecs_vnet_name')]",
+            "name": "[parameters('ecs_vnet_name')]",
             "location": "westeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'GatewaySubnet')]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-main')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'GatewaySubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'SapVpn-ecs-main')]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SapVpn_nsg_westeurope_main_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu1')]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu2')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'SapVpn-ecs-bu1')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'SapVpn-ecs-bu2')]"
             ],
             "properties": {
                 "addressSpace": {
@@ -2852,7 +2852,7 @@
                 "subnets": [
                     {
                         "name": "GatewaySubnet",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'GatewaySubnet')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'GatewaySubnet')]",
                         "properties": {
                             "addressPrefix": "10.11.3.0/24",
                             "serviceEndpoints": [],
@@ -2864,7 +2864,7 @@
                     },
                     {
                         "name": "SapVpn-ecs-main",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-main')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'SapVpn-ecs-main')]",
                         "properties": {
                             "addressPrefix": "10.11.0.0/24",
                             "networkSecurityGroup": {
@@ -2879,7 +2879,7 @@
                     },
                     {
                         "name": "SapVpn-ecs-bu1",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu1')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'SapVpn-ecs-bu1')]",
                         "properties": {
                             "addressPrefix": "10.11.1.0/24",
                             "networkSecurityGroup": {
@@ -2894,7 +2894,7 @@
                     },
                     {
                         "name": "SapVpn-ecs-bu2",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_SapVpn_ecs_vnet_name'), 'SapVpn-ecs-bu2')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ecs_vnet_name'), 'SapVpn-ecs-bu2')]",
                         "properties": {
                             "addressPrefix": "10.11.2.0/24",
                             "networkSecurityGroup": {

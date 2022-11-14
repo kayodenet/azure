@@ -44,6 +44,7 @@ locals {
 locals {
   bu1_prefix        = local.prefix == "" ? "bu1-" : join("-", [local.prefix, "bu1-"])
   bu1_location      = local.region1
+  bu1_vpngw_asn     = "65515"
   bu1_address_space = ["10.1.0.0/16"]
   bu1_domain        = "bu1.azure"
   bu1_tags          = { env = "bu1" }
@@ -63,6 +64,7 @@ locals {
 locals {
   bu2_prefix        = local.prefix == "" ? "bu2-" : join("-", [local.prefix, "bu2-"])
   bu2_location      = local.region1
+  bu2_vpngw_asn     = "65515"
   bu2_address_space = ["10.2.0.0/16"]
   bu2_domain        = "bu2.azure"
   bu2_tags          = { env = "bu2" }
@@ -91,6 +93,32 @@ locals {
   }
   branch1_vm_addr = cidrhost(local.branch1_subnets["${local.branch1_prefix}main"].address_prefixes[0], 5)
   branch1_vm_dns  = "vm.${local.branch1_domain}"
+}
+
+# branch2
+#----------------------------
+
+locals {
+  branch2_prefix        = local.prefix == "" ? "branch2-" : join("-", [local.prefix, "branch2-"])
+  branch2_location      = local.region1
+  branch2_address_space = ["10.20.0.0/16"]
+  branch2_nva_asn       = "65002"
+  branch2_domain        = "branch2"
+  branch2_tags          = { env = "branch2" }
+  branch2_subnets = {
+    ("${local.branch2_prefix}main") = { address_prefixes = ["10.20.0.0/24"] }
+    ("${local.branch2_prefix}ext")  = { address_prefixes = ["10.20.1.0/24"] }
+    ("${local.branch2_prefix}int")  = { address_prefixes = ["10.20.2.0/24"] }
+  }
+  branch2_ext_default_gw = cidrhost(local.branch2_subnets["${local.branch2_prefix}ext"].address_prefixes[0], 1)
+  branch2_int_default_gw = cidrhost(local.branch2_subnets["${local.branch2_prefix}int"].address_prefixes[0], 1)
+  branch2_nva_ext_addr   = cidrhost(local.branch2_subnets["${local.branch2_prefix}ext"].address_prefixes[0], 9)
+  branch2_nva_int_addr   = cidrhost(local.branch2_subnets["${local.branch2_prefix}int"].address_prefixes[0], 9)
+  branch2_vm_addr        = cidrhost(local.branch2_subnets["${local.branch2_prefix}main"].address_prefixes[0], 5)
+  branch2_nva_loopback0  = "192.168.20.20"
+  branch2_nva_tun_range0 = "10.20.20.0/30"
+  branch2_nva_tun_range1 = "10.20.20.4/30"
+  branch2_vm_dns         = "vm.${local.branch2_domain}"
 }
 
 # megaport

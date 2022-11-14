@@ -124,6 +124,7 @@ resource "azurerm_local_network_gateway" "ecs_bu2_local_gw0" {
   gateway_address     = azurerm_public_ip.bu2_vpngw_pip0.ip_address
   address_space = [
     local.bu2_subnets["${local.bu2_prefix}main"].address_prefixes[0],
+    local.branch2_address_space[0],
   ]
 }
 
@@ -134,6 +135,7 @@ resource "azurerm_local_network_gateway" "ecs_bu2_local_gw1" {
   gateway_address     = azurerm_public_ip.bu2_vpngw_pip1.ip_address
   address_space = [
     local.bu2_subnets["${local.bu2_prefix}main"].address_prefixes[0],
+    local.branch2_address_space[0],
   ]
 }
 
@@ -188,7 +190,7 @@ resource "azurerm_virtual_network_gateway_connection" "ecs_bu2_local_gw0" {
   use_policy_based_traffic_selectors = true
   traffic_selector_policy {
     local_address_cidrs  = [local.ecs_subnets["${local.ecs_prefix}bu2"].address_prefixes[0], ]
-    remote_address_cidrs = [local.bu2_subnets["${local.bu2_prefix}main"].address_prefixes[0], ]
+    remote_address_cidrs = [local.bu2_subnets["${local.bu2_prefix}main"].address_prefixes[0], local.branch2_address_space[0], ]
   }
 }
 
@@ -204,6 +206,6 @@ resource "azurerm_virtual_network_gateway_connection" "ecs_bu2_local_gw1" {
   use_policy_based_traffic_selectors = true
   traffic_selector_policy {
     local_address_cidrs  = [local.ecs_subnets["${local.ecs_prefix}bu2"].address_prefixes[0], ]
-    remote_address_cidrs = [local.bu2_subnets["${local.bu2_prefix}main"].address_prefixes[0], ]
+    remote_address_cidrs = [local.bu2_subnets["${local.bu2_prefix}main"].address_prefixes[0], local.branch2_address_space[0], ]
   }
 }

@@ -13,6 +13,7 @@ locals {
       local.bu1_vm_addr,
       local.bu2_vm_addr,
       local.branch1_vm_addr,
+      local.branch2_vm_addr,
     ]
     TARGETS_DNS = []
   })
@@ -133,3 +134,17 @@ resource "azurerm_public_ip" "branch1_ergw_pip0" {
   sku                 = "Standard"
   allocation_method   = "Static"
 }
+
+# branch2
+#----------------------------
+
+# nva
+
+resource "azurerm_public_ip" "branch2_nva_pip" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${local.branch2_prefix}nva-pip"
+  location            = local.region1
+  sku                 = "Standard"
+  allocation_method   = "Static"
+}
+

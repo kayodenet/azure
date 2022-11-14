@@ -1,4 +1,9 @@
 
+locals {
+  bu2_vpngw_bgp0 = azurerm_virtual_network_gateway.bu2_vpngw.bgp_settings[0].peering_addresses[0].default_addresses[0]
+  bu2_vpngw_bgp1 = azurerm_virtual_network_gateway.bu2_vpngw.bgp_settings[0].peering_addresses[1].default_addresses[0]
+}
+
 # vnet
 #----------------------------
 
@@ -74,6 +79,8 @@ resource "azurerm_virtual_network_gateway" "bu2_vpngw" {
 # local gw
 #----------------------------
 
+# ecs
+
 resource "azurerm_local_network_gateway" "bu2_ecs_local_gw0" {
   resource_group_name = azurerm_resource_group.rg.name
   name                = "${local.bu2_prefix}ecs-local-gw0"
@@ -94,6 +101,20 @@ resource "azurerm_local_network_gateway" "bu2_ecs_local_gw1" {
   ]
 }
 
+# branch2
+
+resource "azurerm_local_network_gateway" "bu2_branch2_local_gw" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${local.bu2_prefix}branch2-local-gw"
+  location            = local.bu2_location
+  gateway_address     = azurerm_public_ip.branch2_nva_pip.ip_address
+  address_space       = ["${local.branch2_nva_loopback0}/32", ]
+  bgp_settings {
+    asn                 = local.branch2_nva_asn
+    bgp_peering_address = local.branch2_nva_loopback0
+  }
+}
+
 # connections
 #----------------------------
 
@@ -110,7 +131,7 @@ resource "azurerm_virtual_network_gateway_connection" "bu2_ecs_local_gw0" {
   shared_key                         = local.psk
   use_policy_based_traffic_selectors = true
   traffic_selector_policy {
-    local_address_cidrs  = [local.bu2_subnets["${local.bu2_prefix}main"].address_prefixes[0], ]
+    local_address_cidrs  = [local.bu2_subnets["${local.bu2_prefix}main"].address_prefixes[0], local.branch2_address_space[0], ]
     remote_address_cidrs = [local.ecs_subnets["${local.ecs_prefix}bu2"].address_prefixes[0], ]
   }
 }
@@ -126,7 +147,20 @@ resource "azurerm_virtual_network_gateway_connection" "bu2_ecs_local_gw1" {
   shared_key                         = local.psk
   use_policy_based_traffic_selectors = true
   traffic_selector_policy {
-    local_address_cidrs  = [local.bu2_subnets["${local.bu2_prefix}main"].address_prefixes[0], ]
+    local_address_cidrs  = [local.bu2_subnets["${local.bu2_prefix}main"].address_prefixes[0], local.branch2_address_space[0], ]
     remote_address_cidrs = [local.ecs_subnets["${local.ecs_prefix}bu2"].address_prefixes[0], ]
   }
+}
+
+# branch2
+
+resource "azurerm_virtual_network_gateway_connection" "bu2_branch2_local_gw" {
+  resource_group_name        = azurerm_resource_group.rg.name
+  name                       = "${local.bu2_prefix}branch2-local-gw-conn"
+  location                   = local.bu2_location
+  type                       = "IPsec"
+  enable_bgp                 = true
+  virtual_network_gateway_id = azurerm_virtual_network_gateway.bu2_vpngw.id
+  local_network_gateway_id   = azurerm_local_network_gateway.bu2_branch2_local_gw.id
+  shared_key                 = local.psk
 }
