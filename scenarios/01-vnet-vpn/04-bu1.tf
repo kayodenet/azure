@@ -76,7 +76,7 @@ resource "azurerm_virtual_network_gateway" "bu1_vpngw" {
 
 resource "azurerm_local_network_gateway" "bu1_ecs_local_gw0" {
   resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.bu1_prefix}ecs-local-gw0"
+  name                = "${local.bu1_prefix}hub-local-gw0"
   location            = local.bu1_location
   gateway_address     = azurerm_public_ip.ecs_vpngw_pip0.ip_address
   address_space = [
@@ -86,7 +86,7 @@ resource "azurerm_local_network_gateway" "bu1_ecs_local_gw0" {
 
 resource "azurerm_local_network_gateway" "bu1_ecs_local_gw1" {
   resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.bu1_prefix}ecs-local-gw1"
+  name                = "${local.bu1_prefix}hub-local-gw1"
   location            = local.bu1_location
   gateway_address     = azurerm_public_ip.ecs_vpngw_pip1.ip_address
   address_space = [
@@ -101,7 +101,7 @@ resource "azurerm_local_network_gateway" "bu1_ecs_local_gw1" {
 
 resource "azurerm_virtual_network_gateway_connection" "bu1_ecs_local_gw0" {
   resource_group_name                = azurerm_resource_group.rg.name
-  name                               = "${local.bu1_prefix}ecs-local-gw0"
+  name                               = "${local.bu1_prefix}hub-local-gw0"
   location                           = local.bu1_location
   type                               = "IPsec"
   enable_bgp                         = false

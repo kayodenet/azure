@@ -3,7 +3,7 @@
 #----------------------------
 
 locals {
-  prefix = "SapVpn"
+  prefix = "Vpn"
   mypip  = chomp(data.http.mypip.response_body)
   vm_startup = templatefile("../../scripts/vm.sh", {
     TARGETS_IP = [
@@ -20,10 +20,10 @@ locals {
 }
 
 ####################################################
-# ecs environment
+# hub environment
 ####################################################
 
-# ecs
+# hub
 #----------------------------
 
 # vpngw

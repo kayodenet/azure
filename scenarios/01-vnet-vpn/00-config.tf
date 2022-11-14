@@ -15,16 +15,16 @@ locals {
   rfc1918_prefixes = ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
 }
 
-# ecs
+# hub
 #----------------------------
 
 locals {
-  ecs_prefix        = local.prefix == "" ? "ecs-" : join("-", [local.prefix, "ecs-"])
+  ecs_prefix        = local.prefix == "" ? "hub-" : join("-", [local.prefix, "hub-"])
   ecs_location      = local.region1
   ecs_vpngw_asn     = "65011"
   ecs_address_space = ["10.11.0.0/16"]
-  ecs_domain        = "ecs"
-  ecs_tags          = { env = "ecs" }
+  ecs_domain        = "hub"
+  ecs_tags          = { env = "hub" }
   ecs_subnets = {
     ("${local.ecs_prefix}main") = { address_prefixes = ["10.11.0.0/24"] }
     ("${local.ecs_prefix}bu1")  = { address_prefixes = ["10.11.1.0/24"] }

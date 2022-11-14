@@ -39,7 +39,7 @@ data "megaport_location" "location" {
 
 resource "azurerm_express_route_circuit" "er_circuit_bu1" {
   resource_group_name   = azurerm_resource_group.rg.name
-  name                  = "${local.bu1_prefix}ecs-local-gw0"
+  name                  = "${local.bu1_prefix}hub-local-gw0"
   location              = local.bu1_location
   service_provider_name = "Megaport"
   peering_location      = "Amsterdam"
@@ -52,7 +52,7 @@ resource "azurerm_express_route_circuit" "er_circuit_bu1" {
 
 resource "azurerm_express_route_circuit_authorization" "er_circuit_bu1" {
   resource_group_name        = azurerm_resource_group.rg.name
-  name                       = "${local.bu1_prefix}ecs-local-gw0"
+  name                       = "${local.bu1_prefix}hub-local-gw0"
   express_route_circuit_name = azurerm_express_route_circuit.er_circuit_bu1.name
 }
 
@@ -60,7 +60,7 @@ resource "azurerm_express_route_circuit_authorization" "er_circuit_bu1" {
 
 resource "azurerm_express_route_circuit" "er_circuit_branch1" {
   resource_group_name   = azurerm_resource_group.rg.name
-  name                  = "${local.branch1_prefix}ecs-local-gw0"
+  name                  = "${local.branch1_prefix}hub-local-gw0"
   location              = local.branch1_location
   service_provider_name = "Megaport"
   peering_location      = "Amsterdam"
@@ -73,7 +73,7 @@ resource "azurerm_express_route_circuit" "er_circuit_branch1" {
 
 resource "azurerm_express_route_circuit_authorization" "er_circuit_branch1" {
   resource_group_name        = azurerm_resource_group.rg.name
-  name                       = "${local.branch1_prefix}ecs-local-gw0"
+  name                       = "${local.branch1_prefix}hub-local-gw0"
   express_route_circuit_name = azurerm_express_route_circuit.er_circuit_branch1.name
 }
 
