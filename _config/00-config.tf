@@ -154,9 +154,9 @@ locals {
   }
   branch2_ext_default_gw = cidrhost(local.branch2_subnets["${local.branch2_prefix}ext"].address_prefixes[0], 1)
   branch2_int_default_gw = cidrhost(local.branch2_subnets["${local.branch2_prefix}int"].address_prefixes[0], 1)
-  branch2_vm_addr        = cidrhost(local.branch2_subnets["${local.branch2_prefix}main"].address_prefixes[0], 5)
   branch2_nva_ext_addr   = cidrhost(local.branch2_subnets["${local.branch2_prefix}ext"].address_prefixes[0], 9)
   branch2_nva_int_addr   = cidrhost(local.branch2_subnets["${local.branch2_prefix}int"].address_prefixes[0], 9)
+  branch2_vm_addr        = cidrhost(local.branch2_subnets["${local.branch2_prefix}main"].address_prefixes[0], 5)
   branch2_nva_loopback0  = "192.168.20.20"
   branch2_nva_tun_range0 = "10.20.20.0/30"
   branch2_nva_tun_range1 = "10.20.20.4/30"
@@ -231,7 +231,7 @@ locals {
     ("${local.spoke1_prefix}appgw") = { address_prefixes = ["10.1.1.0/24"] }
   }
   spoke1_vm_addr    = cidrhost(local.spoke1_subnets["${local.spoke1_prefix}main"].address_prefixes[0], 5)
-  spoke1_appgw_addr = cidrhost(local.spoke1_subnets["${local.spoke1_prefix}main"].address_prefixes[0], 99)
+  spoke1_appgw_addr = cidrhost(local.spoke1_subnets["${local.spoke1_prefix}appgw"].address_prefixes[0], 99)
   spoke1_vm_dns     = "vm.${local.spoke1_domain}"
 }
 

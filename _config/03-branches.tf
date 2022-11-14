@@ -29,7 +29,7 @@ resource "azurerm_subnet_network_security_group_association" "branch1_subnets" {
 # vm
 
 module "branch1_vm" {
-  source          = "../../modules/ubuntu"
+  source          = "../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.branch1_prefix}vm"
   location        = local.branch1_location
@@ -41,7 +41,7 @@ module "branch1_vm" {
   custom_data     = base64encode(local.vm_startup)
 }
 
-/*# branch2
+# branch2
 #----------------------------
 
 # vnet
@@ -71,7 +71,7 @@ resource "azurerm_subnet_network_security_group_association" "branch2_subnets" {
 # vm
 
 module "branch2_vm" {
-  source          = "../../modules/ubuntu"
+  source          = "../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.branch2_prefix}vm"
   location        = local.branch2_location
@@ -81,7 +81,7 @@ module "branch2_vm" {
   admin_username  = local.username
   admin_password  = local.password
   custom_data     = base64encode(local.vm_startup)
-}*/
+}
 
 # branch3
 #----------------------------
@@ -113,7 +113,7 @@ resource "azurerm_subnet_network_security_group_association" "branch3_subnets" {
 # vm
 
 module "branch3_vm" {
-  source          = "../../modules/ubuntu"
+  source          = "../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.branch3_prefix}vm"
   location        = local.branch3_location
@@ -125,7 +125,7 @@ module "branch3_vm" {
   custom_data     = base64encode(local.vm_startup)
 }
 
-/*# branch4
+# branch4
 #----------------------------
 
 # vnet
@@ -155,7 +155,7 @@ resource "azurerm_subnet_network_security_group_association" "branch4_subnets" {
 # vm
 
 module "branch4_vm" {
-  source          = "../../modules/ubuntu"
+  source          = "../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.branch4_prefix}vm"
   location        = local.branch4_location
@@ -165,5 +165,5 @@ module "branch4_vm" {
   admin_username  = local.username
   admin_password  = local.password
   custom_data     = base64encode(local.vm_startup)
-}*/
+}
 

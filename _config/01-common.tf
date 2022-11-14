@@ -15,6 +15,16 @@ resource "azurerm_resource_group" "rg" {
   location = local.default_region
 }
 
+# log analytics workspace
+
+resource "azurerm_log_analytics_workspace" "analytics_ws" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${local.prefix}analytics-ws"
+  location            = local.default_region
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
 # my public ip
 
 data "http" "mypip" {

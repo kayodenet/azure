@@ -26,15 +26,10 @@ resource "azurerm_subnet_network_security_group_association" "spoke1_subnets_mai
   network_security_group_id = azurerm_network_security_group.nsg_region1_main.id
 }
 
-resource "azurerm_subnet_network_security_group_association" "spoke1_subnets_appgw" {
-  subnet_id                 = azurerm_subnet.spoke1_subnets["${local.spoke1_prefix}appgw"].id
-  network_security_group_id = azurerm_network_security_group.nsg_region1_appgw.id
-}
-
 # vm
 
 module "spoke1_vm" {
-  source          = "../../modules/ubuntu"
+  source          = "../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.spoke1_prefix}vm"
   location        = local.spoke1_location
@@ -73,15 +68,10 @@ resource "azurerm_subnet_network_security_group_association" "spoke2_subnets_mai
   network_security_group_id = azurerm_network_security_group.nsg_region1_main.id
 }
 
-resource "azurerm_subnet_network_security_group_association" "spoke2_subnets_appgw" {
-  subnet_id                 = azurerm_subnet.spoke2_subnets["${local.spoke2_prefix}appgw"].id
-  network_security_group_id = azurerm_network_security_group.nsg_region1_appgw.id
-}
-
 # vm
 
 module "spoke2_vm" {
-  source          = "../../modules/ubuntu"
+  source          = "../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.spoke2_prefix}vm"
   location        = local.spoke2_location
@@ -120,15 +110,10 @@ resource "azurerm_subnet_network_security_group_association" "spoke3_subnets_mai
   network_security_group_id = azurerm_network_security_group.nsg_region1_main.id
 }
 
-resource "azurerm_subnet_network_security_group_association" "spoke3_subnets_appgw" {
-  subnet_id                 = azurerm_subnet.spoke3_subnets["${local.spoke3_prefix}appgw"].id
-  network_security_group_id = azurerm_network_security_group.nsg_region1_appgw.id
-}
-
 # vm
 
 module "spoke3_vm" {
-  source          = "../../modules/ubuntu"
+  source          = "../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.spoke3_prefix}vm"
   location        = local.spoke3_location
@@ -167,15 +152,10 @@ resource "azurerm_subnet_network_security_group_association" "spoke4_subnets_mai
   network_security_group_id = azurerm_network_security_group.nsg_region2_main.id
 }
 
-resource "azurerm_subnet_network_security_group_association" "spoke4_subnets_appgw" {
-  subnet_id                 = azurerm_subnet.spoke4_subnets["${local.spoke4_prefix}appgw"].id
-  network_security_group_id = azurerm_network_security_group.nsg_region2_appgw.id
-}
-
 # vm
 
 module "spoke4_vm" {
-  source          = "../../modules/ubuntu"
+  source          = "../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.spoke4_prefix}vm"
   location        = local.spoke4_location
@@ -214,15 +194,10 @@ resource "azurerm_subnet_network_security_group_association" "spoke5_subnets_mai
   network_security_group_id = azurerm_network_security_group.nsg_region2_main.id
 }
 
-resource "azurerm_subnet_network_security_group_association" "spoke5_subnets_appgw" {
-  subnet_id                 = azurerm_subnet.spoke5_subnets["${local.spoke5_prefix}appgw"].id
-  network_security_group_id = azurerm_network_security_group.nsg_region2_appgw.id
-}
-
 # vm
 
 module "spoke5_vm" {
-  source          = "../../modules/ubuntu"
+  source          = "../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.spoke5_prefix}vm"
   location        = local.spoke5_location
@@ -261,15 +236,10 @@ resource "azurerm_subnet_network_security_group_association" "spoke6_subnets_mai
   network_security_group_id = azurerm_network_security_group.nsg_region2_main.id
 }
 
-resource "azurerm_subnet_network_security_group_association" "spoke6_subnets_appgw" {
-  subnet_id                 = azurerm_subnet.spoke6_subnets["${local.spoke6_prefix}appgw"].id
-  network_security_group_id = azurerm_network_security_group.nsg_region2_appgw.id
-}
-
 # vm
 
 module "spoke6_vm" {
-  source          = "../../modules/ubuntu"
+  source          = "../modules/ubuntu"
   resource_group  = azurerm_resource_group.rg.name
   name            = "${local.spoke6_prefix}vm"
   location        = local.spoke6_location
