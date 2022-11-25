@@ -10,17 +10,17 @@ proposal AZURE-IKE-PROPOSAL
 match address local 10.10.1.9
 !
 crypto ikev2 keyring AZURE-KEYRING
-peer 13.95.160.186
-address 13.95.160.186
+peer 20.105.140.108
+address 20.105.140.108
 pre-shared-key changeme
-peer 13.95.165.115
-address 13.95.165.115
+peer 20.105.142.199
+address 20.105.142.199
 pre-shared-key changeme
 !
 crypto ikev2 profile AZURE-IKE-PROPOSAL
 match address local 10.10.1.9
-match identity remote address 13.95.160.186 255.255.255.255
-match identity remote address 13.95.165.115 255.255.255.255
+match identity remote address 20.105.140.108 255.255.255.255
+match identity remote address 20.105.142.199 255.255.255.255
 authentication remote pre-share
 authentication local pre-share
 keyring local AZURE-KEYRING
@@ -40,7 +40,7 @@ ip address 10.10.10.1 255.255.255.252
 tunnel mode ipsec ipv4
 ip tcp adjust-mss 1350
 tunnel source 10.10.1.9
-tunnel destination 13.95.160.186
+tunnel destination 20.105.140.108
 tunnel protection ipsec profile AZURE-IPSEC-PROFILE
 !
 interface Tunnel1
@@ -48,25 +48,25 @@ ip address 10.10.10.5 255.255.255.252
 tunnel mode ipsec ipv4
 ip tcp adjust-mss 1350
 tunnel source 10.10.1.9
-tunnel destination 13.95.165.115
+tunnel destination 20.105.142.199
 tunnel protection ipsec profile AZURE-IPSEC-PROFILE
 !
 interface Loopback0
 ip address 192.168.10.10 255.255.255.255
 !
 ip route 0.0.0.0 0.0.0.0 10.10.1.1
-ip route 10.11.2.4 255.255.255.255 Tunnel0
-ip route 10.11.2.5 255.255.255.255 Tunnel1
+ip route 10.11.2.5 255.255.255.255 Tunnel0
+ip route 10.11.2.4 255.255.255.255 Tunnel1
 ip route 10.10.0.0 255.255.255.0 10.10.2.1
 !
 router bgp 65001
 bgp router-id 192.168.10.10
-neighbor 10.11.2.4 remote-as 65011
-neighbor 10.11.2.4 ebgp-multihop 255
-neighbor 10.11.2.4 soft-reconfiguration inbound
-neighbor 10.11.2.4 update-source Loopback0
-neighbor 10.11.2.5 remote-as 65011
+neighbor 10.11.2.5 remote-as 65515
 neighbor 10.11.2.5 ebgp-multihop 255
 neighbor 10.11.2.5 soft-reconfiguration inbound
 neighbor 10.11.2.5 update-source Loopback0
+neighbor 10.11.2.4 remote-as 65515
+neighbor 10.11.2.4 ebgp-multihop 255
+neighbor 10.11.2.4 soft-reconfiguration inbound
+neighbor 10.11.2.4 update-source Loopback0
 network 10.10.0.0 mask 255.255.255.0

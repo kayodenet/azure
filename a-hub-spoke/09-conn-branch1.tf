@@ -124,4 +124,7 @@ resource "azurerm_route" "branch1_default_route_azure" {
 resource "azurerm_subnet_route_table_association" "branch1_default_route_azure" {
   subnet_id      = azurerm_subnet.branch1_subnets["${local.branch1_prefix}main"].id
   route_table_id = azurerm_route_table.branch1_rt.id
+  lifecycle {
+    ignore_changes = all
+  }
 }

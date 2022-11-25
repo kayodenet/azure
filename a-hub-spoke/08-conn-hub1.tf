@@ -7,6 +7,7 @@
 #----------------------------
 
 # spoke1-to-hub1
+# using remote gw transit for this peering (nva bypass)
 
 resource "azurerm_virtual_network_peering" "spoke1_to_hub1_peering" {
   resource_group_name          = azurerm_resource_group.rg.name
@@ -157,9 +158,24 @@ locals {
     ]
 
     BGP_SESSIONS = [
-      { peer_asn = local.hub1_ars_asn, peer_ip = local.hub1_ars_bgp0, as_override = true, ebgp_multihop = true },
-      { peer_asn = local.hub1_ars_asn, peer_ip = local.hub1_ars_bgp1, as_override = true, ebgp_multihop = true },
-      { peer_asn = local.hub2_nva_asn, peer_ip = local.hub2_nva_loopback0, next_hop_self = true, source_loopback = true },
+      {
+        peer_asn      = local.hub1_ars_asn
+        peer_ip       = local.hub1_ars_bgp0
+        as_override   = true
+        ebgp_multihop = true
+      },
+      {
+        peer_asn      = local.hub1_ars_asn
+        peer_ip       = local.hub1_ars_bgp1
+        as_override   = true
+        ebgp_multihop = true
+      },
+      {
+        peer_asn        = local.hub2_nva_asn
+        peer_ip         = local.hub2_nva_loopback0
+        next_hop_self   = true
+        source_loopback = true
+      },
     ]
 
     BGP_ADVERTISED_NETWORKS = [
@@ -194,7 +210,7 @@ resource "azurerm_route_table" "rt_region1" {
   name                = "${local.prefix}-rt-region1"
   location            = local.region1
 
-  disable_bgp_route_propagation = true
+  disable_bgp_route_propagation = true # NOTE: Required to allow Gw send traffic to NVA next hop
   depends_on = [
     time_sleep.rt_spoke_region1,
   ]
@@ -216,9 +232,15 @@ resource "azurerm_route" "default_route_hub1" {
 resource "azurerm_subnet_route_table_association" "spoke2_default_route_hub1" {
   subnet_id      = azurerm_subnet.spoke2_subnets["${local.spoke2_prefix}main"].id
   route_table_id = azurerm_route_table.rt_region1.id
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 resource "azurerm_subnet_route_table_association" "spoke3_default_route_hub1" {
   subnet_id      = azurerm_subnet.spoke3_subnets["${local.spoke3_prefix}main"].id
   route_table_id = azurerm_route_table.rt_region1.id
+  lifecycle {
+    ignore_changes = all
+  }
 }

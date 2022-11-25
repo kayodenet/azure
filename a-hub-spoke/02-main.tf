@@ -3,10 +3,18 @@
 #----------------------------
 
 locals {
-  prefix       = "A"
-  hub1_nva_asn = "65000"
-  hub2_nva_asn = "65000"
-  mypip        = chomp(data.http.mypip.response_body)
+  prefix = "AX"
+  # hub1
+  hub1_nva_asn   = "65000"
+  hub1_vpngw_asn = "65515"
+  hub1_ergw_asn  = "65515"
+  hub1_ars_asn   = "65515"
+  # hub2
+  hub2_nva_asn   = "65000"
+  hub2_vpngw_asn = "65515"
+  hub2_ergw_asn  = "65515"
+  hub2_ars_asn   = "65515"
+  #mypip          = chomp(data.http.mypip.response_body)
   vm_startup = templatefile("../scripts/vm.sh", {
     TARGETS_IP = [
       local.branch1_vm_addr,
@@ -68,6 +76,14 @@ resource "azurerm_public_ip" "hub1_ars_pip" {
   allocation_method   = "Static"
 }
 
+resource "azurerm_public_ip" "hub1_ergw_pip" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${local.hub1_prefix}ergw-pip"
+  location            = local.region1
+  sku                 = "Standard"
+  allocation_method   = "Static"
+}
+
 # hub2
 #----------------------------
 
@@ -117,6 +133,8 @@ resource "azurerm_public_ip" "spoke1_appgw_pip" {
 # branch1
 #----------------------------
 
+# nva
+
 resource "azurerm_public_ip" "branch1_nva_pip" {
   resource_group_name = azurerm_resource_group.rg.name
   name                = "${local.branch1_prefix}nva-pip"
@@ -128,6 +146,8 @@ resource "azurerm_public_ip" "branch1_nva_pip" {
 # branch2
 #----------------------------
 
+# nva
+
 resource "azurerm_public_ip" "branch2_nva_pip" {
   resource_group_name = azurerm_resource_group.rg.name
   name                = "${local.branch2_prefix}nva-pip"
@@ -136,8 +156,20 @@ resource "azurerm_public_ip" "branch2_nva_pip" {
   allocation_method   = "Static"
 }
 
+# ergw
+
+resource "azurerm_public_ip" "branch2_ergw_pip" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${local.branch2_prefix}ergw-pip"
+  location            = local.region1
+  sku                 = "Standard"
+  allocation_method   = "Static"
+}
+
 # branch3
 #----------------------------
+
+# nva
 
 resource "azurerm_public_ip" "branch3_nva_pip" {
   resource_group_name = azurerm_resource_group.rg.name
@@ -149,6 +181,8 @@ resource "azurerm_public_ip" "branch3_nva_pip" {
 
 # branch4
 #----------------------------
+
+# nva
 
 resource "azurerm_public_ip" "branch4_nva_pip" {
   resource_group_name = azurerm_resource_group.rg.name

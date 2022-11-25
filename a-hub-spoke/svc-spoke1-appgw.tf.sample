@@ -61,4 +61,7 @@ module "application-gateway" {
 
   #identity_ids = ["${azurerm_user_assigned_identity.spoke1_appgw_http.id}"]
   #log_analytics_workspace_name = azurerm_log_analytics_workspace.analytics_ws.name
+  depends_on = [
+    azurerm_resource_group.rg
+  ]
 }

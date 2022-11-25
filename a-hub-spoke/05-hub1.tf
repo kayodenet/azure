@@ -100,3 +100,80 @@ resource "azurerm_virtual_network_gateway" "hub1_vpngw" {
     }
   }
 }
+
+# udr
+#----------------------------
+
+# route table
+
+resource "azurerm_route_table" "hub1_vpngw_rt" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${local.hub1_prefix}vpngw-rt"
+  location            = local.region1
+
+  disable_bgp_route_propagation = false
+}
+
+# routes
+
+resource "azurerm_route" "hub1_vpngw_rt_spoke2_route" {
+  name                   = "${local.hub1_prefix}vpngw-rt-spoke2-route"
+  resource_group_name    = azurerm_resource_group.rg.name
+  route_table_name       = azurerm_route_table.hub1_vpngw_rt.name
+  address_prefix         = local.spoke2_address_space[0]
+  next_hop_type          = "VirtualAppliance"
+  next_hop_in_ip_address = local.hub1_nva_addr
+}
+
+resource "azurerm_route" "hub1_vpngw_rt_spoke3_route" {
+  name                   = "${local.hub1_prefix}vpngw-rt-spoke3-route"
+  resource_group_name    = azurerm_resource_group.rg.name
+  route_table_name       = azurerm_route_table.hub1_vpngw_rt.name
+  address_prefix         = local.spoke3_address_space[0]
+  next_hop_type          = "VirtualAppliance"
+  next_hop_in_ip_address = local.hub1_nva_addr
+}
+
+
+# association
+
+resource "azurerm_subnet_route_table_association" "hub1_vpngw_rt_spoke2_route" {
+  subnet_id      = azurerm_subnet.hub1_subnets["GatewaySubnet"].id
+  route_table_id = azurerm_route_table.hub1_vpngw_rt.id
+}
+
+# ergw
+#----------------------------
+
+resource "azurerm_virtual_network_gateway" "hub1_ergw" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${local.hub1_prefix}ergw"
+  location            = local.hub1_location
+  type                = "ExpressRoute"
+  vpn_type            = "RouteBased"
+  sku                 = "Standard"
+  enable_bgp          = true
+  active_active       = false
+  ip_configuration {
+    name                          = "${local.hub1_prefix}link-0"
+    subnet_id                     = azurerm_subnet.hub1_subnets["GatewaySubnet"].id
+    public_ip_address_id          = azurerm_public_ip.hub1_ergw_pip.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+# internal lb
+#----------------------------
+
+resource "azurerm_lb" "hub1_nva_lb" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${local.hub1_prefix}nva-lb"
+  location            = local.hub1_location
+  sku                 = "Standard"
+  frontend_ip_configuration {
+    name                          = "${local.hub1_prefix}nva-lb-feip"
+    subnet_id                     = azurerm_subnet.hub1_subnets["${local.hub1_prefix}nva"].id
+    private_ip_address            = local.hub1_nva_lb_addr
+    private_ip_address_allocation = "Static"
+  }
+}
