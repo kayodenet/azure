@@ -27,9 +27,9 @@ resource "azurerm_log_analytics_workspace" "analytics_ws" {
 
 # my public ip
 
-data "http" "mypip" {
+/*data "http" "mypip" {
   url = "http://ipv4.icanhazip.com"
-}
+}*/
 
 ####################################################
 # nsg

@@ -28,6 +28,7 @@ resource "azurerm_subnet" "hub1_subnets" {
   name                 = each.key
   address_prefixes     = each.value.address_prefixes
 }
+
 # vm
 #----------------------------
 
@@ -122,7 +123,7 @@ resource "azurerm_route" "hub1_vpngw_rt_spoke2_route" {
   route_table_name       = azurerm_route_table.hub1_vpngw_rt.name
   address_prefix         = local.spoke2_address_space[0]
   next_hop_type          = "VirtualAppliance"
-  next_hop_in_ip_address = local.hub1_nva_addr
+  next_hop_in_ip_address = local.hub1_nva_ilb_addr
 }
 
 resource "azurerm_route" "hub1_vpngw_rt_spoke3_route" {
@@ -131,7 +132,7 @@ resource "azurerm_route" "hub1_vpngw_rt_spoke3_route" {
   route_table_name       = azurerm_route_table.hub1_vpngw_rt.name
   address_prefix         = local.spoke3_address_space[0]
   next_hop_type          = "VirtualAppliance"
-  next_hop_in_ip_address = local.hub1_nva_addr
+  next_hop_in_ip_address = local.hub1_nva_ilb_addr
 }
 
 
@@ -220,3 +221,4 @@ resource "azurerm_lb_rule" "hub1_nva" {
   load_distribution              = "Default"
   probe_id                       = azurerm_lb_probe.hub1_nva1_lb_probe.id
 }
+

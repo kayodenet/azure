@@ -123,7 +123,7 @@ resource "azurerm_route" "hub2_vpngw_rt_spoke5_route" {
   route_table_name       = azurerm_route_table.hub2_vpngw_rt.name
   address_prefix         = local.spoke5_address_space[0]
   next_hop_type          = "VirtualAppliance"
-  next_hop_in_ip_address = local.hub2_nva_addr
+  next_hop_in_ip_address = local.hub2_nva_ilb_addr
 }
 
 resource "azurerm_route" "hub2_vpngw_rt_spoke6_route" {
@@ -132,7 +132,7 @@ resource "azurerm_route" "hub2_vpngw_rt_spoke6_route" {
   route_table_name       = azurerm_route_table.hub2_vpngw_rt.name
   address_prefix         = local.spoke6_address_space[0]
   next_hop_type          = "VirtualAppliance"
-  next_hop_in_ip_address = local.hub2_nva_addr
+  next_hop_in_ip_address = local.hub2_nva_ilb_addr
 }
 
 

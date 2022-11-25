@@ -1,5 +1,4 @@
 
-
 # Common
 #----------------------------
 locals {
@@ -55,9 +54,6 @@ locals {
 locals {
   hub1_prefix        = local.prefix == "" ? "hub1-" : join("-", [local.prefix, "hub1-"])
   hub1_location      = local.region1
-  hub1_vpngw_asn     = "65011"
-  hub1_ergw_asn      = "65012"
-  hub1_ars_asn       = "65515"
   hub1_address_space = ["10.11.0.0/16"]
   hub1_domain        = "hub1"
   hub1_tags          = { env = "hub1" }
@@ -66,11 +62,13 @@ locals {
     ("${local.hub1_prefix}nva")  = { address_prefixes = ["10.11.1.0/24"] }
     ("GatewaySubnet")            = { address_prefixes = ["10.11.2.0/24"] }
     ("RouteServerSubnet")        = { address_prefixes = ["10.11.3.0/24"] }
+    ("${local.hub1_prefix}ilb")  = { address_prefixes = ["10.11.4.0/24"] }
   }
   hub1_default_gw_main   = cidrhost(local.hub1_subnets["${local.hub1_prefix}main"].address_prefixes[0], 1)
   hub1_default_gw_nva    = cidrhost(local.hub1_subnets["${local.hub1_prefix}nva"].address_prefixes[0], 1)
   hub1_vm_addr           = cidrhost(local.hub1_subnets["${local.hub1_prefix}main"].address_prefixes[0], 5)
   hub1_nva_addr          = cidrhost(local.hub1_subnets["${local.hub1_prefix}nva"].address_prefixes[0], 9)
+  hub1_nva_ilb_addr      = cidrhost(local.hub1_subnets["${local.hub1_prefix}ilb"].address_prefixes[0], 99)
   hub1_vpngw_bgp_ip      = cidrhost(local.hub1_subnets["GatewaySubnet"].address_prefixes[0], 254)
   hub1_nva_loopback0     = "10.11.11.11"
   hub1_nva_tun_range0    = "10.11.50.0/30"
@@ -85,9 +83,6 @@ locals {
 locals {
   hub2_prefix        = local.prefix == "" ? "hub2-" : join("-", [local.prefix, "hub2-"])
   hub2_location      = local.region2
-  hub2_vpngw_asn     = "65021"
-  hub2_ergw_asn      = "65022"
-  hub2_ars_asn       = "65515"
   hub2_address_space = ["10.22.0.0/16"]
   hub2_domain        = "hub2"
   hub2_tags          = { env = "hub2" }
@@ -96,11 +91,13 @@ locals {
     ("${local.hub2_prefix}nva")  = { address_prefixes = ["10.22.1.0/24"] }
     ("GatewaySubnet")            = { address_prefixes = ["10.22.2.0/24"] }
     ("RouteServerSubnet")        = { address_prefixes = ["10.22.3.0/24"] }
+    ("${local.hub2_prefix}ilb")  = { address_prefixes = ["10.22.4.0/24"] }
   }
   hub2_default_gw_main   = cidrhost(local.hub2_subnets["${local.hub2_prefix}main"].address_prefixes[0], 1)
   hub2_default_gw_nva    = cidrhost(local.hub2_subnets["${local.hub2_prefix}nva"].address_prefixes[0], 1)
   hub2_vm_addr           = cidrhost(local.hub2_subnets["${local.hub2_prefix}main"].address_prefixes[0], 5)
   hub2_nva_addr          = cidrhost(local.hub2_subnets["${local.hub2_prefix}nva"].address_prefixes[0], 9)
+  hub2_nva_ilb_addr      = cidrhost(local.hub2_subnets["${local.hub2_prefix}ilb"].address_prefixes[0], 99)
   hub2_vpngw_bgp_ip      = cidrhost(local.hub2_subnets["GatewaySubnet"].address_prefixes[0], 254)
   hub2_nva_loopback0     = "10.22.22.22"
   hub2_nva_tun_range0    = "10.22.50.0/30"
@@ -123,6 +120,7 @@ locals {
     ("${local.branch1_prefix}main") = { address_prefixes = ["10.10.0.0/24"] }
     ("${local.branch1_prefix}ext")  = { address_prefixes = ["10.10.1.0/24"] }
     ("${local.branch1_prefix}int")  = { address_prefixes = ["10.10.2.0/24"] }
+    ("GatewaySubnet")               = { address_prefixes = ["10.10.3.0/24"] }
   }
   branch1_ext_default_gw = cidrhost(local.branch1_subnets["${local.branch1_prefix}ext"].address_prefixes[0], 1)
   branch1_int_default_gw = cidrhost(local.branch1_subnets["${local.branch1_prefix}int"].address_prefixes[0], 1)
@@ -151,6 +149,7 @@ locals {
     ("${local.branch2_prefix}main") = { address_prefixes = ["10.20.0.0/24"] }
     ("${local.branch2_prefix}ext")  = { address_prefixes = ["10.20.1.0/24"] }
     ("${local.branch2_prefix}int")  = { address_prefixes = ["10.20.2.0/24"] }
+    ("GatewaySubnet")               = { address_prefixes = ["10.20.3.0/24"] }
   }
   branch2_ext_default_gw = cidrhost(local.branch2_subnets["${local.branch2_prefix}ext"].address_prefixes[0], 1)
   branch2_int_default_gw = cidrhost(local.branch2_subnets["${local.branch2_prefix}int"].address_prefixes[0], 1)
@@ -205,6 +204,7 @@ locals {
     ("${local.branch4_prefix}main") = { address_prefixes = ["10.40.0.0/24"] }
     ("${local.branch4_prefix}ext")  = { address_prefixes = ["10.40.1.0/24"] }
     ("${local.branch4_prefix}int")  = { address_prefixes = ["10.40.2.0/24"] }
+    ("GatewaySubnet")               = { address_prefixes = ["10.40.3.0/24"] }
   }
   branch4_ext_default_gw = cidrhost(local.branch4_subnets["${local.branch4_prefix}ext"].address_prefixes[0], 1)
   branch4_int_default_gw = cidrhost(local.branch4_subnets["${local.branch4_prefix}int"].address_prefixes[0], 1)
@@ -319,4 +319,13 @@ locals {
   }
   spoke6_vm_addr = cidrhost(local.spoke6_subnets["${local.spoke6_prefix}main"].address_prefixes[0], 5)
   spoke6_vm_dns  = "vm.${local.spoke6_domain}"
+}
+
+# megaport
+#----------------------------
+locals {
+  megaport_prefix       = "salawu"
+  megaport_asn          = 65111
+  megaport_hub1_vlan    = "110"
+  megaport_branch2_vlan = "100"
 }

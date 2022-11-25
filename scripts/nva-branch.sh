@@ -47,27 +47,41 @@ tunnel protection ipsec profile AZURE-IPSEC-PROFILE
 %{~ endfor }
 interface Loopback0
 ip address ${LOOPBACK0} 255.255.255.255
+%{~ for k,v in LOOPBACKS }
+interface ${k}
+ip address ${v} 255.255.255.255
+%{~ endfor }
 !
 %{~ for route in STATIC_ROUTES }
 ip route ${route.network} ${route.mask} ${route.next_hop}
 %{~ endfor }
 !
+%{~ for x in ROUTE_MAPS }
+route-map ${x.name} ${x.action} ${x.rule}
+%{~ for y in x.commands }
+${y}
+%{~ endfor }
+%{~ endfor }
+!
 router bgp ${LOCAL_ASN}
 bgp router-id ${LOOPBACK0}
-%{~ for session in BGP_SESSIONS }
-neighbor ${session.peer_ip} remote-as ${session.peer_asn}
-%{~ if try(session.ebgp_multihop, false) }
-neighbor ${session.peer_ip} ebgp-multihop 255
+%{~ for x in BGP_SESSIONS }
+neighbor ${x.peer_ip} remote-as ${x.peer_asn}
+%{~ if try(x.ebgp_multihop, false) }
+neighbor ${x.peer_ip} ebgp-multihop 255
 %{~ endif }
-neighbor ${session.peer_ip} soft-reconfiguration inbound
-%{~ if try(session.as_override, false) }
-neighbor ${session.peer_ip} as-override
+neighbor ${x.peer_ip} soft-reconfiguration inbound
+%{~ if try(x.as_override, false) }
+neighbor ${x.peer_ip} as-override
 %{~ endif }
-%{~ if try(session.next_hop_self, false) }
-neighbor ${session.peer_ip} next-hop-self
+%{~ if try(x.next_hop_self, false) }
+neighbor ${x.peer_ip} next-hop-self
 %{~ endif }
-%{~ if try(session.source_loopback, false) }
-neighbor ${session.peer_ip} update-source Loopback0
+%{~ if try(x.source_loopback, false) }
+neighbor ${x.peer_ip} update-source Loopback0
+%{~ endif }
+%{~ if x.route_map != {} }
+neighbor ${x.peer_ip} route-map ${x.route_map.name} ${x.route_map.direction}
 %{~ endif }
 %{~ endfor }
 %{~ for net in BGP_ADVERTISED_NETWORKS }

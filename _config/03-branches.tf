@@ -83,6 +83,25 @@ module "branch2_vm" {
   custom_data     = base64encode(local.vm_startup)
 }
 
+# ergw
+
+resource "azurerm_virtual_network_gateway" "branch2_ergw" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${local.branch2_prefix}ergw"
+  location            = local.branch2_location
+  type                = "ExpressRoute"
+  vpn_type            = "RouteBased"
+  sku                 = "Standard"
+  enable_bgp          = true
+  active_active       = false
+  ip_configuration {
+    name                          = "${local.branch2_prefix}link-0"
+    subnet_id                     = azurerm_subnet.branch2_subnets["GatewaySubnet"].id
+    public_ip_address_id          = azurerm_public_ip.branch2_ergw_pip.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
 # branch3
 #----------------------------
 

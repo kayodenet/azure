@@ -248,7 +248,8 @@ resource "azurerm_route" "default_route_hub1" {
   route_table_name       = azurerm_route_table.rt_region1.name
   address_prefix         = "0.0.0.0/0"
   next_hop_type          = "VirtualAppliance"
-  next_hop_in_ip_address = module.hub1_nva.interface.ip_configuration[0].private_ip_address
+  next_hop_in_ip_address = local.hub1_nva_ilb_addr
+  #next_hop_in_ip_address = module.hub1_nva.interface.ip_configuration[0].private_ip_address
 }
 
 # association

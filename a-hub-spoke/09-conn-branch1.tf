@@ -143,3 +143,4 @@ resource "azurerm_subnet_route_table_association" "branch1_default_route_azure" 
     ignore_changes = all
   }
 }
+
