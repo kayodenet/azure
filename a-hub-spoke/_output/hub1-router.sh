@@ -41,6 +41,8 @@ tunnel protection ipsec profile AZURE-IPSEC-PROFILE
 !
 interface Loopback0
 ip address 10.11.11.11 255.255.255.255
+interface Loopback1
+ip address 10.11.4.99 255.255.255.255
 !
 ip route 0.0.0.0 0.0.0.0 10.11.1.1
 ip route 10.22.22.22 255.255.255.255 Tunnel0
@@ -50,16 +52,22 @@ ip route 10.11.3.5 255.255.255.255 10.11.1.1
 ip route 10.2.0.0 255.255.0.0 10.11.1.1
 ip route 10.3.0.0 255.255.0.0 10.11.1.1
 !
+route-map NEXT-HOP permit 100
+match ip address prefix-list all
+set ip next-hop 10.11.4.99
+!
 router bgp 65000
 bgp router-id 10.11.1.9
 neighbor 10.11.3.4 remote-as 65515
 neighbor 10.11.3.4 ebgp-multihop 255
 neighbor 10.11.3.4 soft-reconfiguration inbound
 neighbor 10.11.3.4 as-override
+neighbor 10.11.3.4 route-map NEXT-HOP out
 neighbor 10.11.3.5 remote-as 65515
 neighbor 10.11.3.5 ebgp-multihop 255
 neighbor 10.11.3.5 soft-reconfiguration inbound
 neighbor 10.11.3.5 as-override
+neighbor 10.11.3.5 route-map NEXT-HOP out
 neighbor 10.22.22.22 remote-as 65000
 neighbor 10.22.22.22 soft-reconfiguration inbound
 neighbor 10.22.22.22 next-hop-self

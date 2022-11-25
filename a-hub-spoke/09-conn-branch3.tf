@@ -17,8 +17,11 @@ locals {
   branch3_nva_init = templatefile("../scripts/nva-branch.sh", {
     LOCAL_ASN = local.branch3_nva_asn
     LOOPBACK0 = local.branch3_nva_loopback0
+    LOOPBACKS = {}
     EXT_ADDR  = local.branch3_nva_ext_addr
     VPN_PSK   = local.psk
+
+    ROUTE_MAPS = []
 
     TUNNELS = [
       {
@@ -61,8 +64,20 @@ locals {
     ]
 
     BGP_SESSIONS = [
-      { peer_asn = local.hub2_vpngw_asn, peer_ip = local.hub2_vpngw_bgp0, source_loopback = true, ebgp_multihop = true },
-      { peer_asn = local.hub2_vpngw_asn, peer_ip = local.hub2_vpngw_bgp1, source_loopback = true, ebgp_multihop = true },
+      {
+        peer_asn        = local.hub2_vpngw_asn
+        peer_ip         = local.hub2_vpngw_bgp0
+        source_loopback = true
+        ebgp_multihop   = true
+        route_map       = {}
+      },
+      {
+        peer_asn        = local.hub2_vpngw_asn
+        peer_ip         = local.hub2_vpngw_bgp1
+        source_loopback = true
+        ebgp_multihop   = true
+        route_map       = {}
+      },
     ]
 
     BGP_ADVERTISED_NETWORKS = [

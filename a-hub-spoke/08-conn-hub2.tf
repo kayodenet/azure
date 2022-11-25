@@ -126,11 +126,27 @@ resource "local_file" "hub2_router" {
 }
 
 locals {
+  hub2_router_route_map_name_nh = "NEXT-HOP"
   hub2_router_init = templatefile("../scripts/nva-hub.sh", {
     LOCAL_ASN = local.hub2_nva_asn
     LOOPBACK0 = local.hub2_nva_loopback0
-    INT_ADDR  = local.hub2_nva_addr
-    VPN_PSK   = local.psk
+    LOOPBACKS = {
+      Loopback1 = local.hub2_nva_ilb_addr
+    }
+    INT_ADDR = local.hub2_nva_addr
+    VPN_PSK  = local.psk
+
+    ROUTE_MAPS = [
+      {
+        name   = local.hub2_router_route_map_name_nh
+        action = "permit"
+        rule   = 100
+        commands = [
+          "match ip address prefix-list all",
+          "set ip next-hop ${local.hub2_nva_ilb_addr}"
+        ]
+      }
+    ]
 
     TUNNELS = [
       {
@@ -164,18 +180,27 @@ locals {
         peer_ip       = local.hub2_ars_bgp0
         as_override   = true
         ebgp_multihop = true
+        route_map = {
+          name      = local.hub2_router_route_map_name_nh
+          direction = "out"
+        }
       },
       {
         peer_asn      = local.hub2_ars_asn
         peer_ip       = local.hub2_ars_bgp1
         as_override   = true
         ebgp_multihop = true
+        route_map = {
+          name      = local.hub2_router_route_map_name_nh
+          direction = "out"
+        }
       },
       {
         peer_asn        = local.hub1_nva_asn
         peer_ip         = local.hub1_nva_loopback0
         next_hop_self   = true
         source_loopback = true
+        route_map       = {}
       },
     ]
 
