@@ -328,40 +328,14 @@ resource "azurerm_storage_account" "region2" {
 }
 
 ####################################################
-# route tables
+# sleep
 ####################################################
 
-# region1
-
-resource "time_sleep" "rt_branch_region1" {
-  create_duration = "180s"
-  depends_on = [
-    module.branch1_vm,
-  ]
+resource "time_sleep" "time_60" {
+  create_duration = "60s"
 }
 
-resource "time_sleep" "rt_spoke_region1" {
-  create_duration = "180s"
-  depends_on = [
-    module.spoke2_vm,
-    module.spoke3_vm,
-  ]
-}
-
-# region2
-
-resource "time_sleep" "rt_branch_region2" {
-  create_duration = "180s"
-  depends_on = [
-    module.branch3_vm,
-  ]
-}
-
-resource "time_sleep" "rt_spoke_region2" {
-  create_duration = "180s"
-  depends_on = [
-    module.spoke5_vm,
-    module.spoke6_vm,
-  ]
+resource "time_sleep" "time_120" {
+  create_duration = "60s"
 }
 

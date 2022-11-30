@@ -3,46 +3,18 @@
 #----------------------------
 
 locals {
-  prefix = "AX"
-  # hub1
+  prefix = "A"
+
   hub1_nva_asn   = "65000"
   hub1_vpngw_asn = "65515"
   hub1_ergw_asn  = "65515"
   hub1_ars_asn   = "65515"
-  # hub2
+
   hub2_nva_asn   = "65000"
   hub2_vpngw_asn = "65515"
   hub2_ergw_asn  = "65515"
   hub2_ars_asn   = "65515"
   #mypip          = chomp(data.http.mypip.response_body)
-  vm_startup = templatefile("../scripts/vm.sh", {
-    TARGETS_IP = [
-      local.branch1_vm_addr,
-      local.branch2_vm_addr,
-      local.branch3_vm_addr,
-      local.branch4_vm_addr,
-      local.hub1_vm_addr,
-      local.hub2_vm_addr,
-      local.spoke1_vm_addr,
-      local.spoke2_vm_addr,
-      local.spoke3_vm_addr,
-      local.spoke4_vm_addr,
-      local.spoke5_vm_addr,
-      local.spoke6_vm_addr,
-    ]
-    TARGETS_DNS = [
-      local.branch1_vm_dns,
-      local.branch2_vm_dns,
-      local.branch3_vm_dns,
-      local.branch4_vm_dns,
-      local.spoke1_vm_dns,
-      local.spoke2_vm_dns,
-      local.spoke3_vm_dns,
-      local.spoke4_vm_dns,
-      local.spoke5_vm_dns,
-      local.spoke6_vm_dns,
-    ]
-  })
 }
 
 ####################################################

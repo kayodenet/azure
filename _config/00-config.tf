@@ -21,7 +21,45 @@ locals {
   default_region      = "westeurope"
   subnets_without_nsg = ["GatewaySubnet"]
 
+  onprem_domain = "contoso.com"
+  cloud_domain  = "azure.contoso.com"
+
   rfc1918_prefixes = ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
+
+  vm_startup = templatefile("../scripts/vm.sh", {
+    TARGETS = {
+      (local.branch1_vm_dns) = local.branch1_vm_addr
+      (local.branch2_vm_dns) = local.branch2_vm_addr
+      (local.branch3_vm_dns) = local.branch3_vm_addr
+      (local.branch4_vm_dns) = local.branch4_vm_addr
+      (local.hub1_vm_dns)    = local.hub1_vm_addr
+      (local.hub2_vm_dns)    = local.hub2_vm_addr
+      (local.spoke1_vm_dns)  = local.spoke1_vm_addr
+      (local.spoke2_vm_dns)  = local.spoke2_vm_addr
+      (local.spoke3_vm_dns)  = local.spoke3_vm_addr
+      (local.spoke4_vm_dns)  = local.spoke4_vm_addr
+      (local.spoke5_vm_dns)  = local.spoke5_vm_addr
+      (local.spoke6_vm_dns)  = local.spoke6_vm_addr
+    }
+  })
+
+  branch_unbound_config = templatefile("../scripts/unbound-debian.sh", {
+    ONPREM_LOCAL_RECORDS = local.onprem_local_records
+    REDIRECTED_HOSTS     = local.onprem_redirected_hosts
+    FORWARD_ZONES        = local.onprem_forward_zones
+  })
+
+  onprem_local_records = [
+    { name = (local.branch1_vm_dns), record = local.branch1_vm_addr },
+    { name = (local.branch2_vm_dns), record = local.branch2_vm_addr },
+    { name = (local.branch3_vm_dns), record = local.branch3_vm_addr },
+    { name = (local.branch4_vm_dns), record = local.branch4_vm_addr },
+  ]
+  onprem_forward_zones = [
+    { zone = "${local.cloud_domain}.", targets = [local.hub1_dns_in_addr, ] },
+    { zone = ".", targets = ["168.63.129.16"] },
+  ]
+  onprem_redirected_hosts = []
 }
 
 # vhub1
@@ -58,23 +96,29 @@ locals {
   hub1_domain        = "hub1"
   hub1_tags          = { env = "hub1" }
   hub1_subnets = {
-    ("${local.hub1_prefix}main") = { address_prefixes = ["10.11.0.0/24"] }
-    ("${local.hub1_prefix}nva")  = { address_prefixes = ["10.11.1.0/24"] }
-    ("GatewaySubnet")            = { address_prefixes = ["10.11.2.0/24"] }
-    ("RouteServerSubnet")        = { address_prefixes = ["10.11.3.0/24"] }
-    ("${local.hub1_prefix}ilb")  = { address_prefixes = ["10.11.4.0/24"] }
+    ("${local.hub1_prefix}main")    = { address_prefixes = ["10.11.0.0/24"] }
+    ("${local.hub1_prefix}nva")     = { address_prefixes = ["10.11.1.0/24"] }
+    ("${local.hub1_prefix}ilb")     = { address_prefixes = ["10.11.2.0/24"] }
+    ("${local.hub1_prefix}dns-in")  = { address_prefixes = ["10.11.3.0/24"] }
+    ("${local.hub1_prefix}dns-out") = { address_prefixes = ["10.11.4.0/24"] }
+    ("GatewaySubnet")               = { address_prefixes = ["10.11.5.0/24"] }
+    ("RouteServerSubnet")           = { address_prefixes = ["10.11.6.0/24"] }
+    ("AzureFirewallSubnet")         = { address_prefixes = ["10.11.7.0/24"] }
   }
   hub1_default_gw_main   = cidrhost(local.hub1_subnets["${local.hub1_prefix}main"].address_prefixes[0], 1)
   hub1_default_gw_nva    = cidrhost(local.hub1_subnets["${local.hub1_prefix}nva"].address_prefixes[0], 1)
   hub1_vm_addr           = cidrhost(local.hub1_subnets["${local.hub1_prefix}main"].address_prefixes[0], 5)
   hub1_nva_addr          = cidrhost(local.hub1_subnets["${local.hub1_prefix}nva"].address_prefixes[0], 9)
   hub1_nva_ilb_addr      = cidrhost(local.hub1_subnets["${local.hub1_prefix}ilb"].address_prefixes[0], 99)
+  hub1_dns_in_addr       = cidrhost(local.hub1_subnets["${local.hub1_prefix}dns-in"].address_prefixes[0], 4)
+  hub1_dns_out_addr      = cidrhost(local.hub1_subnets["${local.hub1_prefix}dns-out"].address_prefixes[0], 4)
   hub1_vpngw_bgp_ip      = cidrhost(local.hub1_subnets["GatewaySubnet"].address_prefixes[0], 254)
   hub1_nva_loopback0     = "10.11.11.11"
   hub1_nva_tun_range0    = "10.11.50.0/30"
   hub1_nva_tun_range1    = "10.11.51.4/30"
   hub1_vpngw_bgp_apipa_0 = cidrhost(local.bgp_apipa_range1, 1)
   hub1_vpngw_bgp_apipa_1 = cidrhost(local.bgp_apipa_range2, 1)
+  hub1_vm_dns            = "hub1-vm.${local.cloud_domain}"
 }
 
 # hub2
@@ -87,23 +131,29 @@ locals {
   hub2_domain        = "hub2"
   hub2_tags          = { env = "hub2" }
   hub2_subnets = {
-    ("${local.hub2_prefix}main") = { address_prefixes = ["10.22.0.0/24"] }
-    ("${local.hub2_prefix}nva")  = { address_prefixes = ["10.22.1.0/24"] }
-    ("GatewaySubnet")            = { address_prefixes = ["10.22.2.0/24"] }
-    ("RouteServerSubnet")        = { address_prefixes = ["10.22.3.0/24"] }
-    ("${local.hub2_prefix}ilb")  = { address_prefixes = ["10.22.4.0/24"] }
+    ("${local.hub2_prefix}main")    = { address_prefixes = ["10.22.0.0/24"] }
+    ("${local.hub2_prefix}nva")     = { address_prefixes = ["10.22.1.0/24"] }
+    ("${local.hub2_prefix}ilb")     = { address_prefixes = ["10.22.2.0/24"] }
+    ("${local.hub2_prefix}dns-in")  = { address_prefixes = ["10.22.3.0/24"] }
+    ("${local.hub2_prefix}dns-out") = { address_prefixes = ["10.22.4.0/24"] }
+    ("GatewaySubnet")               = { address_prefixes = ["10.22.5.0/24"] }
+    ("RouteServerSubnet")           = { address_prefixes = ["10.22.6.0/24"] }
+    ("AzureFirewallSubnet")         = { address_prefixes = ["10.22.7.0/24"] }
   }
   hub2_default_gw_main   = cidrhost(local.hub2_subnets["${local.hub2_prefix}main"].address_prefixes[0], 1)
   hub2_default_gw_nva    = cidrhost(local.hub2_subnets["${local.hub2_prefix}nva"].address_prefixes[0], 1)
   hub2_vm_addr           = cidrhost(local.hub2_subnets["${local.hub2_prefix}main"].address_prefixes[0], 5)
   hub2_nva_addr          = cidrhost(local.hub2_subnets["${local.hub2_prefix}nva"].address_prefixes[0], 9)
   hub2_nva_ilb_addr      = cidrhost(local.hub2_subnets["${local.hub2_prefix}ilb"].address_prefixes[0], 99)
+  hub2_dns_in_addr       = cidrhost(local.hub2_subnets["${local.hub2_prefix}dns-in"].address_prefixes[0], 4)
+  hub2_dns_out_addr      = cidrhost(local.hub2_subnets["${local.hub2_prefix}dns-out"].address_prefixes[0], 4)
   hub2_vpngw_bgp_ip      = cidrhost(local.hub2_subnets["GatewaySubnet"].address_prefixes[0], 254)
   hub2_nva_loopback0     = "10.22.22.22"
   hub2_nva_tun_range0    = "10.22.50.0/30"
   hub2_nva_tun_range1    = "10.22.51.4/30"
   hub2_vpngw_bgp_apipa_0 = cidrhost(local.bgp_apipa_range5, 1)
   hub2_vpngw_bgp_apipa_1 = cidrhost(local.bgp_apipa_range6, 1)
+  hub2_vm_dns            = "hub2-vm.${local.cloud_domain}"
 }
 
 # branch1
@@ -127,12 +177,13 @@ locals {
   branch1_nva_ext_addr   = cidrhost(local.branch1_subnets["${local.branch1_prefix}ext"].address_prefixes[0], 9)
   branch1_nva_int_addr   = cidrhost(local.branch1_subnets["${local.branch1_prefix}int"].address_prefixes[0], 9)
   branch1_vm_addr        = cidrhost(local.branch1_subnets["${local.branch1_prefix}main"].address_prefixes[0], 5)
+  branch1_dns_addr       = cidrhost(local.branch1_subnets["${local.branch1_prefix}main"].address_prefixes[0], 6)
   branch1_nva_loopback0  = "192.168.10.10"
   branch1_nva_tun_range0 = "10.10.10.0/30"
   branch1_nva_tun_range1 = "10.10.10.4/30"
-  branch1_vm_dns         = "vm.${local.branch1_domain}"
   branch1_bgp_apipa_0    = cidrhost(local.bgp_apipa_range3, 2)
   branch1_bgp_apipa_1    = cidrhost(local.bgp_apipa_range4, 2)
+  branch1_vm_dns         = "branch1-vm.${local.onprem_domain}"
 }
 
 # branch2
@@ -156,10 +207,17 @@ locals {
   branch2_nva_ext_addr   = cidrhost(local.branch2_subnets["${local.branch2_prefix}ext"].address_prefixes[0], 9)
   branch2_nva_int_addr   = cidrhost(local.branch2_subnets["${local.branch2_prefix}int"].address_prefixes[0], 9)
   branch2_vm_addr        = cidrhost(local.branch2_subnets["${local.branch2_prefix}main"].address_prefixes[0], 5)
+  branch2_dns_addr       = cidrhost(local.branch2_subnets["${local.branch2_prefix}main"].address_prefixes[0], 6)
   branch2_nva_loopback0  = "192.168.20.20"
   branch2_nva_tun_range0 = "10.20.20.0/30"
   branch2_nva_tun_range1 = "10.20.20.4/30"
-  branch2_vm_dns         = "vm.${local.branch2_domain}"
+  branch2_vm_dns         = "branch2-vm.${local.onprem_domain}"
+
+  branch2_unbound_config = templatefile("../scripts/unbound.sh", {
+    ONPREM_LOCAL_RECORDS = local.onprem_local_records
+    REDIRECTED_HOSTS     = local.onprem_redirected_hosts
+    FORWARD_ZONES        = local.onprem_forward_zones
+  })
 }
 
 # branch3
@@ -179,15 +237,22 @@ locals {
   }
   branch3_ext_default_gw = cidrhost(local.branch3_subnets["${local.branch3_prefix}ext"].address_prefixes[0], 1)
   branch3_int_default_gw = cidrhost(local.branch3_subnets["${local.branch3_prefix}int"].address_prefixes[0], 1)
-  branch3_vm_addr        = cidrhost(local.branch3_subnets["${local.branch3_prefix}main"].address_prefixes[0], 5)
   branch3_nva_ext_addr   = cidrhost(local.branch3_subnets["${local.branch3_prefix}ext"].address_prefixes[0], 9)
   branch3_nva_int_addr   = cidrhost(local.branch3_subnets["${local.branch3_prefix}int"].address_prefixes[0], 9)
+  branch3_vm_addr        = cidrhost(local.branch3_subnets["${local.branch3_prefix}main"].address_prefixes[0], 5)
+  branch3_dns_addr       = cidrhost(local.branch3_subnets["${local.branch3_prefix}main"].address_prefixes[0], 6)
   branch3_nva_loopback0  = "192.168.30.30"
   branch3_nva_tun_range0 = "10.30.30.0/30"
   branch3_nva_tun_range1 = "10.30.30.4/30"
-  branch3_vm_dns         = "vm.${local.branch3_domain}"
   branch3_bgp_apipa_0    = cidrhost(local.bgp_apipa_range7, 2)
   branch3_bgp_apipa_1    = cidrhost(local.bgp_apipa_range8, 2)
+  branch3_vm_dns         = "branch3-vm.${local.onprem_domain}"
+
+  branch3_unbound_config = templatefile("../scripts/unbound.sh", {
+    ONPREM_LOCAL_RECORDS = local.onprem_local_records
+    REDIRECTED_HOSTS     = local.onprem_redirected_hosts
+    FORWARD_ZONES        = local.onprem_forward_zones
+  })
 }
 
 # branch4
@@ -208,13 +273,20 @@ locals {
   }
   branch4_ext_default_gw = cidrhost(local.branch4_subnets["${local.branch4_prefix}ext"].address_prefixes[0], 1)
   branch4_int_default_gw = cidrhost(local.branch4_subnets["${local.branch4_prefix}int"].address_prefixes[0], 1)
-  branch4_vm_addr        = cidrhost(local.branch4_subnets["${local.branch4_prefix}main"].address_prefixes[0], 5)
   branch4_nva_ext_addr   = cidrhost(local.branch4_subnets["${local.branch4_prefix}ext"].address_prefixes[0], 9)
   branch4_nva_int_addr   = cidrhost(local.branch4_subnets["${local.branch4_prefix}int"].address_prefixes[0], 9)
+  branch4_vm_addr        = cidrhost(local.branch4_subnets["${local.branch4_prefix}main"].address_prefixes[0], 5)
+  branch4_dns_addr       = cidrhost(local.branch4_subnets["${local.branch4_prefix}main"].address_prefixes[0], 6)
   branch4_nva_loopback0  = "192.168.40.40"
   branch4_nva_tun_range0 = "10.40.40.0/30"
   branch4_nva_tun_range1 = "10.40.40.4/30"
-  branch4_vm_dns         = "vm.${local.branch4_domain}"
+  branch4_vm_dns         = "branch4-vm.${local.onprem_domain}"
+
+  branch4_unbound_config = templatefile("../scripts/unbound.sh", {
+    ONPREM_LOCAL_RECORDS = local.onprem_local_records
+    REDIRECTED_HOSTS     = local.onprem_redirected_hosts
+    FORWARD_ZONES        = local.onprem_forward_zones
+  })
 }
 
 # spoke1
@@ -232,7 +304,7 @@ locals {
   }
   spoke1_vm_addr    = cidrhost(local.spoke1_subnets["${local.spoke1_prefix}main"].address_prefixes[0], 5)
   spoke1_appgw_addr = cidrhost(local.spoke1_subnets["${local.spoke1_prefix}appgw"].address_prefixes[0], 99)
-  spoke1_vm_dns     = "vm.${local.spoke1_domain}"
+  spoke1_vm_dns     = "spoke1-vm.${local.cloud_domain}"
 }
 
 # spoke2
@@ -249,7 +321,7 @@ locals {
     ("${local.spoke2_prefix}appgw") = { address_prefixes = ["10.2.1.0/24"] }
   }
   spoke2_vm_addr = cidrhost(local.spoke2_subnets["${local.spoke2_prefix}main"].address_prefixes[0], 5)
-  spoke2_vm_dns  = "vm.${local.spoke2_domain}"
+  spoke2_vm_dns  = "spoke2-vm.${local.cloud_domain}"
 }
 
 # spoke3
@@ -266,7 +338,7 @@ locals {
     ("${local.spoke3_prefix}appgw") = { address_prefixes = ["10.3.1.0/24"] }
   }
   spoke3_vm_addr = cidrhost(local.spoke3_subnets["${local.spoke3_prefix}main"].address_prefixes[0], 5)
-  spoke3_vm_dns  = "vm.${local.spoke3_domain}"
+  spoke3_vm_dns  = "spoke3-vm.${local.cloud_domain}"
 }
 
 # spoke4
@@ -283,7 +355,7 @@ locals {
     ("${local.spoke4_prefix}appgw") = { address_prefixes = ["10.4.1.0/24"] }
   }
   spoke4_vm_addr = cidrhost(local.spoke4_subnets["${local.spoke4_prefix}main"].address_prefixes[0], 5)
-  spoke4_vm_dns  = "vm.${local.spoke4_domain}"
+  spoke4_vm_dns  = "spoke4-vm.${local.cloud_domain}"
 }
 
 # spoke5
@@ -301,7 +373,7 @@ locals {
   }
   spoke5_vm_addr    = cidrhost(local.spoke5_subnets["${local.spoke5_prefix}main"].address_prefixes[0], 5)
   spoke5_appgw_addr = cidrhost(local.spoke5_subnets["${local.spoke5_prefix}main"].address_prefixes[0], 99)
-  spoke5_vm_dns     = "vm.${local.spoke5_domain}"
+  spoke5_vm_dns     = "spoke5-vm.${local.cloud_domain}"
 }
 
 # spoke6
@@ -318,7 +390,7 @@ locals {
     ("${local.spoke6_prefix}appgw") = { address_prefixes = ["10.6.1.0/24"] }
   }
   spoke6_vm_addr = cidrhost(local.spoke6_subnets["${local.spoke6_prefix}main"].address_prefixes[0], 5)
-  spoke6_vm_dns  = "vm.${local.spoke6_domain}"
+  spoke6_vm_dns  = "spoke6-vm.${local.cloud_domain}"
 }
 
 # megaport

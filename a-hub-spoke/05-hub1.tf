@@ -135,32 +135,11 @@ resource "azurerm_route" "hub1_vpngw_rt_spoke3_route" {
   next_hop_in_ip_address = local.hub1_nva_ilb_addr
 }
 
-
 # association
 
-resource "azurerm_subnet_route_table_association" "hub1_vpngw_rt_spoke2_route" {
+resource "azurerm_subnet_route_table_association" "hub1_vpngw_rt_spoke_route" {
   subnet_id      = azurerm_subnet.hub1_subnets["GatewaySubnet"].id
   route_table_id = azurerm_route_table.hub1_vpngw_rt.id
-}
-
-# ergw
-#----------------------------
-
-resource "azurerm_virtual_network_gateway" "hub1_ergw" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.hub1_prefix}ergw"
-  location            = local.hub1_location
-  type                = "ExpressRoute"
-  vpn_type            = "RouteBased"
-  sku                 = "Standard"
-  enable_bgp          = true
-  active_active       = false
-  ip_configuration {
-    name                          = "${local.hub1_prefix}link-0"
-    subnet_id                     = azurerm_subnet.hub1_subnets["GatewaySubnet"].id
-    public_ip_address_id          = azurerm_public_ip.hub1_ergw_pip.id
-    private_ip_address_allocation = "Dynamic"
-  }
 }
 
 # internal lb
@@ -222,3 +201,22 @@ resource "azurerm_lb_rule" "hub1_nva" {
   probe_id                       = azurerm_lb_probe.hub1_nva1_lb_probe.id
 }
 
+# ergw
+#----------------------------
+
+resource "azurerm_virtual_network_gateway" "hub1_ergw" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${local.hub1_prefix}ergw"
+  location            = local.hub1_location
+  type                = "ExpressRoute"
+  vpn_type            = "RouteBased"
+  sku                 = "Standard"
+  enable_bgp          = true
+  active_active       = false
+  ip_configuration {
+    name                          = "${local.hub1_prefix}link-0"
+    subnet_id                     = azurerm_subnet.hub1_subnets["GatewaySubnet"].id
+    public_ip_address_id          = azurerm_public_ip.hub1_ergw_pip.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}

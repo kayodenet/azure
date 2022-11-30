@@ -5,6 +5,7 @@ resource "azurerm_network_interface" "this" {
   resource_group_name  = var.resource_group
   name                 = "${local.name}nic"
   location             = var.location
+  dns_servers          = var.dns_servers
   tags                 = var.tags
   enable_ip_forwarding = var.enable_ip_forwarding
   ip_configuration {

@@ -31,6 +31,7 @@ resource "azurerm_virtual_network_peering" "spoke5_to_hub2_peering" {
   remote_virtual_network_id    = azurerm_virtual_network.hub2_vnet.id
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
+  use_remote_gateways          = true
 }
 
 # spoke6-to-hub2
@@ -42,6 +43,7 @@ resource "azurerm_virtual_network_peering" "spoke6_to_hub2_peering" {
   remote_virtual_network_id    = azurerm_virtual_network.hub2_vnet.id
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
+  use_remote_gateways          = true
 }
 
 # hub2-to-spoke4 
@@ -69,6 +71,10 @@ resource "azurerm_virtual_network_peering" "hub2_to_spoke5_peering" {
   remote_virtual_network_id    = azurerm_virtual_network.spoke5_vnet.id
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
+  allow_gateway_transit        = true
+  depends_on = [
+    azurerm_virtual_network_gateway.hub2_vpngw
+  ]
 }
 
 # hub2-to-spoke6
@@ -80,6 +86,10 @@ resource "azurerm_virtual_network_peering" "hub2_to_spoke6_peering" {
   remote_virtual_network_id    = azurerm_virtual_network.spoke6_vnet.id
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
+  allow_gateway_transit        = true
+  depends_on = [
+    azurerm_virtual_network_gateway.hub2_vpngw
+  ]
 }
 
 # local gw
@@ -170,8 +180,6 @@ locals {
       { network = local.hub1_nva_addr, mask = "255.255.255.255", next_hop = local.hub2_default_gw_nva },
       { network = local.hub2_ars_bgp0, mask = "255.255.255.255", next_hop = local.hub2_default_gw_nva },
       { network = local.hub2_ars_bgp1, mask = "255.255.255.255", next_hop = local.hub2_default_gw_nva },
-      { network = cidrhost(local.spoke5_address_space[0], 0), mask = cidrnetmask(local.spoke5_address_space[0]), next_hop = local.hub2_default_gw_nva },
-      { network = cidrhost(local.spoke6_address_space[0], 0), mask = cidrnetmask(local.spoke6_address_space[0]), next_hop = local.hub2_default_gw_nva },
     ]
 
     BGP_SESSIONS = [
@@ -204,10 +212,7 @@ locals {
       },
     ]
 
-    BGP_ADVERTISED_NETWORKS = [
-      { network = cidrhost(local.spoke5_address_space[0], 0), mask = cidrnetmask(local.spoke5_address_space[0]) },
-      { network = cidrhost(local.spoke6_address_space[0], 0), mask = cidrnetmask(local.spoke6_address_space[0]) },
-    ]
+    BGP_ADVERTISED_NETWORKS = []
   })
 }
 
@@ -231,15 +236,12 @@ module "hub2_nva" {
 
 # route table
 
-resource "azurerm_route_table" "rt_region2" {
+resource "azurerm_route_table" "rt_spoke_region2" {
   resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.prefix}-rt-region2"
+  name                = "${local.prefix}-rt-spoke-region2"
   location            = local.region2
 
   disable_bgp_route_propagation = true # NOTE: Required to allow Gw send traffic to NVA next hop
-  depends_on = [
-    time_sleep.rt_spoke_region2,
-  ]
 }
 
 # routes
@@ -247,18 +249,17 @@ resource "azurerm_route_table" "rt_region2" {
 resource "azurerm_route" "default_route_hub2" {
   name                   = "${local.prefix}-default-route-hub2"
   resource_group_name    = azurerm_resource_group.rg.name
-  route_table_name       = azurerm_route_table.rt_region2.name
-  address_prefix         = "0.0.0.0/0"
+  route_table_name       = azurerm_route_table.rt_spoke_region2.name
+  address_prefix         = "10.0.0.0/8"
   next_hop_type          = "VirtualAppliance"
   next_hop_in_ip_address = local.hub2_nva_ilb_addr
-  #next_hop_in_ip_address = module.hub2_nva.interface.ip_configuration[0].private_ip_address
 }
 
 # association
 
 resource "azurerm_subnet_route_table_association" "spoke5_default_route_hub2" {
   subnet_id      = azurerm_subnet.spoke5_subnets["${local.spoke5_prefix}main"].id
-  route_table_id = azurerm_route_table.rt_region2.id
+  route_table_id = azurerm_route_table.rt_spoke_region2.id
   lifecycle {
     ignore_changes = all
   }
@@ -266,7 +267,7 @@ resource "azurerm_subnet_route_table_association" "spoke5_default_route_hub2" {
 
 resource "azurerm_subnet_route_table_association" "spoke6_default_route_hub2" {
   subnet_id      = azurerm_subnet.spoke6_subnets["${local.spoke6_prefix}main"].id
-  route_table_id = azurerm_route_table.rt_region2.id
+  route_table_id = azurerm_route_table.rt_spoke_region2.id
   lifecycle {
     ignore_changes = all
   }

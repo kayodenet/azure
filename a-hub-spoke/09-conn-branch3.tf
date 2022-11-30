@@ -118,9 +118,6 @@ resource "azurerm_route_table" "branch3_rt" {
   location            = local.region2
 
   disable_bgp_route_propagation = true
-  depends_on = [
-    time_sleep.rt_branch_region2,
-  ]
 }
 
 # routes
@@ -129,7 +126,7 @@ resource "azurerm_route" "branch3_default_route_azure" {
   name                   = "${local.branch3_prefix}default-route-azure"
   resource_group_name    = azurerm_resource_group.rg.name
   route_table_name       = azurerm_route_table.branch3_rt.name
-  address_prefix         = "0.0.0.0/0"
+  address_prefix         = "10.0.0.0/8"
   next_hop_type          = "VirtualAppliance"
   next_hop_in_ip_address = local.branch3_nva_int_addr
 }

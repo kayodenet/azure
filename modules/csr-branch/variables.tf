@@ -101,3 +101,9 @@ variable "custom_data" {
   type        = string
   default     = null
 }
+
+variable "dns_servers" {
+  description = "DNS servers"
+  type        = list(any)
+  default     = null
+}

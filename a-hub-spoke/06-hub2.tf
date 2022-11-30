@@ -138,7 +138,7 @@ resource "azurerm_route" "hub2_vpngw_rt_spoke6_route" {
 
 # association
 
-resource "azurerm_subnet_route_table_association" "hub2_vpngw_rt_spoke5_route" {
+resource "azurerm_subnet_route_table_association" "hub2_vpngw_rt_spoke_route" {
   subnet_id      = azurerm_subnet.hub2_subnets["GatewaySubnet"].id
   route_table_id = azurerm_route_table.hub2_vpngw_rt.id
 }
