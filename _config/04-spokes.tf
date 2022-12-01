@@ -1,4 +1,13 @@
 
+locals {
+  spoke3_ars_bgp0    = tolist(azurerm_route_server.spoke3_ars.virtual_router_ips)[0]
+  spoke3_ars_bgp1    = tolist(azurerm_route_server.spoke3_ars.virtual_router_ips)[1]
+  spoke3_ars_bgp_asn = azurerm_route_server.spoke3_ars.virtual_router_asn
+  spoke6_ars_bgp0    = tolist(azurerm_route_server.spoke6_ars.virtual_router_ips)[0]
+  spoke6_ars_bgp1    = tolist(azurerm_route_server.spoke6_ars.virtual_router_ips)[1]
+  spoke6_ars_bgp_asn = azurerm_route_server.spoke6_ars.virtual_router_asn
+}
+
 # spoke1
 #----------------------------
 
@@ -125,6 +134,27 @@ module "spoke3_vm" {
   custom_data     = base64encode(local.vm_startup)
 }
 
+# route server
+#----------------------------
+
+resource "azurerm_route_server" "spoke3_ars" {
+  resource_group_name              = azurerm_resource_group.rg.name
+  name                             = "${local.spoke3_prefix}ars"
+  location                         = local.spoke3_location
+  sku                              = "Standard"
+  public_ip_address_id             = azurerm_public_ip.spoke3_ars_pip.id
+  subnet_id                        = azurerm_subnet.spoke3_subnets["RouteServerSubnet"].id
+  branch_to_branch_traffic_enabled = true
+}
+
+resource "azurerm_route_server_bgp_connection" "spoke3_hub1_nva" {
+  name            = "${local.spoke3_prefix}hub1-nva"
+  route_server_id = azurerm_route_server.spoke3_ars.id
+  peer_asn        = local.hub1_nva_asn
+  peer_ip         = local.hub1_nva_addr
+}
+
+
 # spoke4
 #----------------------------
 
@@ -249,4 +279,24 @@ module "spoke6_vm" {
   admin_username  = local.username
   admin_password  = local.password
   custom_data     = base64encode(local.vm_startup)
+}
+
+# route server
+#----------------------------
+
+resource "azurerm_route_server" "spoke6_ars" {
+  resource_group_name              = azurerm_resource_group.rg.name
+  name                             = "${local.spoke6_prefix}ars"
+  location                         = local.spoke6_location
+  sku                              = "Standard"
+  public_ip_address_id             = azurerm_public_ip.spoke6_ars_pip.id
+  subnet_id                        = azurerm_subnet.spoke6_subnets["RouteServerSubnet"].id
+  branch_to_branch_traffic_enabled = true
+}
+
+resource "azurerm_route_server_bgp_connection" "spoke6_hub1_nva" {
+  name            = "${local.spoke6_prefix}hub1-nva"
+  route_server_id = azurerm_route_server.spoke6_ars.id
+  peer_asn        = local.hub2_nva_asn
+  peer_ip         = local.hub2_nva_addr
 }

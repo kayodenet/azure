@@ -72,7 +72,7 @@ crontab /var/tmp/crontab_flask.txt
 
 cat <<EOF > /usr/local/bin/ping-ip
 echo -e "\n ping ip ...\n"
-%{ for target in TARGETS_IP ~}
+%{ for target in values(TARGETS) ~}
 echo ${target} - \$(ping -qc2 -W1 ${target} 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')
 %{ endfor ~}
 EOF
@@ -82,7 +82,7 @@ chmod a+x /usr/local/bin/ping-ip
 
 cat <<EOF > /usr/local/bin/ping-dns
 echo -e "\n ping dns ...\n"
-%{ for target in TARGETS_DNS ~}
+%{ for target in keys(TARGETS) ~}
 echo ${target} - \$(ping -qc2 -W1 ${target} 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')
 %{ endfor ~}
 EOF
@@ -92,7 +92,7 @@ chmod a+x /usr/local/bin/ping-dns
 
 cat <<EOF > /usr/local/bin/curl-ip
 echo -e "\n curl ip ...\n"
-%{ for target in TARGETS_IP ~}
+%{ for target in values(TARGETS) ~}
 echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%%{http_code} (%%{time_total}s) - %%{remote_ip}" -s -o /dev/null ${target}) - ${target}"
 %{ endfor ~}
 EOF
@@ -102,9 +102,19 @@ chmod a+x /usr/local/bin/curl-ip
 
 cat <<EOF > /usr/local/bin/curl-dns
 echo -e "\n curl dns ...\n"
-%{ for target in TARGETS_DNS ~}
+%{ for target in keys(TARGETS) ~}
 echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%%{http_code} (%%{time_total}s) - %%{remote_ip}" -s -o /dev/null ${target}) - ${target}"
 %{ endfor ~}
 EOF
 chmod a+x /usr/local/bin/curl-dns
 
+# trace-ip
+
+cat <<EOF > /usr/local/bin/trace-ip
+echo -e "\n trace ip ...\n"
+%{ for target in values(TARGETS) ~}
+traceroute ${target}
+echo ""
+%{ endfor ~}
+EOF
+chmod a+x /usr/local/bin/trace-ip

@@ -163,3 +163,26 @@ resource "azurerm_public_ip" "branch4_nva_pip" {
   sku                 = "Standard"
   allocation_method   = "Static"
 }
+
+# spoke3
+#----------------------------
+
+resource "azurerm_public_ip" "spoke3_ars_pip" {
+  name                = "${local.spoke3_prefix}ars-pip"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = local.region1
+  sku                 = "Standard"
+  allocation_method   = "Static"
+}
+
+# spoke6
+#----------------------------
+
+resource "azurerm_public_ip" "spoke6_ars_pip" {
+  name                = "${local.spoke6_prefix}ars-pip"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = local.region2
+  sku                 = "Standard"
+  allocation_method   = "Static"
+}
+

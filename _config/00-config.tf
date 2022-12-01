@@ -31,15 +31,15 @@ locals {
       (local.branch1_vm_dns) = local.branch1_vm_addr
       (local.branch2_vm_dns) = local.branch2_vm_addr
       (local.branch3_vm_dns) = local.branch3_vm_addr
-      (local.branch4_vm_dns) = local.branch4_vm_addr
-      (local.hub1_vm_dns)    = local.hub1_vm_addr
-      (local.hub2_vm_dns)    = local.hub2_vm_addr
-      (local.spoke1_vm_dns)  = local.spoke1_vm_addr
-      (local.spoke2_vm_dns)  = local.spoke2_vm_addr
-      (local.spoke3_vm_dns)  = local.spoke3_vm_addr
-      (local.spoke4_vm_dns)  = local.spoke4_vm_addr
-      (local.spoke5_vm_dns)  = local.spoke5_vm_addr
-      (local.spoke6_vm_dns)  = local.spoke6_vm_addr
+      #(local.branch4_vm_dns) = local.branch4_vm_addr
+      (local.hub1_vm_dns)   = local.hub1_vm_addr
+      (local.hub2_vm_dns)   = local.hub2_vm_addr
+      (local.spoke1_vm_dns) = local.spoke1_vm_addr
+      (local.spoke2_vm_dns) = local.spoke2_vm_addr
+      (local.spoke3_vm_dns) = local.spoke3_vm_addr
+      (local.spoke4_vm_dns) = local.spoke4_vm_addr
+      (local.spoke5_vm_dns) = local.spoke5_vm_addr
+      (local.spoke6_vm_dns) = local.spoke6_vm_addr
     }
   })
 
@@ -336,6 +336,7 @@ locals {
   spoke3_subnets = {
     ("${local.spoke3_prefix}main")  = { address_prefixes = ["10.3.0.0/24"] }
     ("${local.spoke3_prefix}appgw") = { address_prefixes = ["10.3.1.0/24"] }
+    ("RouteServerSubnet")           = { address_prefixes = ["10.3.2.0/24"] }
   }
   spoke3_vm_addr = cidrhost(local.spoke3_subnets["${local.spoke3_prefix}main"].address_prefixes[0], 5)
   spoke3_vm_dns  = "spoke3-vm.${local.cloud_domain}"
@@ -388,6 +389,7 @@ locals {
   spoke6_subnets = {
     ("${local.spoke6_prefix}main")  = { address_prefixes = ["10.6.0.0/24"] }
     ("${local.spoke6_prefix}appgw") = { address_prefixes = ["10.6.1.0/24"] }
+    ("RouteServerSubnet")           = { address_prefixes = ["10.6.2.0/24"] }
   }
   spoke6_vm_addr = cidrhost(local.spoke6_subnets["${local.spoke6_prefix}main"].address_prefixes[0], 5)
   spoke6_vm_dns  = "spoke6-vm.${local.cloud_domain}"

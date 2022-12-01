@@ -117,20 +117,19 @@ resource "azurerm_route_table" "hub1_vpngw_rt" {
 
 # routes
 
-resource "azurerm_route" "hub1_vpngw_rt_spoke2_route" {
-  name                   = "${local.hub1_prefix}vpngw-rt-spoke2-route"
-  resource_group_name    = azurerm_resource_group.rg.name
-  route_table_name       = azurerm_route_table.hub1_vpngw_rt.name
-  address_prefix         = local.spoke2_address_space[0]
-  next_hop_type          = "VirtualAppliance"
-  next_hop_in_ip_address = local.hub1_nva_ilb_addr
+locals {
+  hub1_vpngw_routes = {
+    spoke2 = local.spoke2_address_space[0],
+    spoke3 = local.spoke3_address_space[0],
+  }
 }
 
-resource "azurerm_route" "hub1_vpngw_rt_spoke3_route" {
-  name                   = "${local.hub1_prefix}vpngw-rt-spoke3-route"
+resource "azurerm_route" "hub1_vpngw_rt_routes" {
+  for_each               = local.hub1_vpngw_routes
   resource_group_name    = azurerm_resource_group.rg.name
+  name                   = "${local.hub1_prefix}vpngw-rt-${each.key}-route"
   route_table_name       = azurerm_route_table.hub1_vpngw_rt.name
-  address_prefix         = local.spoke3_address_space[0]
+  address_prefix         = each.value
   next_hop_type          = "VirtualAppliance"
   next_hop_in_ip_address = local.hub1_nva_ilb_addr
 }
