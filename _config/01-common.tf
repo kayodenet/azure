@@ -27,9 +27,9 @@ resource "azurerm_log_analytics_workspace" "analytics_ws" {
 
 # my public ip
 
-/*data "http" "mypip" {
+data "http" "mypip" {
   url = "http://ipv4.icanhazip.com"
-}*/
+}
 
 ####################################################
 # nsg
@@ -59,6 +59,21 @@ resource "azurerm_network_security_rule" "nsg_region1_main_inbound_allow_all" {
   destination_port_range      = "*"
   protocol                    = "*"
   description                 = "Inbound Allow RFC1918"
+}
+
+resource "azurerm_network_security_rule" "nsg_region1_main_inbound_allow_tcp_mypip" {
+  resource_group_name         = azurerm_resource_group.rg.name
+  network_security_group_name = azurerm_network_security_group.nsg_region1_main.name
+  name                        = "inbound-allow-tcp-mypip"
+  direction                   = "Inbound"
+  access                      = "Allow"
+  priority                    = 110
+  source_address_prefix       = local.mypip
+  source_port_range           = "*"
+  destination_address_prefix  = "*"
+  destination_port_range      = "*"
+  protocol                    = "Tcp"
+  description                 = "Allow inbound SSH"
 }
 
 resource "azurerm_network_security_rule" "nsg_region1_main_outbound_allow_rfc1918" {
@@ -339,3 +354,11 @@ resource "time_sleep" "time_120" {
   create_duration = "60s"
 }
 
+####################################################
+# dns
+####################################################
+
+resource "azurerm_private_dns_zone" "azure" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "az.salawu.net"
+}

@@ -1,7 +1,8 @@
 #! /bin/bash
 
 apt update
-apt install -y tcpdump bind9-utils dnsutils net-tools unbound
+apt install -y tcpdump bind9-utils dnsutils net-tools
+apt install -y unbound
 
 touch /etc/unbound/unbound.log
 chmod a+x /etc/unbound/unbound.log
@@ -49,6 +50,7 @@ forward-zone:
 %{~ endfor ~}
 EOF
 
+sleep 10
 systemctl restart unbound
 systemctl enable unbound
 
@@ -59,8 +61,8 @@ systemctl enable unbound
 
 cat <<EOF > /usr/local/bin/ping-ip
 echo -e "\n ping ip ...\n"
-%{ for target in values(TARGETS) ~}
-echo ${target} - \$(ping -qc2 -W1 ${target} 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')
+%{ for target in TARGETS ~}
+echo "${target.name} - ${target.ip} -\$(ping -qc2 -W1 ${target.ip} 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
 %{ endfor ~}
 EOF
 chmod a+x /usr/local/bin/ping-ip
@@ -69,8 +71,8 @@ chmod a+x /usr/local/bin/ping-ip
 
 cat <<EOF > /usr/local/bin/ping-dns
 echo -e "\n ping dns ...\n"
-%{ for target in keys(TARGETS) ~}
-echo ${target} - \$(ping -qc2 -W1 ${target} 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')
+%{ for target in TARGETS ~}
+echo "${target.dns} - \$(dig +short ${target.dns} | tail -n1) -\$(ping -qc2 -W1 ${target.dns} 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
 %{ endfor ~}
 EOF
 chmod a+x /usr/local/bin/ping-dns
@@ -79,8 +81,8 @@ chmod a+x /usr/local/bin/ping-dns
 
 cat <<EOF > /usr/local/bin/curl-ip
 echo -e "\n curl ip ...\n"
-%{ for target in values(TARGETS) ~}
-echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%%{http_code} (%%{time_total}s) - %%{remote_ip}" -s -o /dev/null ${target}) - ${target}"
+%{ for target in TARGETS ~}
+echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%%{http_code} (%%{time_total}s) - %%{remote_ip}" -s -o /dev/null ${target.ip}) - ${target.name} (${target.ip})"
 %{ endfor ~}
 EOF
 chmod a+x /usr/local/bin/curl-ip
@@ -89,8 +91,8 @@ chmod a+x /usr/local/bin/curl-ip
 
 cat <<EOF > /usr/local/bin/curl-dns
 echo -e "\n curl dns ...\n"
-%{ for target in keys(TARGETS) ~}
-echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%%{http_code} (%%{time_total}s) - %%{remote_ip}" -s -o /dev/null ${target}) - ${target}"
+%{ for target in TARGETS ~}
+echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%%{http_code} (%%{time_total}s) - %%{remote_ip}" -s -o /dev/null ${target.dns}) - ${target.dns}"
 %{ endfor ~}
 EOF
 chmod a+x /usr/local/bin/curl-dns
@@ -99,9 +101,9 @@ chmod a+x /usr/local/bin/curl-dns
 
 cat <<EOF > /usr/local/bin/trace-ip
 echo -e "\n trace ip ...\n"
-%{ for target in values(TARGETS) ~}
-traceroute ${target}
-echo ""
+%{ for target in TARGETS ~}
+traceroute ${target.ip}
+echo -e "${target.name}\n"
 %{ endfor ~}
 EOF
 chmod a+x /usr/local/bin/trace-ip

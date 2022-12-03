@@ -6,6 +6,8 @@ locals {
   hub1_ars_bgp0    = tolist(azurerm_route_server.hub1_ars.virtual_router_ips)[0]
   hub1_ars_bgp1    = tolist(azurerm_route_server.hub1_ars.virtual_router_ips)[1]
   hub1_ars_bgp_asn = azurerm_route_server.hub1_ars.virtual_router_asn
+  #hub1_dns_in_ip   = azurerm_private_dns_resolver_inbound_endpoint.hub1_dns_in
+  #hub1_dns_out_ip  = azurerm_private_dns_resolver_inbound_endpoint.hub1_dns_out
 }
 
 # vnet
@@ -27,22 +29,84 @@ resource "azurerm_subnet" "hub1_subnets" {
   virtual_network_name = azurerm_virtual_network.hub1_vnet.name
   name                 = each.key
   address_prefixes     = each.value.address_prefixes
+
+  /*dynamic "delegation" {
+    iterator = delegation
+    for_each = each.value.delegate_dns ? [1] : []
+    content {
+      name = "Microsoft.Network.dnsResolvers"
+      service_delegation {
+        actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
+        name    = "Microsoft.Network/dnsResolvers"
+      }
+    }
+  }*/
 }
+
+output "test" {
+  value = { for k, v in local.hub1_subnets : k => v if v.delegate_dns }
+}
+
+# dns
+#----------------------------
+
+# link
+
+resource "azurerm_private_dns_zone_virtual_network_link" "hub1_vnet_link" {
+  resource_group_name   = azurerm_resource_group.rg.name
+  name                  = "${local.hub1_prefix}vnet-link"
+  private_dns_zone_name = azurerm_private_dns_zone.azure.name
+  virtual_network_id    = azurerm_virtual_network.hub1_vnet.id
+  registration_enabled  = true
+}
+
+# resolver
+
+resource "azurerm_private_dns_resolver" "hub1_dns_resolver" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${local.hub1_prefix}dns-resolver"
+  location            = local.hub1_location
+  virtual_network_id  = azurerm_virtual_network.hub1_vnet.id
+}
+
+# endpoint
+
+/*resource "azurerm_private_dns_resolver_inbound_endpoint" "hub1_dns_in" {
+  name                    = "${local.hub1_prefix}dns-in"
+  private_dns_resolver_id = azurerm_private_dns_resolver.hub1_dns_resolver.id
+  location                = local.hub1_location
+  ip_configurations {
+    private_ip_allocation_method = "Dynamic"
+    subnet_id                    = azurerm_subnet.hub1_subnets["${local.hub1_prefix}dns-in"].id
+  }
+}
+
+resource "azurerm_private_dns_resolver_inbound_endpoint" "hub1_dns_out" {
+  name                    = "${local.hub1_prefix}dns-out"
+  private_dns_resolver_id = azurerm_private_dns_resolver.hub1_dns_resolver.id
+  location                = local.hub1_location
+  ip_configurations {
+    private_ip_allocation_method = "Dynamic"
+    subnet_id                    = azurerm_subnet.hub1_subnets["${local.hub1_prefix}dns-out"].id
+  }
+}*/
 
 # vm
 #----------------------------
 
 module "hub1_vm" {
-  source          = "../modules/ubuntu"
-  resource_group  = azurerm_resource_group.rg.name
-  name            = "${local.hub1_prefix}vm"
-  location        = local.hub1_location
-  subnet          = azurerm_subnet.hub1_subnets["${local.hub1_prefix}main"].id
-  private_ip      = local.hub1_vm_addr
-  storage_account = azurerm_storage_account.region1
-  admin_username  = local.username
-  admin_password  = local.password
-  custom_data     = base64encode(local.vm_startup)
+  source           = "../modules/ubuntu"
+  resource_group   = azurerm_resource_group.rg.name
+  name             = "${local.hub1_prefix}vm"
+  location         = local.hub1_location
+  subnet           = azurerm_subnet.hub1_subnets["${local.hub1_prefix}main"].id
+  private_ip       = local.hub1_vm_addr
+  storage_account  = azurerm_storage_account.region1
+  admin_username   = local.username
+  admin_password   = local.password
+  custom_data      = base64encode(local.vm_startup)
+  private_dns_zone = azurerm_private_dns_zone.azure.name
+  private_dns_name = local.hub1_vm_dns_prefix
 }
 
 # route server

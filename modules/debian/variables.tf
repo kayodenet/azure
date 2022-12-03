@@ -96,3 +96,21 @@ variable "dns_servers" {
   type        = list(any)
   default     = null
 }
+
+variable "use_vm_extension" {
+  description = "VM extension to confiure user data"
+  type        = bool
+  default     = false
+}
+
+variable "private_dns_zone" {
+  description = "private dns zone name"
+  type        = string
+  default     = ""
+}
+
+variable "private_dns_name" {
+  description = "private dns zone dns name"
+  type        = string
+  default     = ""
+}

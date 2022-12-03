@@ -38,7 +38,7 @@ resource "azurerm_linux_virtual_machine" "this" {
   zone                = var.zone
   size                = var.vm_size
   tags                = var.tags
-  custom_data         = var.custom_data
+  custom_data         = var.use_vm_extension ? null : var.custom_data
   network_interface_ids = [
     azurerm_network_interface.this.id
   ]
@@ -51,9 +51,8 @@ resource "azurerm_linux_virtual_machine" "this" {
     publisher = "Debian"
     offer     = "debian-10"
     sku       = "10"
-    version   = "latest"
+    version   = "0.20201013.422"
   }
-
   computer_name  = "${local.name}vm"
   admin_username = var.admin_username
   admin_password = var.admin_password
@@ -69,4 +68,28 @@ resource "azurerm_linux_virtual_machine" "this" {
       tags,
     ]
   }
+}
+
+resource "azurerm_virtual_machine_extension" "this" {
+  count                = var.use_vm_extension ? 1 : 0
+  name                 = var.name
+  virtual_machine_id   = azurerm_linux_virtual_machine.this.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
+
+  settings = <<SETTINGS
+{
+  "script": "${var.custom_data}"
+}
+SETTINGS
+}
+
+resource "azurerm_private_dns_a_record" "this" {
+  count               = var.private_dns_zone == "" || var.private_dns_name == "" ? 0 : 1
+  resource_group_name = var.resource_group
+  name                = var.private_dns_name
+  zone_name           = var.private_dns_zone
+  ttl                 = 300
+  records             = [azurerm_linux_virtual_machine.this.private_ip_address]
 }
