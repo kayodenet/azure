@@ -358,7 +358,15 @@ resource "time_sleep" "time_120" {
 # dns
 ####################################################
 
-resource "azurerm_private_dns_zone" "azure" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "az.salawu.net"
+module "branch_dns_cloud_init" {
+  source          = "../modules/cloud-config-gen"
+  container_image = null
+  files = { "/var/tmp/unbound.sh" = {
+    owner       = "root"
+    permissions = "0744"
+    content = templatefile("../scripts/unbound.sh", local.branch_unbound_vars) }
+  }
+  run_commands = [
+    #". /var/tmp/unbound.sh",
+  ]
 }

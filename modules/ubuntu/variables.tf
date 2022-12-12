@@ -70,13 +70,13 @@ variable "enable_public_ip" {
 variable "admin_username" {
   description = "private dns zone name"
   type        = string
-  default     = "adminuser"
+  default     = "azureuser"
 }
 
 variable "admin_password" {
   description = "private dns zone name"
   type        = string
-  default     = "adminuser"
+  default     = "azureuser"
 }
 
 variable "enable_ip_forwarding" {
@@ -109,8 +109,8 @@ variable "private_dns_zone" {
   default     = ""
 }
 
-variable "private_dns_name" {
-  description = "private dns zone dns name"
+variable "dns_host" {
+  description = "private dns host name"
   type        = string
-  default     = ""
+  default     = "vm"
 }

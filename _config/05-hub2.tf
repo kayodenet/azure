@@ -1,96 +1,64 @@
 
-
 locals {
   hub2_vpngw_bgp0  = azurerm_virtual_network_gateway.hub2_vpngw.bgp_settings[0].peering_addresses[0].default_addresses[0]
   hub2_vpngw_bgp1  = azurerm_virtual_network_gateway.hub2_vpngw.bgp_settings[0].peering_addresses[1].default_addresses[0]
   hub2_ars_bgp0    = tolist(azurerm_route_server.hub2_ars.virtual_router_ips)[0]
   hub2_ars_bgp1    = tolist(azurerm_route_server.hub2_ars.virtual_router_ips)[1]
   hub2_ars_bgp_asn = azurerm_route_server.hub2_ars.virtual_router_asn
-  #hub2_dns_in_ip   = azurerm_private_dns_resolver_inbound_endpoint.hub2_dns_in
-  #hub2_dns_out_ip  = azurerm_private_dns_resolver_inbound_endpoint.hub2_dns_out
+  #hub2_dns_in_ip   = azurerm_private_dns_resolver_inbound_endpoint.hub2_dns_in.ip_configurations[0].private_ip_address
 }
 
-# vnet
+# base
 #----------------------------
 
-resource "azurerm_virtual_network" "hub2_vnet" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.hub2_prefix}vnet"
-  address_space       = local.hub2_address_space
-  location            = local.hub2_location
-}
-
-# subnets
-#----------------------------
-
-resource "azurerm_subnet" "hub2_subnets" {
-  for_each             = local.hub2_subnets
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.hub2_vnet.name
-  name                 = each.key
-  address_prefixes     = each.value.address_prefixes
-}
-
-# dns
-#----------------------------
-
-# link
-
-resource "azurerm_private_dns_zone_virtual_network_link" "hub2_vnet_link" {
-  resource_group_name   = azurerm_resource_group.rg.name
-  name                  = "${local.hub2_prefix}vnet-link"
-  private_dns_zone_name = azurerm_private_dns_zone.azure.name
-  virtual_network_id    = azurerm_virtual_network.hub2_vnet.id
-  registration_enabled  = true
-}
-
-# resolver
-
-resource "azurerm_private_dns_resolver" "hub2_dns_resolver" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.hub2_prefix}dns-resolver"
-  location            = local.hub2_location
-  virtual_network_id  = azurerm_virtual_network.hub2_vnet.id
-}
-
-# endpoint
-
-/*resource "azurerm_private_dns_resolver_inbound_endpoint" "hub2_dns_in" {
-  name                    = "${local.hub2_prefix}dns-in"
-  private_dns_resolver_id = azurerm_private_dns_resolver.hub2_dns_resolver.id
-  location                = local.hub2_location
-  ip_configurations {
-    private_ip_allocation_method = "Dynamic"
-    subnet_id                    = azurerm_subnet.hub2_subnets["${local.hub2_prefix}dns-in"].id
-  }
-}
-
-resource "azurerm_private_dns_resolver_inbound_endpoint" "hub2_dns_out" {
-  name                    = "${local.hub2_prefix}dns-out"
-  private_dns_resolver_id = azurerm_private_dns_resolver.hub2_dns_resolver.id
-  location                = local.hub2_location
-  ip_configurations {
-    private_ip_allocation_method = "Dynamic"
-    subnet_id                    = azurerm_subnet.hub2_subnets["${local.hub2_prefix}dns-out"].id
-  }
-}*/
-
-# vm
-#----------------------------
-
-module "hub2_vm" {
-  source           = "../modules/ubuntu"
+module "hub2" {
+  source           = "../modules/base"
   resource_group   = azurerm_resource_group.rg.name
-  name             = "${local.hub2_prefix}vm"
+  name             = local.hub2_prefix
   location         = local.hub2_location
-  subnet           = azurerm_subnet.hub2_subnets["${local.hub2_prefix}main"].id
-  private_ip       = local.hub2_vm_addr
   storage_account  = azurerm_storage_account.region2
-  admin_username   = local.username
-  admin_password   = local.password
-  custom_data      = base64encode(local.vm_startup)
-  private_dns_zone = azurerm_private_dns_zone.azure.name
-  private_dns_name = local.hub2_vm_dns_prefix
+  private_dns_zone = local.hub2_dns_zone
+  dns_zone_linked_vnets = [
+    module.hub1.vnet.id,
+    module.spoke1.vnet.id,
+    module.spoke2.vnet.id,
+    module.spoke3.vnet.id,
+    module.spoke4.vnet.id,
+    module.spoke5.vnet.id,
+    module.spoke6.vnet.id,
+  ]
+  dns_zone_linked_rulesets = [
+    azurerm_private_dns_resolver_dns_forwarding_ruleset.hub2_onprem.id,
+  ]
+
+  vnet_config = [
+    {
+      address_space               = local.hub2_address_space
+      subnets                     = local.hub2_subnets
+      enable_private_dns_resolver = true
+    }
+  ]
+
+  vm_config = [
+    {
+      private_ip  = local.hub2_vm_addr
+      custom_data = base64encode(local.vm_startup)
+      dns_host    = local.hub2_vm_dns_prefix
+    }
+  ]
+}
+
+# nsg
+#----------------------------
+
+resource "azurerm_subnet_network_security_group_association" "hub2_nsg_main" {
+  subnet_id                 = module.hub2.subnets["${local.hub2_prefix}main"].id
+  network_security_group_id = azurerm_network_security_group.nsg_region2_main.id
+}
+
+resource "azurerm_subnet_network_security_group_association" "hub2_nsg_nva" {
+  subnet_id                 = module.hub2.subnets["${local.hub2_prefix}nva"].id
+  network_security_group_id = azurerm_network_security_group.nsg_region2_nva.id
 }
 
 # route server
@@ -102,7 +70,7 @@ resource "azurerm_route_server" "hub2_ars" {
   location                         = local.hub2_location
   sku                              = "Standard"
   public_ip_address_id             = azurerm_public_ip.hub2_ars_pip.id
-  subnet_id                        = azurerm_subnet.hub2_subnets["RouteServerSubnet"].id
+  subnet_id                        = module.hub2.subnets["RouteServerSubnet"].id
   branch_to_branch_traffic_enabled = true
 }
 
@@ -127,13 +95,13 @@ resource "azurerm_virtual_network_gateway" "hub2_vpngw" {
   active_active       = true
   ip_configuration {
     name                          = "${local.hub2_prefix}link-0"
-    subnet_id                     = azurerm_subnet.hub2_subnets["GatewaySubnet"].id
+    subnet_id                     = module.hub2.subnets["GatewaySubnet"].id
     public_ip_address_id          = azurerm_public_ip.hub2_vpngw_pip0.id
     private_ip_address_allocation = "Dynamic"
   }
   ip_configuration {
     name                          = "${local.hub2_prefix}link-1"
-    subnet_id                     = azurerm_subnet.hub2_subnets["GatewaySubnet"].id
+    subnet_id                     = module.hub2.subnets["GatewaySubnet"].id
     public_ip_address_id          = azurerm_public_ip.hub2_vpngw_pip1.id
     private_ip_address_allocation = "Dynamic"
   }
@@ -185,7 +153,7 @@ resource "azurerm_route" "hub2_vpngw_rt_routes" {
 # association
 
 resource "azurerm_subnet_route_table_association" "hub2_vpngw_rt_spoke_route" {
-  subnet_id      = azurerm_subnet.hub2_subnets["GatewaySubnet"].id
+  subnet_id      = module.hub2.subnets["GatewaySubnet"].id
   route_table_id = azurerm_route_table.hub2_vpngw_rt.id
 }
 
@@ -199,7 +167,7 @@ resource "azurerm_lb" "hub2_nva_lb" {
   sku                 = "Standard"
   frontend_ip_configuration {
     name                          = "${local.hub2_prefix}nva-lb-feip"
-    subnet_id                     = azurerm_subnet.hub2_subnets["${local.hub2_prefix}ilb"].id
+    subnet_id                     = module.hub2.subnets["${local.hub2_prefix}ilb"].id
     private_ip_address            = local.hub2_nva_ilb_addr
     private_ip_address_allocation = "Static"
   }
@@ -215,7 +183,7 @@ resource "azurerm_lb_backend_address_pool" "hub2_nva" {
 resource "azurerm_lb_backend_address_pool_address" "hub2_nva" {
   name                    = "${local.hub2_prefix}nva-beap-addr"
   backend_address_pool_id = azurerm_lb_backend_address_pool.hub2_nva.id
-  virtual_network_id      = azurerm_virtual_network.hub2_vnet.id
+  virtual_network_id      = module.hub2.vnet.id
   ip_address              = local.hub2_nva_addr
 }
 
@@ -248,3 +216,23 @@ resource "azurerm_lb_rule" "hub2_nva" {
   probe_id                       = azurerm_lb_probe.hub2_nva1_lb_probe.id
 }
 
+# dns resolver ruleset
+#----------------------------
+
+resource "azurerm_private_dns_resolver_dns_forwarding_ruleset" "hub2_onprem" {
+  resource_group_name                        = azurerm_resource_group.rg.name
+  name                                       = "${local.hub2_prefix}onprem"
+  location                                   = local.hub2_location
+  private_dns_resolver_outbound_endpoint_ids = [module.hub2.private_dns_outbound_ep.id]
+}
+
+resource "azurerm_private_dns_resolver_forwarding_rule" "hub2_onprem" {
+  name                      = "${local.hub2_prefix}onprem"
+  dns_forwarding_ruleset_id = azurerm_private_dns_resolver_dns_forwarding_ruleset.hub2_onprem.id
+  domain_name               = "${local.onprem_domain}."
+  enabled                   = true
+  target_dns_servers {
+    ip_address = local.branch3_dns_addr
+    port       = 53
+  }
+}

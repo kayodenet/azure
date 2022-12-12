@@ -49,8 +49,6 @@ ip route 10.11.11.11 255.255.255.255 Tunnel0
 ip route 10.11.1.9 255.255.255.255 10.22.1.1
 ip route 10.22.6.4 255.255.255.255 10.22.1.1
 ip route 10.22.6.5 255.255.255.255 10.22.1.1
-ip route 10.6.2.4 255.255.255.255 10.22.1.1
-ip route 10.6.2.5 255.255.255.255 10.22.1.1
 !
 route-map NEXT-HOP permit 100
 match ip address prefix-list all
@@ -72,13 +70,3 @@ neighbor 10.11.11.11 remote-as 65000
 neighbor 10.11.11.11 soft-reconfiguration inbound
 neighbor 10.11.11.11 next-hop-self
 neighbor 10.11.11.11 update-source Loopback0
-neighbor 10.6.2.4 remote-as 65515
-neighbor 10.6.2.4 ebgp-multihop 255
-neighbor 10.6.2.4 soft-reconfiguration inbound
-neighbor 10.6.2.4 as-override
-neighbor 10.6.2.4 route-map NEXT-HOP out
-neighbor 10.6.2.5 remote-as 65515
-neighbor 10.6.2.5 ebgp-multihop 255
-neighbor 10.6.2.5 soft-reconfiguration inbound
-neighbor 10.6.2.5 as-override
-neighbor 10.6.2.5 route-map NEXT-HOP out

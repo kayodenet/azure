@@ -1,378 +1,307 @@
 
-locals {
-  spoke3_ars_bgp0    = tolist(azurerm_route_server.spoke3_ars.virtual_router_ips)[0]
-  spoke3_ars_bgp1    = tolist(azurerm_route_server.spoke3_ars.virtual_router_ips)[1]
-  spoke3_ars_bgp_asn = azurerm_route_server.spoke3_ars.virtual_router_asn
-  spoke6_ars_bgp0    = tolist(azurerm_route_server.spoke6_ars.virtual_router_ips)[0]
-  spoke6_ars_bgp1    = tolist(azurerm_route_server.spoke6_ars.virtual_router_ips)[1]
-  spoke6_ars_bgp_asn = azurerm_route_server.spoke6_ars.virtual_router_asn
-}
-
 ####################################################
 # spoke1
 ####################################################
 
-# vnet
+# base
+#----------------------------
 
-resource "azurerm_virtual_network" "spoke1_vnet" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.spoke1_prefix}vnet"
-  address_space       = local.spoke1_address_space
-  location            = local.spoke1_location
+module "spoke1" {
+  source           = "../modules/base"
+  resource_group   = azurerm_resource_group.rg.name
+  name             = local.spoke1_prefix
+  location         = local.spoke1_location
+  storage_account  = azurerm_storage_account.region1
+  private_dns_zone = local.spoke1_dns_zone
+  dns_zone_linked_vnets = [
+    module.hub1.vnet.id,
+    module.hub2.vnet.id,
+  ]
+  dns_zone_linked_rulesets = [
+    azurerm_private_dns_resolver_dns_forwarding_ruleset.hub1_onprem.id,
+  ]
+
+  vnet_config = [
+    {
+      address_space       = local.spoke1_address_space
+      subnets             = local.spoke1_subnets
+      subnets_nat_gateway = ["${local.spoke1_prefix}main", ]
+    }
+  ]
+
+  vm_config = [
+    {
+      private_ip  = local.spoke1_vm_addr
+      custom_data = base64encode(local.vm_startup)
+      dns_host    = local.spoke1_vm_dns_prefix
+    }
+  ]
 }
 
-# dns
+# nsg
+#----------------------------
 
-resource "azurerm_private_dns_zone_virtual_network_link" "spoke1_vnet" {
-  resource_group_name   = azurerm_resource_group.rg.name
-  name                  = "${local.spoke1_prefix}vnet"
-  private_dns_zone_name = azurerm_private_dns_zone.azure.name
-  virtual_network_id    = azurerm_virtual_network.spoke1_vnet.id
-  registration_enabled  = false
-}
-
-# subnets
-
-resource "azurerm_subnet" "spoke1_subnets" {
-  for_each             = local.spoke1_subnets
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.spoke1_vnet.name
-  name                 = each.key
-  address_prefixes     = each.value.address_prefixes
-}
-
-resource "azurerm_subnet_network_security_group_association" "spoke1_subnets_main" {
-  subnet_id                 = azurerm_subnet.spoke1_subnets["${local.spoke1_prefix}main"].id
+resource "azurerm_subnet_network_security_group_association" "spoke1_nsg_main" {
+  subnet_id                 = module.spoke1.subnets["${local.spoke1_prefix}main"].id
   network_security_group_id = azurerm_network_security_group.nsg_region1_main.id
 }
 
-# vm
-
-module "spoke1_vm" {
-  source           = "../modules/ubuntu"
-  resource_group   = azurerm_resource_group.rg.name
-  name             = "${local.spoke1_prefix}vm"
-  location         = local.spoke1_location
-  subnet           = azurerm_subnet.spoke1_subnets["${local.spoke1_prefix}main"].id
-  private_ip       = local.spoke1_vm_addr
-  storage_account  = azurerm_storage_account.region1
-  admin_username   = local.username
-  admin_password   = local.password
-  custom_data      = base64encode(local.vm_startup)
-  enable_public_ip = true
-  private_dns_zone = azurerm_private_dns_zone.azure.name
-  private_dns_name = local.spoke1_vm_dns_prefix
+resource "azurerm_subnet_network_security_group_association" "spoke1_nsg_appgw" {
+  subnet_id                 = module.spoke1.subnets["${local.spoke1_prefix}appgw"].id
+  network_security_group_id = azurerm_network_security_group.nsg_region1_appgw.id
 }
 
 ####################################################
 # spoke2
 ####################################################
 
-# vnet
+# base
+#----------------------------
 
-resource "azurerm_virtual_network" "spoke2_vnet" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.spoke2_prefix}vnet"
-  address_space       = local.spoke2_address_space
-  location            = local.spoke2_location
+module "spoke2" {
+  source           = "../modules/base"
+  resource_group   = azurerm_resource_group.rg.name
+  name             = local.spoke2_prefix
+  location         = local.spoke2_location
+  storage_account  = azurerm_storage_account.region1
+  private_dns_zone = local.spoke2_dns_zone
+  dns_zone_linked_vnets = [
+    module.hub1.vnet.id,
+    module.hub2.vnet.id,
+  ]
+  dns_zone_linked_rulesets = [
+    azurerm_private_dns_resolver_dns_forwarding_ruleset.hub1_onprem.id,
+  ]
+
+  vnet_config = [
+    {
+      address_space = local.spoke2_address_space
+      subnets       = local.spoke2_subnets
+    }
+  ]
+
+  vm_config = [
+    {
+      private_ip  = local.spoke2_vm_addr
+      custom_data = base64encode(local.vm_startup)
+      dns_host    = local.spoke2_vm_dns_prefix
+    }
+  ]
 }
 
-# dns
+# nsg
+#----------------------------
 
-resource "azurerm_private_dns_zone_virtual_network_link" "spoke2_vnet" {
-  resource_group_name   = azurerm_resource_group.rg.name
-  name                  = "${local.spoke2_prefix}vnet"
-  private_dns_zone_name = azurerm_private_dns_zone.azure.name
-  virtual_network_id    = azurerm_virtual_network.spoke2_vnet.id
-  registration_enabled  = false
-}
-
-# subnets
-
-resource "azurerm_subnet" "spoke2_subnets" {
-  for_each             = local.spoke2_subnets
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.spoke2_vnet.name
-  name                 = each.key
-  address_prefixes     = each.value.address_prefixes
-}
-
-resource "azurerm_subnet_network_security_group_association" "spoke2_subnets_main" {
-  subnet_id                 = azurerm_subnet.spoke2_subnets["${local.spoke2_prefix}main"].id
+resource "azurerm_subnet_network_security_group_association" "spoke2_nsg_main" {
+  subnet_id                 = module.spoke2.subnets["${local.spoke2_prefix}main"].id
   network_security_group_id = azurerm_network_security_group.nsg_region1_main.id
 }
 
-# vm
-
-module "spoke2_vm" {
-  source           = "../modules/ubuntu"
-  resource_group   = azurerm_resource_group.rg.name
-  name             = "${local.spoke2_prefix}vm"
-  location         = local.spoke2_location
-  subnet           = azurerm_subnet.spoke2_subnets["${local.spoke2_prefix}main"].id
-  private_ip       = local.spoke2_vm_addr
-  storage_account  = azurerm_storage_account.region1
-  admin_username   = local.username
-  admin_password   = local.password
-  custom_data      = base64encode(local.vm_startup)
-  private_dns_zone = azurerm_private_dns_zone.azure.name
-  private_dns_name = local.spoke2_vm_dns_prefix
+resource "azurerm_subnet_network_security_group_association" "spoke2_nsg_appgw" {
+  subnet_id                 = module.spoke2.subnets["${local.spoke2_prefix}appgw"].id
+  network_security_group_id = azurerm_network_security_group.nsg_region1_appgw.id
 }
 
 ####################################################
 # spoke3
 ####################################################
 
-# vnet
+# base
+#----------------------------
 
-resource "azurerm_virtual_network" "spoke3_vnet" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.spoke3_prefix}vnet"
-  address_space       = local.spoke3_address_space
-  location            = local.spoke3_location
+module "spoke3" {
+  source           = "../modules/base"
+  resource_group   = azurerm_resource_group.rg.name
+  name             = local.spoke3_prefix
+  location         = local.spoke3_location
+  storage_account  = azurerm_storage_account.region1
+  private_dns_zone = local.spoke3_dns_zone
+  dns_zone_linked_vnets = [
+    module.hub1.vnet.id,
+    module.hub2.vnet.id,
+  ]
+  dns_zone_linked_rulesets = [
+    azurerm_private_dns_resolver_dns_forwarding_ruleset.hub1_onprem.id,
+  ]
+
+  vnet_config = [
+    {
+      address_space = local.spoke3_address_space
+      subnets       = local.spoke3_subnets
+    }
+  ]
+
+  vm_config = [
+    {
+      private_ip  = local.spoke3_vm_addr
+      custom_data = base64encode(local.vm_startup)
+      dns_host    = local.spoke3_vm_dns_prefix
+    }
+  ]
 }
 
-# dns
+# nsg
+#----------------------------
 
-resource "azurerm_private_dns_zone_virtual_network_link" "spoke3_vnet" {
-  resource_group_name   = azurerm_resource_group.rg.name
-  name                  = "${local.spoke3_prefix}vnet"
-  private_dns_zone_name = azurerm_private_dns_zone.azure.name
-  virtual_network_id    = azurerm_virtual_network.spoke3_vnet.id
-  registration_enabled  = false
-}
-
-# subnets
-
-resource "azurerm_subnet" "spoke3_subnets" {
-  for_each             = local.spoke3_subnets
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.spoke3_vnet.name
-  name                 = each.key
-  address_prefixes     = each.value.address_prefixes
-}
-
-resource "azurerm_subnet_network_security_group_association" "spoke3_subnets_main" {
-  subnet_id                 = azurerm_subnet.spoke3_subnets["${local.spoke3_prefix}main"].id
+resource "azurerm_subnet_network_security_group_association" "spoke3_nsg_main" {
+  subnet_id                 = module.spoke3.subnets["${local.spoke3_prefix}main"].id
   network_security_group_id = azurerm_network_security_group.nsg_region1_main.id
 }
 
-# vm
-
-module "spoke3_vm" {
-  source           = "../modules/ubuntu"
-  resource_group   = azurerm_resource_group.rg.name
-  name             = "${local.spoke3_prefix}vm"
-  location         = local.spoke3_location
-  subnet           = azurerm_subnet.spoke3_subnets["${local.spoke3_prefix}main"].id
-  private_ip       = local.spoke3_vm_addr
-  storage_account  = azurerm_storage_account.region1
-  admin_username   = local.username
-  admin_password   = local.password
-  custom_data      = base64encode(local.vm_startup)
-  private_dns_zone = azurerm_private_dns_zone.azure.name
-  private_dns_name = local.spoke3_vm_dns_prefix
-}
-
-# route server
-
-resource "azurerm_route_server" "spoke3_ars" {
-  resource_group_name              = azurerm_resource_group.rg.name
-  name                             = "${local.spoke3_prefix}ars"
-  location                         = local.spoke3_location
-  sku                              = "Standard"
-  public_ip_address_id             = azurerm_public_ip.spoke3_ars_pip.id
-  subnet_id                        = azurerm_subnet.spoke3_subnets["RouteServerSubnet"].id
-  branch_to_branch_traffic_enabled = true
-}
-
-resource "azurerm_route_server_bgp_connection" "spoke3_hub1_nva" {
-  name            = "${local.spoke3_prefix}hub1-nva"
-  route_server_id = azurerm_route_server.spoke3_ars.id
-  peer_asn        = local.hub1_nva_asn
-  peer_ip         = local.hub1_nva_addr
+resource "azurerm_subnet_network_security_group_association" "spoke3_nsg_appgw" {
+  subnet_id                 = module.spoke3.subnets["${local.spoke3_prefix}appgw"].id
+  network_security_group_id = azurerm_network_security_group.nsg_region1_appgw.id
 }
 
 ####################################################
 # spoke4
 ####################################################
 
-# vnet
+# base
+#----------------------------
 
-resource "azurerm_virtual_network" "spoke4_vnet" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.spoke4_prefix}vnet"
-  address_space       = local.spoke4_address_space
-  location            = local.spoke4_location
+module "spoke4" {
+  source           = "../modules/base"
+  resource_group   = azurerm_resource_group.rg.name
+  name             = local.spoke4_prefix
+  location         = local.spoke4_location
+  storage_account  = azurerm_storage_account.region2
+  private_dns_zone = local.spoke4_dns_zone
+  dns_zone_linked_vnets = [
+    module.hub1.vnet.id,
+    module.hub2.vnet.id,
+  ]
+  dns_zone_linked_rulesets = [
+    azurerm_private_dns_resolver_dns_forwarding_ruleset.hub2_onprem.id,
+  ]
+
+  vnet_config = [
+    {
+      address_space = local.spoke4_address_space
+      subnets       = local.spoke4_subnets
+    }
+  ]
+
+  vm_config = [
+    {
+      private_ip  = local.spoke4_vm_addr
+      custom_data = base64encode(local.vm_startup)
+      dns_host    = local.spoke4_vm_dns_prefix
+    }
+  ]
 }
 
-# dns
+# nsg
+#----------------------------
 
-resource "azurerm_private_dns_zone_virtual_network_link" "spoke4_vnet" {
-  resource_group_name   = azurerm_resource_group.rg.name
-  name                  = "${local.spoke4_prefix}vnet"
-  private_dns_zone_name = azurerm_private_dns_zone.azure.name
-  virtual_network_id    = azurerm_virtual_network.spoke4_vnet.id
-  registration_enabled  = false
-}
-
-# subnets
-
-resource "azurerm_subnet" "spoke4_subnets" {
-  for_each             = local.spoke4_subnets
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.spoke4_vnet.name
-  name                 = each.key
-  address_prefixes     = each.value.address_prefixes
-}
-
-resource "azurerm_subnet_network_security_group_association" "spoke4_subnets_main" {
-  subnet_id                 = azurerm_subnet.spoke4_subnets["${local.spoke4_prefix}main"].id
+resource "azurerm_subnet_network_security_group_association" "spoke4_nsg_main" {
+  subnet_id                 = module.spoke4.subnets["${local.spoke4_prefix}main"].id
   network_security_group_id = azurerm_network_security_group.nsg_region2_main.id
 }
 
-# vm
-
-module "spoke4_vm" {
-  source           = "../modules/ubuntu"
-  resource_group   = azurerm_resource_group.rg.name
-  name             = "${local.spoke4_prefix}vm"
-  location         = local.spoke4_location
-  subnet           = azurerm_subnet.spoke4_subnets["${local.spoke4_prefix}main"].id
-  private_ip       = local.spoke4_vm_addr
-  storage_account  = azurerm_storage_account.region2
-  admin_username   = local.username
-  admin_password   = local.password
-  custom_data      = base64encode(local.vm_startup)
-  private_dns_zone = azurerm_private_dns_zone.azure.name
-  private_dns_name = local.spoke4_vm_dns_prefix
+resource "azurerm_subnet_network_security_group_association" "spoke4_nsg_appgw" {
+  subnet_id                 = module.spoke4.subnets["${local.spoke4_prefix}appgw"].id
+  network_security_group_id = azurerm_network_security_group.nsg_region2_appgw.id
 }
 
 ####################################################
 # spoke5
 ####################################################
 
-# vnet
+# base
+#----------------------------
 
-resource "azurerm_virtual_network" "spoke5_vnet" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.spoke5_prefix}vnet"
-  address_space       = local.spoke5_address_space
-  location            = local.spoke5_location
+module "spoke5" {
+  source           = "../modules/base"
+  resource_group   = azurerm_resource_group.rg.name
+  name             = local.spoke5_prefix
+  location         = local.spoke5_location
+  storage_account  = azurerm_storage_account.region2
+  private_dns_zone = local.spoke5_dns_zone
+  dns_zone_linked_vnets = [
+    module.hub1.vnet.id,
+    module.hub2.vnet.id,
+  ]
+  dns_zone_linked_rulesets = [
+    azurerm_private_dns_resolver_dns_forwarding_ruleset.hub2_onprem.id,
+  ]
+
+  vnet_config = [
+    {
+      address_space = local.spoke5_address_space
+      subnets       = local.spoke5_subnets
+    }
+  ]
+
+  vm_config = [
+    {
+      private_ip  = local.spoke5_vm_addr
+      custom_data = base64encode(local.vm_startup)
+      dns_host    = local.spoke5_vm_dns_prefix
+    }
+  ]
 }
 
-# dns
+# nsg
+#----------------------------
 
-resource "azurerm_private_dns_zone_virtual_network_link" "spoke5_vnet" {
-  resource_group_name   = azurerm_resource_group.rg.name
-  name                  = "${local.spoke5_prefix}vnet"
-  private_dns_zone_name = azurerm_private_dns_zone.azure.name
-  virtual_network_id    = azurerm_virtual_network.spoke5_vnet.id
-  registration_enabled  = false
-}
-
-# subnets
-
-resource "azurerm_subnet" "spoke5_subnets" {
-  for_each             = local.spoke5_subnets
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.spoke5_vnet.name
-  name                 = each.key
-  address_prefixes     = each.value.address_prefixes
-}
-
-resource "azurerm_subnet_network_security_group_association" "spoke5_subnets_main" {
-  subnet_id                 = azurerm_subnet.spoke5_subnets["${local.spoke5_prefix}main"].id
+resource "azurerm_subnet_network_security_group_association" "spoke5_nsg_main" {
+  subnet_id                 = module.spoke5.subnets["${local.spoke5_prefix}main"].id
   network_security_group_id = azurerm_network_security_group.nsg_region2_main.id
 }
 
-# vm
-
-module "spoke5_vm" {
-  source           = "../modules/ubuntu"
-  resource_group   = azurerm_resource_group.rg.name
-  name             = "${local.spoke5_prefix}vm"
-  location         = local.spoke5_location
-  subnet           = azurerm_subnet.spoke5_subnets["${local.spoke5_prefix}main"].id
-  private_ip       = local.spoke5_vm_addr
-  storage_account  = azurerm_storage_account.region2
-  admin_username   = local.username
-  admin_password   = local.password
-  custom_data      = base64encode(local.vm_startup)
-  private_dns_zone = azurerm_private_dns_zone.azure.name
-  private_dns_name = local.spoke5_vm_dns_prefix
+resource "azurerm_subnet_network_security_group_association" "spoke5_nsg_appgw" {
+  subnet_id                 = module.spoke5.subnets["${local.spoke5_prefix}appgw"].id
+  network_security_group_id = azurerm_network_security_group.nsg_region2_appgw.id
 }
 
 ####################################################
 # spoke6
 ####################################################
 
-# vnet
+# base
+#----------------------------
 
-resource "azurerm_virtual_network" "spoke6_vnet" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.spoke6_prefix}vnet"
-  address_space       = local.spoke6_address_space
-  location            = local.spoke6_location
+module "spoke6" {
+  source           = "../modules/base"
+  resource_group   = azurerm_resource_group.rg.name
+  name             = local.spoke6_prefix
+  location         = local.spoke6_location
+  storage_account  = azurerm_storage_account.region2
+  private_dns_zone = local.spoke6_dns_zone
+  dns_zone_linked_vnets = [
+    module.hub1.vnet.id,
+    module.hub2.vnet.id,
+  ]
+  dns_zone_linked_rulesets = [
+    azurerm_private_dns_resolver_dns_forwarding_ruleset.hub2_onprem.id,
+  ]
+
+  vnet_config = [
+    {
+      address_space = local.spoke6_address_space
+      subnets       = local.spoke6_subnets
+    }
+  ]
+
+  vm_config = [
+    {
+      private_ip  = local.spoke6_vm_addr
+      custom_data = base64encode(local.vm_startup)
+      dns_host    = local.spoke6_vm_dns_prefix
+    }
+  ]
 }
 
-# dns
+# nsg
+#----------------------------
 
-resource "azurerm_private_dns_zone_virtual_network_link" "spoke6_vnet" {
-  resource_group_name   = azurerm_resource_group.rg.name
-  name                  = "${local.spoke6_prefix}vnet"
-  private_dns_zone_name = azurerm_private_dns_zone.azure.name
-  virtual_network_id    = azurerm_virtual_network.spoke6_vnet.id
-  registration_enabled  = false
-}
-
-# subnets
-
-resource "azurerm_subnet" "spoke6_subnets" {
-  for_each             = local.spoke6_subnets
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.spoke6_vnet.name
-  name                 = each.key
-  address_prefixes     = each.value.address_prefixes
-}
-
-resource "azurerm_subnet_network_security_group_association" "spoke6_subnets_main" {
-  subnet_id                 = azurerm_subnet.spoke6_subnets["${local.spoke6_prefix}main"].id
+resource "azurerm_subnet_network_security_group_association" "spoke6_nsg_main" {
+  subnet_id                 = module.spoke6.subnets["${local.spoke6_prefix}main"].id
   network_security_group_id = azurerm_network_security_group.nsg_region2_main.id
 }
 
-# vm
-
-module "spoke6_vm" {
-  source           = "../modules/ubuntu"
-  resource_group   = azurerm_resource_group.rg.name
-  name             = "${local.spoke6_prefix}vm"
-  location         = local.spoke6_location
-  subnet           = azurerm_subnet.spoke6_subnets["${local.spoke6_prefix}main"].id
-  private_ip       = local.spoke6_vm_addr
-  storage_account  = azurerm_storage_account.region2
-  admin_username   = local.username
-  admin_password   = local.password
-  custom_data      = base64encode(local.vm_startup)
-  private_dns_zone = azurerm_private_dns_zone.azure.name
-  private_dns_name = local.spoke6_vm_dns_prefix
-}
-
-# route server
-
-resource "azurerm_route_server" "spoke6_ars" {
-  resource_group_name              = azurerm_resource_group.rg.name
-  name                             = "${local.spoke6_prefix}ars"
-  location                         = local.spoke6_location
-  sku                              = "Standard"
-  public_ip_address_id             = azurerm_public_ip.spoke6_ars_pip.id
-  subnet_id                        = azurerm_subnet.spoke6_subnets["RouteServerSubnet"].id
-  branch_to_branch_traffic_enabled = true
-}
-
-resource "azurerm_route_server_bgp_connection" "spoke6_hub1_nva" {
-  name            = "${local.spoke6_prefix}hub1-nva"
-  route_server_id = azurerm_route_server.spoke6_ars.id
-  peer_asn        = local.hub2_nva_asn
-  peer_ip         = local.hub2_nva_addr
+resource "azurerm_subnet_network_security_group_association" "spoke6_nsg_appgw" {
+  subnet_id                 = module.spoke6.subnets["${local.spoke6_prefix}appgw"].id
+  network_security_group_id = azurerm_network_security_group.nsg_region2_appgw.id
 }

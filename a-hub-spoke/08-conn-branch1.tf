@@ -96,8 +96,8 @@ module "branch1_nva" {
   location             = local.branch1_location
   enable_ip_forwarding = true
   enable_public_ip     = true
-  subnet_ext           = azurerm_subnet.branch1_subnets["${local.branch1_prefix}ext"].id
-  subnet_int           = azurerm_subnet.branch1_subnets["${local.branch1_prefix}int"].id
+  subnet_ext           = module.branch1.subnets["${local.branch1_prefix}ext"].id
+  subnet_int           = module.branch1.subnets["${local.branch1_prefix}int"].id
   private_ip_ext       = local.branch1_nva_ext_addr
   private_ip_int       = local.branch1_nva_int_addr
   public_ip            = azurerm_public_ip.branch1_nva_pip.id
@@ -134,7 +134,7 @@ resource "azurerm_route" "branch1_default_route_azure" {
 # association
 
 resource "azurerm_subnet_route_table_association" "branch1_default_route_azure" {
-  subnet_id      = azurerm_subnet.branch1_subnets["${local.branch1_prefix}main"].id
+  subnet_id      = module.branch1.subnets["${local.branch1_prefix}main"].id
   route_table_id = azurerm_route_table.branch1_rt.id
   lifecycle {
     ignore_changes = all
