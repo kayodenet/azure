@@ -17,6 +17,7 @@ modulez/
 # Other files
 *apply.sh
 *destroy.sh
+clean.sh
 plan.sh
 *rendered
 *keys/
@@ -48,3 +49,5 @@ _run.*
 _dev.*
 _delete.*
 _env.txt
+
+ZORT/
