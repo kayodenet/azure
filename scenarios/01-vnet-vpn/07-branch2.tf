@@ -149,7 +149,7 @@ resource "azurerm_route_table" "branch2_rt" {
 
   disable_bgp_route_propagation = true
   depends_on = [
-    time_sleep.rt_branch_region1,
+    time_sleeptime_sleep.time_60,
   ]
 }
 

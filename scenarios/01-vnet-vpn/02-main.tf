@@ -5,7 +5,7 @@
 locals {
   prefix = "Vpn"
   mypip  = chomp(data.http.mypip.response_body)
-  vm_startup = templatefile("../../scripts/vm.sh", {
+  vm_startup = templatefile("../../scripts/server.sh", {
     TARGETS_IP = [
       local.ecs_main_vm_addr,
       local.ecs_bu1_vm_addr,
