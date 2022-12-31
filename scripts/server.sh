@@ -73,7 +73,9 @@ crontab /var/tmp/crontab_flask.txt
 cat <<EOF > /usr/local/bin/ping-ip
 echo -e "\n ping ip ...\n"
 %{ for target in TARGETS ~}
+%{ if try(!target.sandbox, true) ~}
 echo "${target.name} - ${target.ip} -\$(ping -qc2 -W1 ${target.ip} 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+%{ endif ~}
 %{ endfor ~}
 EOF
 chmod a+x /usr/local/bin/ping-ip
@@ -83,7 +85,9 @@ chmod a+x /usr/local/bin/ping-ip
 cat <<EOF > /usr/local/bin/ping-dns
 echo -e "\n ping dns ...\n"
 %{ for target in TARGETS ~}
+%{ if try(!target.sandbox, true) ~}
 echo "${target.dns} - \$(dig +short ${target.dns} | tail -n1) -\$(ping -qc2 -W1 ${target.dns} 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+%{ endif ~}
 %{ endfor ~}
 EOF
 chmod a+x /usr/local/bin/ping-dns

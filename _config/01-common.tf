@@ -3,6 +3,21 @@
 # providers
 ####################################################
 
+terraform {
+  required_providers {
+    azapi = {
+      source = "Azure/azapi"
+    }
+    megaport = {
+      source  = "megaport/megaport"
+      version = "0.1.9"
+    }
+  }
+}
+
+provider "azapi" {
+}
+
 provider "azurerm" {
   skip_provider_registration = true
   features {}

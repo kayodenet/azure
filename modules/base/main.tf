@@ -1,4 +1,11 @@
 
+/*locals {
+  dns_zone_resource = (
+    var.private_dns_zone == null ? {} :
+    try(azurerm_private_dns_zone.this[0], {})
+  )
+}*/
+
 # vnet
 #----------------------------
 
@@ -7,6 +14,15 @@ resource "azurerm_virtual_network" "this" {
   name                = "${var.name}vnet"
   address_space       = var.vnet_config[0].address_space
   location            = var.location
+}
+
+# nsg
+#----------------------------
+
+resource "azurerm_subnet_network_security_group_association" "this" {
+  for_each                  = var.nsg_subnets
+  subnet_id                 = [for k, v in azurerm_subnet.this : v.id if length(regexall("${each.key}", k)) > 0][0]
+  network_security_group_id = each.value
 }
 
 # dns
@@ -21,28 +37,27 @@ resource "azurerm_private_dns_zone" "this" {
 resource "azurerm_private_dns_zone_virtual_network_link" "this" {
   count                 = var.private_dns_zone == null ? 0 : 1
   resource_group_name   = var.resource_group
-  name                  = "${var.name}vnet"
+  name                  = "${var.name}vnet-link"
   private_dns_zone_name = azurerm_private_dns_zone.this[0].name
   virtual_network_id    = azurerm_virtual_network.this.id
   registration_enabled  = true
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "external" {
-  for_each              = toset(var.dns_zone_linked_vnets)
+  for_each              = { for k, v in var.dns_zone_linked_vnets : k => v if var.private_dns_zone != null }
   resource_group_name   = var.resource_group
-  name                  = split("/", each.value)[8]
+  name                  = "${var.name}${each.key}-vnet-link"
   private_dns_zone_name = azurerm_private_dns_zone.this[0].name
   virtual_network_id    = each.value
   registration_enabled  = false
 }
 
 resource "azurerm_private_dns_resolver_virtual_network_link" "external" {
-  for_each                  = toset(var.dns_zone_linked_rulesets)
-  name                      = "${var.name}-${split("/", each.value)[8]}-link"
+  for_each                  = { for k, v in var.dns_zone_linked_rulesets : k => v if var.private_dns_zone != null }
+  name                      = "${var.name}${each.key}-vnet-link"
   dns_forwarding_ruleset_id = each.value
   virtual_network_id        = azurerm_virtual_network.this.id
 }
-
 
 # subnets
 #----------------------------
@@ -66,33 +81,6 @@ resource "azurerm_subnet" "this" {
     }
   }
 }
-
-/*# nsg
-#----------------------------
-
-resource "azurerm_subnet_network_security_group_association" "main" {
-  for_each                  = { for k, v in var.vnet_config[0].subnets : k => v if length(regexall("main", k)) > 0 && var.network_security_group_id_main != null }
-  subnet_id                 = azurerm_subnet.this[each.key].id
-  network_security_group_id = var.network_security_group_id_main
-}
-
-resource "azurerm_subnet_network_security_group_association" "appgw" {
-  for_each                  = { for k, v in var.vnet_config[0].subnets : k => v if length(regexall("appgw", k)) > 0 && var.network_security_group_id_appgw != null }
-  subnet_id                 = azurerm_subnet.this[each.key].id
-  network_security_group_id = var.network_security_group_id_appgw
-}
-
-resource "azurerm_subnet_network_security_group_association" "int" {
-  for_each                  = { for k, v in var.vnet_config[0].subnets : k => v if length(regexall("int", k)) > 0 && var.network_security_group_id_int != null }
-  subnet_id                 = azurerm_subnet.this[each.key].id
-  network_security_group_id = var.network_security_group_id_int
-}
-
-resource "azurerm_subnet_network_security_group_association" "ext" {
-  for_each                  = { for k, v in var.vnet_config[0].subnets : k => v if length(regexall("ext", k)) > 0 && var.network_security_group_id_ext != null }
-  subnet_id                 = azurerm_subnet.this[each.key].id
-  network_security_group_id = var.network_security_group_id_ext
-}*/
 
 # dns
 #----------------------------
@@ -198,4 +186,121 @@ resource "azurerm_private_dns_resolver_outbound_endpoint" "this" {
   private_dns_resolver_id = azurerm_private_dns_resolver.this[0].id
   location                = var.location
   subnet_id               = [for k, v in azurerm_subnet.this : v.id if length(regexall("dns-out", k)) > 0][0]
+}
+
+# route server
+#----------------------------
+
+resource "azurerm_public_ip" "ars_pip" {
+  count               = var.vnet_config[0].enable_ars ? 1 : 0
+  resource_group_name = var.resource_group
+  name                = "${var.name}ars-pip"
+  location            = var.location
+  sku                 = "Standard"
+  allocation_method   = "Static"
+}
+
+resource "azurerm_route_server" "ars" {
+  count                            = var.vnet_config[0].enable_ars ? 1 : 0
+  resource_group_name              = var.resource_group
+  name                             = "${var.name}ars"
+  location                         = var.location
+  sku                              = "Standard"
+  public_ip_address_id             = azurerm_public_ip.ars_pip[0].id
+  subnet_id                        = azurerm_subnet.this["RouteServerSubnet"].id
+  branch_to_branch_traffic_enabled = true
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+}
+
+# vpngw
+#----------------------------
+
+resource "azurerm_public_ip" "vpngw_pip0" {
+  count               = var.vnet_config[0].enable_vpngw ? 1 : 0
+  resource_group_name = var.resource_group
+  name                = "${var.name}vpngw-pip0"
+  location            = var.location
+  sku                 = "Standard"
+  allocation_method   = "Static"
+}
+
+resource "azurerm_public_ip" "vpngw_pip1" {
+  count               = var.vnet_config[0].enable_vpngw ? 1 : 0
+  resource_group_name = var.resource_group
+  name                = "${var.name}vpngw-pip1"
+  location            = var.location
+  sku                 = "Standard"
+  allocation_method   = "Static"
+}
+
+resource "azurerm_virtual_network_gateway" "vpngw" {
+  count               = var.vnet_config[0].enable_vpngw ? 1 : 0
+  resource_group_name = var.resource_group
+  name                = "${var.name}vpngw"
+  location            = var.location
+  type                = "Vpn"
+  vpn_type            = "RouteBased"
+  sku                 = "VpnGw3"
+  enable_bgp          = true
+  active_active       = true
+
+  ip_configuration {
+    name                          = "${var.name}ip-config0"
+    subnet_id                     = azurerm_subnet.this["GatewaySubnet"].id
+    public_ip_address_id          = azurerm_public_ip.vpngw_pip0[0].id
+    private_ip_address_allocation = "Dynamic"
+  }
+  ip_configuration {
+    name                          = "${var.name}ip-config1"
+    subnet_id                     = azurerm_subnet.this["GatewaySubnet"].id
+    public_ip_address_id          = azurerm_public_ip.vpngw_pip1[0].id
+    private_ip_address_allocation = "Dynamic"
+  }
+
+  bgp_settings {
+    asn = var.vnet_config[0].vpngw_config[0].asn
+    peering_addresses {
+      ip_configuration_name = "${var.name}ip-config0"
+      apipa_addresses       = try(var.vnet_config[0].vpngw_config.ip_config0_apipa_addresses, ["169.254.21.1"])
+    }
+    peering_addresses {
+      ip_configuration_name = "${var.name}ip-config1"
+      apipa_addresses       = try(var.vnet_config[0].vpngw_config.ip_config1_apipa_addresses, ["169.254.21.5"])
+    }
+  }
+}
+
+# ergw
+#----------------------------
+
+resource "azurerm_public_ip" "ergw_pip" {
+  count               = var.vnet_config[0].enable_ergw ? 1 : 0
+  resource_group_name = var.resource_group
+  name                = "${var.name}ergw-pip0"
+  location            = var.location
+  sku                 = "Standard"
+  allocation_method   = "Static"
+}
+
+resource "azurerm_virtual_network_gateway" "ergw" {
+  count               = var.vnet_config[0].enable_ergw ? 1 : 0
+  resource_group_name = var.resource_group
+  name                = "${var.name}ergw"
+  location            = var.location
+  type                = "ExpressRoute"
+  vpn_type            = "RouteBased"
+  sku                 = "Standard"
+  enable_bgp          = true
+  active_active       = false
+  ip_configuration {
+    name                          = "${var.name}ip0"
+    subnet_id                     = azurerm_subnet.this["GatewaySubnet"].id
+    public_ip_address_id          = azurerm_public_ip.ergw_pip[0].id
+    private_ip_address_allocation = "Dynamic"
+  }
 }

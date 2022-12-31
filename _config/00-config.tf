@@ -26,24 +26,6 @@ locals {
 
   rfc1918_prefixes = ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
 
-  vm_script_targets = [
-    { name = "branch1", dns = local.branch1_vm_dns, ip = local.branch1_vm_addr },
-    { name = "branch2", dns = local.branch2_vm_dns, ip = local.branch2_vm_addr },
-    { name = "branch3", dns = local.branch3_vm_dns, ip = local.branch3_vm_addr },
-    { name = "hub1   ", dns = local.hub1_vm_dns, ip = local.hub1_vm_addr },
-    { name = "hub2   ", dns = local.hub2_vm_dns, ip = local.hub2_vm_addr },
-    { name = "spoke1 ", dns = local.spoke1_vm_dns, ip = local.spoke1_vm_addr },
-    { name = "spoke2 ", dns = local.spoke2_vm_dns, ip = local.spoke2_vm_addr },
-    { name = "spoke3 ", dns = local.spoke3_vm_dns, ip = local.spoke3_vm_addr },
-    { name = "spoke4 ", dns = local.spoke4_vm_dns, ip = local.spoke4_vm_addr },
-    { name = "spoke5 ", dns = local.spoke5_vm_dns, ip = local.spoke5_vm_addr },
-    { name = "spoke6 ", dns = local.spoke6_vm_dns, ip = local.spoke6_vm_addr },
-  ]
-
-  vm_startup = templatefile("../scripts/server.sh", {
-    TARGETS = local.vm_script_targets
-  })
-
   branch_unbound_config = templatefile("../scripts/unbound.sh", {
     ONPREM_LOCAL_RECORDS = local.onprem_local_records
     REDIRECTED_HOSTS     = local.onprem_redirected_hosts
@@ -163,7 +145,7 @@ locals {
   hub2_nva_tun_range0    = "10.22.50.0/30"
   hub2_nva_tun_range1    = "10.22.51.4/30"
   hub2_vpngw_bgp_apipa_0 = cidrhost(local.bgp_apipa_range5, 1)
-  hub2_vm_dns_prefix     = "vm.hub2"
+  hub2_vm_dns_prefix     = "vm"
   hub2_vm_dns            = "${local.hub2_vm_dns_prefix}.${local.hub2_dns_zone}"
 }
 

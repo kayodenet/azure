@@ -22,6 +22,8 @@ resource "azurerm_virtual_hub" "vhub2" {
 # vpngw
 #----------------------------
 
+# s2s
+
 resource "azurerm_vpn_gateway" "vhub2" {
   resource_group_name = azurerm_resource_group.rg.name
   name                = "${local.vhub2_prefix}vpngw"
@@ -76,7 +78,7 @@ resource "azurerm_vpn_site" "vhub2_site_hub2" {
   link {
     name          = "${local.vhub2_prefix}site-hub2-link-0"
     provider_name = "Microsoft"
-    ip_address    = azurerm_public_ip.hub2_vpngw_pip0.ip_address
+    ip_address    = module.hub2.vpngw_pip0.ip_address
     speed_in_mbps = 50
     bgp {
       asn             = local.hub2_vpngw_asn
@@ -86,11 +88,30 @@ resource "azurerm_vpn_site" "vhub2_site_hub2" {
   link {
     name          = "${local.vhub2_prefix}site-hub2-link-1"
     provider_name = "Microsoft"
-    ip_address    = azurerm_public_ip.hub2_vpngw_pip1.ip_address
+    ip_address    = module.hub2.vpngw_pip1.ip_address
     speed_in_mbps = 50
     bgp {
       asn             = local.hub2_vpngw_asn
       peering_address = local.hub2_vpngw_bgp1
     }
   }
+}
+
+# route tables
+#----------------------------
+
+# blue
+
+resource "azurerm_virtual_hub_route_table" "vhub2_rt_blue" {
+  name           = "${local.vhub2_prefix}rt-blue"
+  virtual_hub_id = azurerm_virtual_hub.vhub2.id
+  labels         = ["blue"]
+}
+
+# red
+
+resource "azurerm_virtual_hub_route_table" "vhub2_rt_red" {
+  name           = "${local.vhub2_prefix}rt-red"
+  virtual_hub_id = azurerm_virtual_hub.vhub2.id
+  labels         = ["red"]
 }

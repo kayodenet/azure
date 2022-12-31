@@ -44,30 +44,6 @@ variable "ssh_public_key" {
   default     = null
 }
 
-/*variable "network_security_group_id_main" {
-  description = "network security group id for main subnet"
-  type        = string
-  default     = null
-}
-
-variable "network_security_group_id_ext" {
-  description = "network security group id for external subnet"
-  type        = string
-  default     = null
-}
-
-variable "network_security_group_id_int" {
-  description = "network security group id for internal subnet"
-  type        = string
-  default     = null
-}
-
-variable "network_security_group_id_appgw" {
-  description = "network security group id for appgw subnet"
-  type        = string
-  default     = null
-}*/
-
 variable "private_dns_zone" {
   description = "private dns zone"
   type        = string
@@ -76,14 +52,20 @@ variable "private_dns_zone" {
 
 variable "dns_zone_linked_vnets" {
   description = "private dns zone"
-  type        = list(string)
-  default     = []
+  type        = map(any)
+  default     = {}
+}
+
+variable "nsg_subnets" {
+  description = "subnets to associate to nsg"
+  type        = map(any)
+  default     = {}
 }
 
 variable "dns_zone_linked_rulesets" {
   description = "private dns rulesets"
-  type        = list(string)
-  default     = []
+  type        = map(any)
+  default     = {}
 }
 
 variable "vnet_config" {
@@ -94,6 +76,14 @@ variable "vnet_config" {
     nsg_id                      = optional(string)
     dns_servers                 = optional(list(string))
     enable_private_dns_resolver = optional(bool, false)
+    enable_ars                  = optional(bool, false)
+    enable_vpngw                = optional(bool, false)
+    enable_ergw                 = optional(bool, false)
+    vpngw_config = optional(list(object({
+      asn                        = string
+      ip_config0_apipa_addresses = optional(list(string), ["169.254.21.1"])
+      ip_config1_apipa_addresses = optional(list(string), ["169.254.21.5"])
+    })))
   }))
   default = []
 }
