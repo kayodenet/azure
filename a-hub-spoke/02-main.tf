@@ -3,7 +3,7 @@
 #----------------------------
 
 locals {
-  prefix = "A"
+  prefix = "AX"
 
   hub1_nva_asn   = "65000"
   hub1_vpngw_asn = "65515"
@@ -15,72 +15,23 @@ locals {
   hub2_ergw_asn  = "65515"
   hub2_ars_asn   = "65515"
   mypip          = chomp(data.http.mypip.response_body)
-}
 
-####################################################
-# standard hubs (transit vnets)
-####################################################
-
-# hub1
-#----------------------------
-
-resource "azurerm_public_ip" "hub1_vpngw_pip0" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.hub1_prefix}vpngw-pip0"
-  location            = local.region1
-  sku                 = "Standard"
-  allocation_method   = "Static"
-}
-
-resource "azurerm_public_ip" "hub1_vpngw_pip1" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.hub1_prefix}vpngw-pip1"
-  location            = local.region1
-  sku                 = "Standard"
-  allocation_method   = "Static"
-}
-
-resource "azurerm_public_ip" "hub1_ars_pip" {
-  name                = "${local.hub1_prefix}ars-pip"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = local.region1
-  sku                 = "Standard"
-  allocation_method   = "Static"
-}
-
-resource "azurerm_public_ip" "hub1_ergw_pip" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.hub1_prefix}ergw-pip"
-  location            = local.region1
-  sku                 = "Standard"
-  allocation_method   = "Static"
-}
-
-# hub2
-#----------------------------
-
-resource "azurerm_public_ip" "hub2_vpngw_pip0" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.hub2_prefix}vpngw-pip0"
-  location            = local.region2
-  sku                 = "Standard"
-  allocation_method   = "Static"
-}
-
-resource "azurerm_public_ip" "hub2_vpngw_pip1" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.hub2_prefix}vpngw-pip1"
-  location            = local.region2
-  sku                 = "Standard"
-  allocation_method   = "Static"
-}
-
-resource "azurerm_public_ip" "hub2_ars_pip" {
-  name                = "${local.hub2_prefix}ars-pip"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = local.region2
-  sku                 = "Standard"
-  allocation_method   = "Static"
+  vm_script_targets = [
+    { name = "branch1", dns = local.branch1_vm_dns, ip = local.branch1_vm_addr },
+    { name = "branch2", dns = local.branch2_vm_dns, ip = local.branch2_vm_addr },
+    { name = "branch3", dns = local.branch3_vm_dns, ip = local.branch3_vm_addr },
+    { name = "hub1   ", dns = local.hub1_vm_dns, ip = local.hub1_vm_addr },
+    { name = "hub2   ", dns = local.hub2_vm_dns, ip = local.hub2_vm_addr },
+    { name = "spoke1 ", dns = local.spoke1_vm_dns, ip = local.spoke1_vm_addr },
+    { name = "spoke2 ", dns = local.spoke2_vm_dns, ip = local.spoke2_vm_addr },
+    { name = "spoke3 ", dns = local.spoke3_vm_dns, ip = local.spoke3_vm_addr, sandbox = true },
+    { name = "spoke4 ", dns = local.spoke4_vm_dns, ip = local.spoke4_vm_addr },
+    { name = "spoke5 ", dns = local.spoke5_vm_dns, ip = local.spoke5_vm_addr },
+    { name = "spoke6 ", dns = local.spoke6_vm_dns, ip = local.spoke6_vm_addr, sandbox = true },
+  ]
+  vm_startup = templatefile("../scripts/server.sh", {
+    TARGETS = local.vm_script_targets
+  })
 }
 
 ####################################################
@@ -128,16 +79,6 @@ resource "azurerm_public_ip" "branch2_nva_pip" {
   allocation_method   = "Static"
 }
 
-# ergw
-
-resource "azurerm_public_ip" "branch2_ergw_pip" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.branch2_prefix}ergw-pip"
-  location            = local.region1
-  sku                 = "Standard"
-  allocation_method   = "Static"
-}
-
 # branch3
 #----------------------------
 
@@ -146,41 +87,6 @@ resource "azurerm_public_ip" "branch2_ergw_pip" {
 resource "azurerm_public_ip" "branch3_nva_pip" {
   resource_group_name = azurerm_resource_group.rg.name
   name                = "${local.branch3_prefix}nva-pip"
-  location            = local.region2
-  sku                 = "Standard"
-  allocation_method   = "Static"
-}
-
-# branch4
-#----------------------------
-
-# nva
-
-resource "azurerm_public_ip" "branch4_nva_pip" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.branch4_prefix}nva-pip"
-  location            = local.region2
-  sku                 = "Standard"
-  allocation_method   = "Static"
-}
-
-# spoke3
-#----------------------------
-
-resource "azurerm_public_ip" "spoke3_ars_pip" {
-  name                = "${local.spoke3_prefix}ars-pip"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = local.region1
-  sku                 = "Standard"
-  allocation_method   = "Static"
-}
-
-# spoke6
-#----------------------------
-
-resource "azurerm_public_ip" "spoke6_ars_pip" {
-  name                = "${local.spoke6_prefix}ars-pip"
-  resource_group_name = azurerm_resource_group.rg.name
   location            = local.region2
   sku                 = "Standard"
   allocation_method   = "Static"

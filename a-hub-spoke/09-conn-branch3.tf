@@ -30,10 +30,10 @@ locals {
           address = cidrhost(local.branch3_nva_tun_range0, 1)
           mask    = cidrnetmask(local.branch3_nva_tun_range0)
           source  = local.branch3_nva_ext_addr
-          dest    = azurerm_public_ip.hub2_vpngw_pip0.ip_address
+          dest    = module.hub2.vpngw_pip0.ip_address
         },
         ipsec = {
-          peer_ip = azurerm_public_ip.hub2_vpngw_pip0.ip_address
+          peer_ip = module.hub2.vpngw_pip0.ip_address
           psk     = local.psk
         }
       },
@@ -43,10 +43,10 @@ locals {
           address = cidrhost(local.branch3_nva_tun_range1, 1)
           mask    = cidrnetmask(local.branch3_nva_tun_range1)
           source  = local.branch3_nva_ext_addr
-          dest    = azurerm_public_ip.hub2_vpngw_pip1.ip_address
+          dest    = module.hub2.vpngw_pip1.ip_address
         },
         ipsec = {
-          peer_ip = azurerm_public_ip.hub2_vpngw_pip1.ip_address
+          peer_ip = module.hub2.vpngw_pip1.ip_address
           psk     = local.psk
         }
       },

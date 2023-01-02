@@ -1,11 +1,11 @@
 
 locals {
-  hub2_vpngw_bgp0 = module.hub2.vpngw.bgp_settings[0].peering_addresses[0].default_addresses[0]
-  hub2_vpngw_bgp1 = module.hub2.vpngw.bgp_settings[0].peering_addresses[1].default_addresses[0]
-  #hub2_ars_bgp0    = tolist(module.hub2.ars.virtual_router_ips)[0]
-  #hub2_ars_bgp1    = tolist(module.hub2.ars.virtual_router_ips)[1]
-  #hub2_ars_bgp_asn = module.hub2.ars.virtual_router_asn
-  #hub2_dns_in_ip   = module.hub2.private_dns_inbound_ep.ip_configurations[0].private_ip_address
+  hub2_vpngw_bgp0  = module.hub2.vpngw.bgp_settings[0].peering_addresses[0].default_addresses[0]
+  hub2_vpngw_bgp1  = module.hub2.vpngw.bgp_settings[0].peering_addresses[1].default_addresses[0]
+  hub2_ars_bgp0    = tolist(module.hub2.ars.virtual_router_ips)[0]
+  hub2_ars_bgp1    = tolist(module.hub2.ars.virtual_router_ips)[1]
+  hub2_ars_bgp_asn = module.hub2.ars.virtual_router_asn
+  #hub2_dns_in_ip = module.hub2.private_dns_inbound_ep.ip_configurations[0].private_ip_address
 }
 
 # base
@@ -39,9 +39,9 @@ module "hub2" {
       address_space               = local.hub2_address_space
       subnets                     = local.hub2_subnets
       enable_private_dns_resolver = true
-      #enable_ars                  = true
-      enable_vpngw = true
-      #enable_ergw                = true
+      enable_ergw                 = true
+      enable_vpngw                = true
+      enable_ars                  = true
 
       vpngw_config = [
         {
@@ -185,49 +185,3 @@ resource "azurerm_private_dns_resolver_forwarding_rule" "hub2_onprem" {
   }
 }
 
-# route server
-#----------------------------
-
-/*resource "azurerm_route_server_bgp_connection" "hub2_nva" {
-  name            = "${local.hub2_prefix}nva"
-  route_server_id = module.hub2.ars.id
-  peer_asn        = local.hub2_nva_asn
-  peer_ip         = local.hub2_nva_addr
-}*/
-
-/*# vpngw
-#----------------------------
-
-resource "azurerm_virtual_network_gateway" "hub2_vpngw" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.hub2_prefix}vpngw"
-  location            = local.hub2_location
-  type                = "Vpn"
-  vpn_type            = "RouteBased"
-  sku                 = "VpnGw3"
-  enable_bgp          = true
-  active_active       = true
-  ip_configuration {
-    name                          = "${local.hub2_prefix}link-0"
-    subnet_id                     = module.hub2.subnets["GatewaySubnet"].id
-    public_ip_address_id          = module.hub2.vpngw_pip0.id
-    private_ip_address_allocation = "Dynamic"
-  }
-  ip_configuration {
-    name                          = "${local.hub2_prefix}link-1"
-    subnet_id                     = module.hub2.subnets["GatewaySubnet"].id
-    public_ip_address_id          = module.hub2.vpngw_pip1.id
-    private_ip_address_allocation = "Dynamic"
-  }
-  bgp_settings {
-    asn = local.hub2_vpngw_asn
-    peering_addresses {
-      ip_configuration_name = "${local.hub2_prefix}link-0"
-      apipa_addresses       = [local.hub2_vpngw_bgp_apipa_0, ]
-    }
-    peering_addresses {
-      ip_configuration_name = "${local.hub2_prefix}link-1"
-      apipa_addresses       = [local.hub2_vpngw_bgp_apipa_0, ]
-    }
-  }
-}*/

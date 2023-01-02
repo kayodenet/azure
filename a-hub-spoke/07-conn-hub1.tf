@@ -18,7 +18,7 @@ resource "azurerm_virtual_network_peering" "spoke1_to_hub1_peering" {
   allow_forwarded_traffic      = true
   use_remote_gateways          = true
   depends_on = [
-    azurerm_virtual_network_gateway.hub1_vpngw
+    module.hub1.vpngw
   ]
 }
 
@@ -34,7 +34,7 @@ resource "azurerm_virtual_network_peering" "hub1_to_spoke1_peering" {
   allow_forwarded_traffic      = true
   allow_gateway_transit        = true
   depends_on = [
-    azurerm_virtual_network_gateway.hub1_vpngw
+    module.hub1.vpngw
   ]
 }
 
@@ -97,7 +97,7 @@ resource "azurerm_virtual_network_peering" "spoke2_to_hub1_peering" {
   allow_forwarded_traffic      = true
   use_remote_gateways          = true
   depends_on = [
-    azurerm_virtual_network_gateway.hub1_vpngw
+    module.hub1.vpngw
   ]
 }
 
@@ -112,7 +112,7 @@ resource "azurerm_virtual_network_peering" "hub1_to_spoke2_peering" {
   allow_forwarded_traffic      = true
   allow_gateway_transit        = true
   depends_on = [
-    azurerm_virtual_network_gateway.hub1_vpngw
+    module.hub1.vpngw
   ]
 }
 
@@ -185,7 +185,7 @@ resource "azurerm_virtual_network_gateway_connection" "hub1_branch1_lng" {
   location                   = local.hub1_location
   type                       = "IPsec"
   enable_bgp                 = true
-  virtual_network_gateway_id = azurerm_virtual_network_gateway.hub1_vpngw.id
+  virtual_network_gateway_id = module.hub1.vpngw.id
   local_network_gateway_id   = azurerm_local_network_gateway.hub1_branch1_lng.id
   shared_key                 = local.psk
 }
@@ -298,4 +298,15 @@ module "hub1_nva" {
   admin_username       = local.username
   admin_password       = local.password
   custom_data          = base64encode(local.hub1_router_init)
+}
+
+####################################################
+# ars
+####################################################
+
+resource "azurerm_route_server_bgp_connection" "hub1_ars_bgp_conn" {
+  name            = "${local.hub1_prefix}ars-bgp-conn"
+  route_server_id = module.hub1.ars.id
+  peer_asn        = local.hub1_nva_asn
+  peer_ip         = local.hub1_nva_addr
 }

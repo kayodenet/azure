@@ -53,17 +53,26 @@ systemctl enable unbound
 
 cat <<EOF > /usr/local/bin/ping-ip
 echo -e "\n ping ip ...\n"
+
 echo "branch1 - 10.10.0.5 -\$(ping -qc2 -W1 10.10.0.5 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "branch2 - 10.20.0.5 -\$(ping -qc2 -W1 10.20.0.5 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "branch3 - 10.30.0.5 -\$(ping -qc2 -W1 10.30.0.5 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "hub1    - 10.11.0.5 -\$(ping -qc2 -W1 10.11.0.5 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "hub2    - 10.22.0.5 -\$(ping -qc2 -W1 10.22.0.5 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "spoke1  - 10.1.0.5 -\$(ping -qc2 -W1 10.1.0.5 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "spoke2  - 10.2.0.5 -\$(ping -qc2 -W1 10.2.0.5 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
-echo "spoke3  - 10.3.0.5 -\$(ping -qc2 -W1 10.3.0.5 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
+
 echo "spoke4  - 10.4.0.5 -\$(ping -qc2 -W1 10.4.0.5 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "spoke5  - 10.5.0.5 -\$(ping -qc2 -W1 10.5.0.5 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
-echo "spoke6  - 10.6.0.5 -\$(ping -qc2 -W1 10.6.0.5 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 EOF
 chmod a+x /usr/local/bin/ping-ip
 
@@ -71,17 +80,26 @@ chmod a+x /usr/local/bin/ping-ip
 
 cat <<EOF > /usr/local/bin/ping-dns
 echo -e "\n ping dns ...\n"
+
 echo "vm.branch1.salawu.net - \$(dig +short vm.branch1.salawu.net | tail -n1) -\$(ping -qc2 -W1 vm.branch1.salawu.net 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "vm.branch2.salawu.net - \$(dig +short vm.branch2.salawu.net | tail -n1) -\$(ping -qc2 -W1 vm.branch2.salawu.net 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "vm.branch3.salawu.net - \$(dig +short vm.branch3.salawu.net | tail -n1) -\$(ping -qc2 -W1 vm.branch3.salawu.net 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "vm.hub1.az.salawu.net - \$(dig +short vm.hub1.az.salawu.net | tail -n1) -\$(ping -qc2 -W1 vm.hub1.az.salawu.net 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
-echo "vm.hub2.hub2.az.salawu.net - \$(dig +short vm.hub2.hub2.az.salawu.net | tail -n1) -\$(ping -qc2 -W1 vm.hub2.hub2.az.salawu.net 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
+echo "vm.hub2.az.salawu.net - \$(dig +short vm.hub2.az.salawu.net | tail -n1) -\$(ping -qc2 -W1 vm.hub2.az.salawu.net 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "vm.spoke1.az.salawu.net - \$(dig +short vm.spoke1.az.salawu.net | tail -n1) -\$(ping -qc2 -W1 vm.spoke1.az.salawu.net 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "vm.spoke2.az.salawu.net - \$(dig +short vm.spoke2.az.salawu.net | tail -n1) -\$(ping -qc2 -W1 vm.spoke2.az.salawu.net 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
-echo "vm.spoke3.az.salawu.net - \$(dig +short vm.spoke3.az.salawu.net | tail -n1) -\$(ping -qc2 -W1 vm.spoke3.az.salawu.net 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
+
 echo "vm.spoke4.az.salawu.net - \$(dig +short vm.spoke4.az.salawu.net | tail -n1) -\$(ping -qc2 -W1 vm.spoke4.az.salawu.net 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 echo "vm.spoke5.az.salawu.net - \$(dig +short vm.spoke5.az.salawu.net | tail -n1) -\$(ping -qc2 -W1 vm.spoke5.az.salawu.net 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
-echo "vm.spoke6.az.salawu.net - \$(dig +short vm.spoke6.az.salawu.net | tail -n1) -\$(ping -qc2 -W1 vm.spoke6.az.salawu.net 2>&1 | awk -F'/' 'END{ print (/^rtt/? "OK "\$5" ms":"NA") }')"
+
 EOF
 chmod a+x /usr/local/bin/ping-dns
 
@@ -111,7 +129,7 @@ echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%{http_code} 
 echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%{http_code} (%{time_total}s) - %{remote_ip}" -s -o /dev/null vm.branch2.salawu.net) - vm.branch2.salawu.net"
 echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%{http_code} (%{time_total}s) - %{remote_ip}" -s -o /dev/null vm.branch3.salawu.net) - vm.branch3.salawu.net"
 echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%{http_code} (%{time_total}s) - %{remote_ip}" -s -o /dev/null vm.hub1.az.salawu.net) - vm.hub1.az.salawu.net"
-echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%{http_code} (%{time_total}s) - %{remote_ip}" -s -o /dev/null vm.hub2.hub2.az.salawu.net) - vm.hub2.hub2.az.salawu.net"
+echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%{http_code} (%{time_total}s) - %{remote_ip}" -s -o /dev/null vm.hub2.az.salawu.net) - vm.hub2.az.salawu.net"
 echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%{http_code} (%{time_total}s) - %{remote_ip}" -s -o /dev/null vm.spoke1.az.salawu.net) - vm.spoke1.az.salawu.net"
 echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%{http_code} (%{time_total}s) - %{remote_ip}" -s -o /dev/null vm.spoke2.az.salawu.net) - vm.spoke2.az.salawu.net"
 echo  "\$(curl -kL --max-time 2.0 -H 'Cache-Control: no-cache' -w "%{http_code} (%{time_total}s) - %{remote_ip}" -s -o /dev/null vm.spoke3.az.salawu.net) - vm.spoke3.az.salawu.net"

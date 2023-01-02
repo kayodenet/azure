@@ -1,10 +1,10 @@
 
 locals {
-  #hub1_vpngw_bgp0  = module.hub1.vpngw.bgp_settings[0].peering_addresses[0].default_addresses[0]
-  #hub1_vpngw_bgp1  = module.hub1.vpngw.bgp_settings[0].peering_addresses[1].default_addresses[0]
-  #hub1_ars_bgp0    = tolist(module.hub1.ars.virtual_router_ips)[0]
-  #hub1_ars_bgp1    = tolist(module.hub1.ars.virtual_router_ips)[1]
-  #hub1_ars_bgp_asn = module.hub1.ars.virtual_router_asn
+  hub1_vpngw_bgp0  = module.hub1.vpngw.bgp_settings[0].peering_addresses[0].default_addresses[0]
+  hub1_vpngw_bgp1  = module.hub1.vpngw.bgp_settings[0].peering_addresses[1].default_addresses[0]
+  hub1_ars_bgp0    = tolist(module.hub1.ars.virtual_router_ips)[0]
+  hub1_ars_bgp1    = tolist(module.hub1.ars.virtual_router_ips)[1]
+  hub1_ars_bgp_asn = module.hub1.ars.virtual_router_asn
   #hub1_dns_in_ip = module.hub1.private_dns_inbound_ep.ip_configurations[0].private_ip_address
 }
 
@@ -39,9 +39,15 @@ module "hub1" {
       address_space               = local.hub1_address_space
       subnets                     = local.hub1_subnets
       enable_private_dns_resolver = true
-      #enable_ars                 = true
-      #nable_vpngw                = true
-      #enable_ergw                = true
+      enable_ergw                 = true
+      enable_vpngw                = true
+      enable_ars                  = true
+
+      vpngw_config = [
+        {
+          asn = local.hub1_vpngw_asn
+        }
+      ]
     }
   ]
 
@@ -106,6 +112,10 @@ resource "azurerm_lb" "hub1_nva_lb" {
     subnet_id                     = module.hub1.subnets["${local.hub1_prefix}ilb"].id
     private_ip_address            = local.hub1_nva_ilb_addr
     private_ip_address_allocation = "Static"
+  }
+
+  lifecycle {
+    ignore_changes = [frontend_ip_configuration, ]
   }
 }
 
@@ -178,72 +188,4 @@ resource "azurerm_private_dns_resolver_forwarding_rule" "hub1_onprem" {
     port       = 53
   }
 }
-
-/*
-# route server
-#----------------------------
-
-resource "azurerm_route_server_bgp_connection" "hub1_nva" {
-  name            = "${local.hub1_prefix}nva"
-  route_server_id = azurerm_route_server.hub1_ars.id
-  peer_asn        = local.hub1_nva_asn
-  peer_ip         = local.hub1_nva_addr
-}
-
-# vpngw
-#----------------------------
-
-resource "azurerm_virtual_network_gateway" "hub1_vpngw" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.hub1_prefix}vpngw"
-  location            = local.hub1_location
-  type                = "Vpn"
-  vpn_type            = "RouteBased"
-  sku                 = "VpnGw3"
-  enable_bgp          = true
-  active_active       = true
-  ip_configuration {
-    name                          = "${local.hub1_prefix}link-0"
-    subnet_id                     = module.hub1.subnets["GatewaySubnet"].id
-    public_ip_address_id          = azurerm_public_ip.hub1_vpngw_pip0.id
-    private_ip_address_allocation = "Dynamic"
-  }
-  ip_configuration {
-    name                          = "${local.hub1_prefix}link-1"
-    subnet_id                     = module.hub1.subnets["GatewaySubnet"].id
-    public_ip_address_id          = azurerm_public_ip.hub1_vpngw_pip1.id
-    private_ip_address_allocation = "Dynamic"
-  }
-  bgp_settings {
-    asn = local.hub1_vpngw_asn
-    peering_addresses {
-      ip_configuration_name = "${local.hub1_prefix}link-0"
-      apipa_addresses       = [local.hub1_vpngw_bgp_apipa_0, ]
-    }
-    peering_addresses {
-      ip_configuration_name = "${local.hub1_prefix}link-1"
-      apipa_addresses       = [local.hub1_vpngw_bgp_apipa_0, ]
-    }
-  }
-}
-
-# ergw
-#----------------------------
-
-resource "azurerm_virtual_network_gateway" "hub1_ergw" {
-  resource_group_name = azurerm_resource_group.rg.name
-  name                = "${local.hub1_prefix}ergw"
-  location            = local.hub1_location
-  type                = "ExpressRoute"
-  vpn_type            = "RouteBased"
-  sku                 = "Standard"
-  enable_bgp          = true
-  active_active       = false
-  ip_configuration {
-    name                          = "${local.hub1_prefix}link-0"
-    subnet_id                     = module.hub1.subnets["GatewaySubnet"].id
-    public_ip_address_id          = azurerm_public_ip.hub1_ergw_pip.id
-    private_ip_address_allocation = "Dynamic"
-  }
-}*/
 

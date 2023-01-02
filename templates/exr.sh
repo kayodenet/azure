@@ -8,7 +8,7 @@ routetableid=$(az network vhub route-table show --name defaultRouteTable --vhub-
 echo "Connecting ${VHUB_NAME} to ${ER_CIRCUIT_NAME} ..."
 
 az network express-route gateway connection create \
---name connection-to-${ER_CIRCUIT_NAME} -g ${RESOURCE_GROUP} \
+--name conn-${ER_CIRCUIT_NAME} -g ${RESOURCE_GROUP} \
 --gateway-name ${ER_GATEWAY_NAME} \
 --peering $peering \
 --associated-route-table $routetableid  \
